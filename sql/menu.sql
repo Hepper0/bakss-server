@@ -12,16 +12,17 @@ VALUES
 (2012, '备份修改', 201, 2, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'service:backup:edit', '#', 'admin'),
 (2013, '备份删除', 201, 3, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'service:backup:remove', '#', 'admin');
 
+
 -- 菜单
 INSERT INTO `bakss`.`sys_menu`(`menu_id`, `menu_name`, `parent_id`, `order_num`, `path`, `component`, `query`, `route_name`, `is_frame`, `is_cache`, `menu_type`, `visible`, `status`, `perms`, `icon`, `create_by`, remark)
-VALUES (202, '创建备份', 5, 4, 'create', 'service/CreateBackup/index', NULL, '', 1, 0, 'C', '0', '0', 'service:backup:apply', 'tree', 'admin', '申请备份管理权菜单'),
+VALUES (202, '创建备份', 5, 2, 'create', 'service/CreateBackup/index', NULL, '', 1, 0, 'C', '0', '0', 'service:backup:apply', 'tree', 'admin', '申请备份管理权菜单'),
 -- 按钮
 INSERT INTO `bakss`.`sys_menu`(`menu_id`, `menu_name`, `parent_id`, `order_num`, `path`, `component`, `query`, `route_name`, `is_frame`, `is_cache`, `menu_type`, `visible`, `status`, `perms`, `icon`, `create_by`)
 VALUES (2021, '备份创建', 202, 1, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'service:backup:create', '#', 'admin');
 
 -- 菜单
 INSERT INTO `bakss`.`sys_menu`(`menu_id`, `menu_name`, `parent_id`, `order_num`, `path`, `component`, `query`, `route_name`, `is_frame`, `is_cache`, `menu_type`, `visible`, `status`, `perms`, `icon`, `create_by`, remark)
-VALUES (203, '创建恢复', 5, 4, 'restore', 'service/RestoreBackup/index', NULL, '', 1, 0, 'C', '0', '0', 'service:backup:apply', 'tree', 'admin', '申请备份管理权菜单');
+VALUES (203, '创建恢复', 5, 3, 'restore', 'service/RestoreBackup/index', NULL, '', 1, 0, 'C', '0', '0', 'service:backup:apply', 'tree', 'admin', '申请备份管理权菜单');
 -- 按钮
 INSERT INTO `bakss`.`sys_menu`(`menu_id`, `menu_name`, `parent_id`, `order_num`, `path`, `component`, `query`, `route_name`, `is_frame`, `is_cache`, `menu_type`, `visible`, `status`, `perms`, `icon`, `create_by`)
 VALUES (2031, '备份恢复', 203, 1, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'service:backup:restore', '#', 'admin');
@@ -32,6 +33,25 @@ VALUES (204, '申请备份管理权', 5, 4, 'apply', 'service/ApplyPermis/index'
 -- 按钮
 INSERT INTO `bakss`.`sys_menu`(`menu_id`, `menu_name`, `parent_id`, `order_num`, `path`, `component`, `query`, `route_name`, `is_frame`, `is_cache`, `menu_type`, `visible`, `status`, `perms`, `icon`, `create_by`)
 VALUES (2041, '备份管理器申请', 204, 1, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'service:backup:apply', '#', 'admin');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 -- 主菜单
