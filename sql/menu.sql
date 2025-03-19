@@ -11,6 +11,11 @@ VALUES
 (2011, '备份查询', 201, 1, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'service:backup:query', '#', 'admin'),
 (2012, '备份修改', 201, 2, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'service:backup:edit', '#', 'admin'),
 (2013, '备份删除', 201, 3, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'service:backup:remove', '#', 'admin');
+(2014, '修改备份目录', 201, 3, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'service:backup:dire', '#', 'admin');
+(2015, '启用策略', 201, 3, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'service:backup:strategy:enable', '#', 'admin');
+(2016, '禁用策略', 201, 3, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'service:backup:strategy:disable', '#', 'admin');
+(2017, '删除策略', 201, 3, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'service:backup:strategy:remove', '#', 'admin');
+(2018, '临时备份', 201, 3, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'service:backup:once', '#', 'admin');
 
 
 -- 菜单
@@ -34,25 +39,15 @@ VALUES (204, '申请备份管理权', 5, 4, 'apply', 'service/ApplyPermis/index'
 INSERT INTO `bakss`.`sys_menu`(`menu_id`, `menu_name`, `parent_id`, `order_num`, `path`, `component`, `query`, `route_name`, `is_frame`, `is_cache`, `menu_type`, `visible`, `status`, `perms`, `icon`, `create_by`)
 VALUES (2041, '备份管理器申请', 204, 1, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'service:backup:apply', '#', 'admin');
 
+INSERT INTO `bakss`.`sys_menu`(`menu_id`, `menu_name`, `parent_id`, `order_num`, `path`, `component`, `query`, `route_name`, `is_frame`, `is_cache`, `menu_type`, `visible`, `status`, `perms`, `icon`, `create_by`, `remark`)
+VALUES (205, '更多操作', 5, 6, 'more', 'service/BackupMgr/more', NULL, '', 1, 0, 'C', '1', '0', 'service:backup:more', '', 'admin', '备份管理更多操作');
 
+INSERT INTO `bakss`.`sys_menu`(`menu_id`, `menu_name`, `parent_id`, `order_num`, `path`, `component`, `query`, `route_name`, `is_frame`, `is_cache`, `menu_type`, `visible`, `status`, `perms`, `icon`, `create_by`, `remark`)
+VALUES (206, '授权', 5, 7, 'grant', 'service/BackupMgr/grant', NULL, '', 1, 0, 'C', '1', '0', 'service:backup:grant', '', 'admin', '备份管理授权操作');
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+-- 菜单
+INSERT INTO `bakss`.`sys_menu`(`menu_id`, `menu_name`, `parent_id`, `order_num`, `path`, `component`, `query`, `route_name`, `is_frame`, `is_cache`, `menu_type`, `visible`, `status`, `perms`, `icon`, `create_by`, remark)
+VALUES (207, '申请备份管理权', 5, 8, 'applyDetail', 'service/ApplyPermis/apply', NULL, '', 1, 0, 'C', '1', '0', '', '', 'admin', '申请备份管理权明细菜单');
 
 -- 主菜单
 INSERT INTO `bakss`.`sys_menu`(`menu_id`, `menu_name`, `parent_id`, `order_num`, `path`, `component`, `query`, `route_name`, `is_frame`, `is_cache`, `menu_type`, `visible`, `status`, `perms`, `icon`, `create_by`, `remark`)
@@ -77,7 +72,10 @@ VALUES
 
 -- 主菜单
 INSERT INTO `bakss`.`sys_menu`(`menu_id`, `menu_name`, `parent_id`, `order_num`, `path`, `component`, `query`, `route_name`, `is_frame`, `is_cache`, `menu_type`, `visible`, `status`, `perms`, `icon`, `create_by`, `remark`)
-VALUES (8, '申请查看', 0, 0, 'review', 'review/index', '', '', 1, 0, 'C', '0', '0', 'review:query', 'message', 'admin', '申请查看菜单');
+VALUES (8, '申请查看', 0, 0, 'review/index', 'review/index', '', '', 1, 0, 'C', '0', '0', 'review:query', 'message', 'admin', '申请查看菜单');
+-- 菜单
+INSERT INTO `bakss`.`sys_menu`(`menu_id`, `menu_name`, `parent_id`, `order_num`, `path`, `component`, `query`, `route_name`, `is_frame`, `is_cache`, `menu_type`, `visible`, `status`, `perms`, `icon`, `create_by`, remark)
+VALUES (601, '详情', 8, 1, '/review/detail', 'review/detail', NULL, '', 1, 0, 'C', '1', '0', 'review:detail', '', 'admin', '申请详情页面');
 
 -- 主菜单
 INSERT INTO `bakss`.`sys_menu`(`menu_id`, `menu_name`, `parent_id`, `order_num`, `path`, `component`, `query`, `route_name`, `is_frame`, `is_cache`, `menu_type`, `visible`, `status`, `perms`, `icon`, `create_by`, `remark`)
