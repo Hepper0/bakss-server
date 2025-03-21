@@ -80,5 +80,8 @@ VALUES (601, '详情', 8, 1, '/review/detail', 'review/detail', NULL, '', 1, 0, 
 -- 主菜单
 INSERT INTO `bakss`.`sys_menu`(`menu_id`, `menu_name`, `parent_id`, `order_num`, `path`, `component`, `query`, `route_name`, `is_frame`, `is_cache`, `menu_type`, `visible`, `status`, `perms`, `icon`, `create_by`, `remark`)
 VALUES (9, '我的任务', 0, 0, 'task', 'task/index', '', '', 1, 0, 'C', '0', '0', '', 'task:list', 'document', 'admin', '我的任务菜单');
+-- 菜单
+INSERT INTO `bakss`.`sys_menu`(`menu_id`, `menu_name`, `parent_id`, `order_num`, `path`, `component`, `query`, `route_name`, `is_frame`, `is_cache`, `menu_type`, `visible`, `status`, `perms`, `icon`, `create_by`, remark)
+VALUES (701, '详情', 8, 1, '/task/detail', 'task/detail', NULL, '', 1, 0, 'C', '1', '0', 'task:detail', '', 'admin', '任务详情页面');
 
 
