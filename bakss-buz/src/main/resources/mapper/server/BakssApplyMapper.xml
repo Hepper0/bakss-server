@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bakss.server.mapper.BakssApplyMapper">
+    
+    <resultMap type="BakssApply" id="BakssApplyResult">
+        <result property="id"    column="id"    />
+        <result property="applyType"    column="apply_type"    />
+        <result property="applyUser"    column="apply_user"    />
+        <result property="applyTime"    column="apply_time"    />
+        <result property="backupId"    column="backup_id"    />
+        <result property="backupTime"    column="backup_time"    />
+        <result property="backupStatus"    column="backup_status"    />
+        <result property="reviewStatus"    column="review_status"    />
+        <result property="remark"    column="remark"    />
+        <result property="deleted"    column="deleted"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectBakssApplyVo">
+        select id, apply_type, apply_user, apply_time, backup_id, backup_time, backup_status, review_status, remark, deleted, create_time, create_by, update_time from bakss_apply
+    </sql>
+
+    <select id="selectBakssApplyList" parameterType="BakssApply" resultMap="BakssApplyResult">
+        <include refid="selectBakssApplyVo"/>
+        <where>  
+            <if test="applyType != null "> and apply_type = #{applyType}</if>
+            <if test="applyUser != null  and applyUser != ''"> and apply_user = #{applyUser}</if>
+            <if test="applyTime != null "> and apply_time = #{applyTime}</if>
+            <if test="backupId != null "> and backup_id = #{backupId}</if>
+            <if test="backupTime != null "> and backup_time = #{backupTime}</if>
+            <if test="backupStatus != null "> and backup_status = #{backupStatus}</if>
+            <if test="reviewStatus != null "> and review_status = #{reviewStatus}</if>
+            <if test="deleted != null "> and deleted = #{deleted}</if>
+        </where>
+    </select>
+    
+    <select id="selectBakssApplyById" parameterType="String" resultMap="BakssApplyResult">
+        <include refid="selectBakssApplyVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertBakssApply" parameterType="BakssApply">
+        insert into bakss_apply
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="applyType != null">apply_type,</if>
+            <if test="applyUser != null">apply_user,</if>
+            <if test="applyTime != null">apply_time,</if>
+            <if test="backupId != null">backup_id,</if>
+            <if test="backupTime != null">backup_time,</if>
+            <if test="backupStatus != null">backup_status,</if>
+            <if test="reviewStatus != null">review_status,</if>
+            <if test="remark != null">remark,</if>
+            <if test="deleted != null">deleted,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="applyType != null">#{applyType},</if>
+            <if test="applyUser != null">#{applyUser},</if>
+            <if test="applyTime != null">#{applyTime},</if>
+            <if test="backupId != null">#{backupId},</if>
+            <if test="backupTime != null">#{backupTime},</if>
+            <if test="backupStatus != null">#{backupStatus},</if>
+            <if test="reviewStatus != null">#{reviewStatus},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="deleted != null">#{deleted},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBakssApply" parameterType="BakssApply">
+        update bakss_apply
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="applyType != null">apply_type = #{applyType},</if>
+            <if test="applyUser != null">apply_user = #{applyUser},</if>
+            <if test="applyTime != null">apply_time = #{applyTime},</if>
+            <if test="backupId != null">backup_id = #{backupId},</if>
+            <if test="backupTime != null">backup_time = #{backupTime},</if>
+            <if test="backupStatus != null">backup_status = #{backupStatus},</if>
+            <if test="reviewStatus != null">review_status = #{reviewStatus},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="deleted != null">deleted = #{deleted},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBakssApplyById" parameterType="String">
+        delete from bakss_apply where id = #{id}
+    </delete>
+
+    <delete id="deleteBakssApplyByIds" parameterType="String">
+        delete from bakss_apply where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

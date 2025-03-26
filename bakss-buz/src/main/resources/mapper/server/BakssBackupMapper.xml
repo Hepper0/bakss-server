@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bakss.server.mapper.BakssBackupMapper">
+
+    <resultMap type="BakssBackup" id="BakssBackupResult">
+        <result property="id"    column="id"    />
+        <result property="backupSoftware"    column="backupSoftware"    />
+        <result property="softwareVersion"    column="softwareVersion"    />
+        <result property="clientName"    column="clientName"    />
+        <result property="backupContent"    column="backupContent"    />
+        <result property="backupIP"    column="backupIP"    />
+        <result property="appName"    column="appName"    />
+        <result property="env"    column="env"    />
+        <result property="platform"    column="platform"    />
+        <result property="owner"    column="owner"    />
+        <result property="deleted"    column="deleted"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectBakssBackupVo">
+        select id, backupSoftware, softwareVersion, clientName, backupContent, backupIP, appName, env, platform, owner, deleted, create_time, create_by, update_time from bakss_backup
+    </sql>
+
+    <select id="selectBakssBackupList" parameterType="BakssBackup" resultMap="BakssBackupResult">
+        <include refid="selectBakssBackupVo"/>
+        <where>
+            <if test="backupSoftware != null  and backupSoftware != ''"> and backupSoftware = #{backupSoftware}</if>
+            <if test="softwareVersion != null  and softwareVersion != ''"> and softwareVersion = #{softwareVersion}</if>
+            <if test="clientName != null  and clientName != ''"> and clientName like concat('%', #{clientName}, '%')</if>
+            <if test="backupContent != null  and backupContent != ''"> and backupContent = #{backupContent}</if>
+            <if test="backupIP != null  and backupIP != ''"> and backupIP = #{backupIP}</if>
+            <if test="appName != null  and appName != ''"> and appName like concat('%', #{appName}, '%')</if>
+            <if test="env != null  and env != ''"> and env = #{env} </if>
+            <if test="platform != null  and platform != ''"> and platform = #{platform}</if>
+            <if test="owner != null  and owner != ''"> and owner = #{owner}</if>
+            <if test="deleted != null "> and deleted = #{deleted}</if>
+        </where>
+    </select>
+
+    <select id="selectBakssBackupById" parameterType="Long" resultMap="BakssBackupResult">
+        <include refid="selectBakssBackupVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertBakssBackup" parameterType="BakssBackup" useGeneratedKeys="true" keyProperty="id">
+        insert into bakss_backup
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="backupSoftware != null">backupSoftware,</if>
+            <if test="softwareVersion != null">softwareVersion,</if>
+            <if test="clientName != null">clientName,</if>
+            <if test="backupContent != null">backupContent,</if>
+            <if test="backupIP != null">backupIP,</if>
+            <if test="appName != null">appName,</if>
+            <if test="env != null">env,</if>
+            <if test="platform != null">platform,</if>
+            <if test="owner != null">owner,</if>
+            <if test="deleted != null">deleted,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="updateTime != null">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="backupSoftware != null">#{backupSoftware},</if>
+            <if test="softwareVersion != null">#{softwareVersion},</if>
+            <if test="clientName != null">#{clientName},</if>
+            <if test="backupContent != null">#{backupContent},</if>
+            <if test="backupIP != null">#{backupIP},</if>
+            <if test="appName != null">#{appName},</if>
+            <if test="env != null">#{env},</if>
+            <if test="platform != null">#{platform},</if>
+            <if test="owner != null">#{owner},</if>
+            <if test="deleted != null">#{deleted},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateBakssBackup" parameterType="BakssBackup">
+        update bakss_backup
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="backupSoftware != null">backupSoftware = #{backupSoftware},</if>
+            <if test="softwareVersion != null">softwareVersion = #{softwareVersion},</if>
+            <if test="clientName != null">clientName = #{clientName},</if>
+            <if test="backupContent != null">backupContent = #{backupContent},</if>
+            <if test="backupIP != null">backupIP = #{backupIP},</if>
+            <if test="appName != null">appName = #{appName},</if>
+            <if test="env != null">env = #{env},</if>
+            <if test="platform != null">platform = #{platform},</if>
+            <if test="owner != null">owner = #{owner},</if>
+            <if test="deleted != null">deleted = #{deleted},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBakssBackupById" parameterType="Long">
+        delete from bakss_backup where id = #{id}
+    </delete>
+
+    <delete id="deleteBakssBackupByIds" parameterType="String">
+        delete from bakss_backup where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
