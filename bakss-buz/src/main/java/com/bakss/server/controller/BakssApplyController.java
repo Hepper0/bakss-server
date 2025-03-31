@@ -22,22 +22,22 @@ import com.bakss.common.utils.poi.ExcelUtil;
 import com.bakss.common.core.page.TableDataInfo;
 
 /**
- * 【请填写功能名称】Controller
+ * 申请Controller
  *
  * @author author
  * @date 2025-03-26
  */
 @RestController
-@RequestMapping("/system/apply")
+@RequestMapping("/service/apply")
 public class BakssApplyController extends BaseController
 {
     @Autowired
     private IBakssApplyService bakssApplyService;
 
     /**
-     * 查询【请填写功能名称】列表
+     * 查询申请列表
      */
-    @PreAuthorize("@ss.hasPermi('system:apply:list')")
+    @PreAuthorize("@ss.hasPermi('service:apply:list')")
     @GetMapping("/list")
     public TableDataInfo list(BakssApply bakssApply)
     {
@@ -47,22 +47,22 @@ public class BakssApplyController extends BaseController
     }
 
     /**
-     * 导出【请填写功能名称】列表
+     * 导出申请列表
      */
-    @PreAuthorize("@ss.hasPermi('system:apply:export')")
-    @Log(title = "【请填写功能名称】", businessType = BusinessType.EXPORT)
+    @PreAuthorize("@ss.hasPermi('service:apply:export')")
+    @Log(title = "申请", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, BakssApply bakssApply)
     {
         List<BakssApply> list = bakssApplyService.selectBakssApplyList(bakssApply);
         ExcelUtil<BakssApply> util = new ExcelUtil<BakssApply>(BakssApply.class);
-        util.exportExcel(response, list, "【请填写功能名称】数据");
+        util.exportExcel(response, list, "申请数据");
     }
 
     /**
-     * 获取【请填写功能名称】详细信息
+     * 获取申请详细信息
      */
-    @PreAuthorize("@ss.hasPermi('system:apply:query')")
+    @PreAuthorize("@ss.hasPermi('service:apply:query')")
     @GetMapping(value = "/{id}")
     public AjaxResult getInfo(@PathVariable("id") String id)
     {
@@ -70,10 +70,10 @@ public class BakssApplyController extends BaseController
     }
 
     /**
-     * 新增【请填写功能名称】
+     * 新增申请
      */
-    @PreAuthorize("@ss.hasPermi('system:apply:add')")
-    @Log(title = "【请填写功能名称】", businessType = BusinessType.INSERT)
+    @PreAuthorize("@ss.hasPermi('service:apply:add')")
+    @Log(title = "申请", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody BakssApply bakssApply)
     {
@@ -81,10 +81,10 @@ public class BakssApplyController extends BaseController
     }
 
     /**
-     * 修改【请填写功能名称】
+     * 修改申请
      */
-    @PreAuthorize("@ss.hasPermi('system:apply:edit')")
-    @Log(title = "【请填写功能名称】", businessType = BusinessType.UPDATE)
+    @PreAuthorize("@ss.hasPermi('service:apply:edit')")
+    @Log(title = "申请", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody BakssApply bakssApply)
     {
@@ -92,10 +92,10 @@ public class BakssApplyController extends BaseController
     }
 
     /**
-     * 删除【请填写功能名称】
+     * 删除申请
      */
-    @PreAuthorize("@ss.hasPermi('system:apply:remove')")
-    @Log(title = "【请填写功能名称】", businessType = BusinessType.DELETE)
+    @PreAuthorize("@ss.hasPermi('service:apply:remove')")
+    @Log(title = "申请", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable String[] ids)
     {

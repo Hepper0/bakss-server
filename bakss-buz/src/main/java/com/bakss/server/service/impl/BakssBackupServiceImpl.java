@@ -10,7 +10,7 @@ import com.bakss.server.service.IBakssBackupService;
 import javax.annotation.Resource;
 
 /**
- * 【请填写功能名称】Service业务层处理
+ * 备份管理Service业务层处理
  *
  * @author author
  * @date 2025-03-25
@@ -22,10 +22,10 @@ public class BakssBackupServiceImpl implements IBakssBackupService
     private BakssBackupMapper bakssBackupMapper;
 
     /**
-     * 查询【请填写功能名称】
+     * 查询备份管理
      *
-     * @param id 【请填写功能名称】主键
-     * @return 【请填写功能名称】
+     * @param id 备份管理主键
+     * @return 备份管理
      */
     @Override
     public BakssBackup selectBakssBackupById(Long id)
@@ -34,10 +34,10 @@ public class BakssBackupServiceImpl implements IBakssBackupService
     }
 
     /**
-     * 查询【请填写功能名称】列表
+     * 查询备份管理列表
      *
-     * @param bakssBackup 【请填写功能名称】
-     * @return 【请填写功能名称】
+     * @param bakssBackup 备份管理
+     * @return 备份管理
      */
     @Override
     public List<BakssBackup> selectBakssBackupList(BakssBackup bakssBackup)
@@ -46,9 +46,9 @@ public class BakssBackupServiceImpl implements IBakssBackupService
     }
 
     /**
-     * 新增【请填写功能名称】
+     * 新增备份管理
      *
-     * @param bakssBackup 【请填写功能名称】
+     * @param bakssBackup 备份管理
      * @return 结果
      */
     @Override
@@ -59,9 +59,9 @@ public class BakssBackupServiceImpl implements IBakssBackupService
     }
 
     /**
-     * 修改【请填写功能名称】
+     * 修改备份管理
      *
-     * @param bakssBackup 【请填写功能名称】
+     * @param bakssBackup 备份管理
      * @return 结果
      */
     @Override
@@ -72,9 +72,9 @@ public class BakssBackupServiceImpl implements IBakssBackupService
     }
 
     /**
-     * 批量删除【请填写功能名称】
+     * 批量删除备份管理
      *
-     * @param ids 需要删除的【请填写功能名称】主键
+     * @param ids 需要删除的备份管理主键
      * @return 结果
      */
     @Override
@@ -84,9 +84,9 @@ public class BakssBackupServiceImpl implements IBakssBackupService
     }
 
     /**
-     * 删除【请填写功能名称】信息
+     * 删除备份管理信息
      *
-     * @param id 【请填写功能名称】主键
+     * @param id 备份管理主键
      * @return 结果
      */
     @Override

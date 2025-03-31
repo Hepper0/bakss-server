@@ -7,7 +7,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 /**
- * 【请填写功能名称】对象 bakss_apply
+ * 申请对象 bakss_apply
  *
  * @author author
  * @date 2025-03-26

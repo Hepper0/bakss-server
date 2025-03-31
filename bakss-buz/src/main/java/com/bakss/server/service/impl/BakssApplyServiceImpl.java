@@ -11,7 +11,7 @@ import com.bakss.server.service.IBakssApplyService;
 import javax.annotation.Resource;
 
 /**
- * 【请填写功能名称】Service业务层处理
+ * 申请Service业务层处理
  *
  * @author author
  * @date 2025-03-26
@@ -23,10 +23,10 @@ public class BakssApplyServiceImpl implements IBakssApplyService
     private BakssApplyMapper bakssApplyMapper;
 
     /**
-     * 查询【请填写功能名称】
+     * 查询申请
      *
-     * @param id 【请填写功能名称】主键
-     * @return 【请填写功能名称】
+     * @param id 申请主键
+     * @return 申请
      */
     @Override
     public BakssApply selectBakssApplyById(String id)
@@ -35,10 +35,10 @@ public class BakssApplyServiceImpl implements IBakssApplyService
     }
 
     /**
-     * 查询【请填写功能名称】列表
+     * 查询申请列表
      *
-     * @param bakssApply 【请填写功能名称】
-     * @return 【请填写功能名称】
+     * @param bakssApply 申请
+     * @return 申请
      */
     @Override
     public List<BakssApply> selectBakssApplyList(BakssApply bakssApply)
@@ -47,9 +47,9 @@ public class BakssApplyServiceImpl implements IBakssApplyService
     }
 
     /**
-     * 新增【请填写功能名称】
+     * 新增申请
      *
-     * @param bakssApply 【请填写功能名称】
+     * @param bakssApply 申请
      * @return 结果
      */
     @Override
@@ -60,9 +60,9 @@ public class BakssApplyServiceImpl implements IBakssApplyService
     }
 
     /**
-     * 修改【请填写功能名称】
+     * 修改申请
      *
-     * @param bakssApply 【请填写功能名称】
+     * @param bakssApply 申请
      * @return 结果
      */
     @Override
@@ -73,9 +73,9 @@ public class BakssApplyServiceImpl implements IBakssApplyService
     }
 
     /**
-     * 批量删除【请填写功能名称】
+     * 批量删除申请
      *
-     * @param ids 需要删除的【请填写功能名称】主键
+     * @param ids 需要删除的申请主键
      * @return 结果
      */
     @Override
@@ -85,9 +85,9 @@ public class BakssApplyServiceImpl implements IBakssApplyService
     }
 
     /**
-     * 删除【请填写功能名称】信息
+     * 删除申请信息
      *
-     * @param id 【请填写功能名称】主键
+     * @param id 申请主键
      * @return 结果
      */
     @Override

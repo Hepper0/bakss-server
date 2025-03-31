@@ -49,6 +49,76 @@ create table bakss_apply(
     update_time datetime
 );
 
+
+-- 备份目录：修改目录
+create table bakss_apply_directory(
+    id int primary key auto_increment,
+    apply_id int,
+    old_dir varchar(500),
+    new_dir varchar(500)
+    deleted int default 0,
+    create_time datetime default now(),
+    create_by varchar(100),
+    update_time datetime
+);
+
+-- 备份策略：删除，禁用，启用策略
+create table bakss_apply_strategy(
+    id int primary key auto_increment,
+    apply_id int,
+    strategy_id int,
+    type int comment '1启用 2禁用 3删除',
+    deleted int default 0,
+    create_time datetime default now(),
+    create_by varchar(100),
+    update_time datetime
+)
+
+-- 创建备份计划
+-- create table bakss_apply_backup(
+--    id int primary key auto_increment,
+--    apply_id int,
+--    deleted int default 0,
+--    create_time datetime default now(),
+--    create_by varchar(100),
+--    update_time datetime
+-- )
+
+-- 创建恢复
+create table bakss_apply_restore(
+    id int primary key auto_increment,
+    apply_id int,
+    restore_id int,
+    deleted int default 0,
+    create_time datetime default now(),
+    create_by varchar(100),
+    update_time datetime
+);
+
+-- -- 备份执行
+-- create table bakss_apply_backup_once(
+--     id int primary key auto_increment,
+--     apply_id int,
+--     backup_time datetime,
+--     deleted int default 0,
+--     create_time datetime default now(),
+--     create_by varchar(100),
+--     update_time datetime
+-- )
+
+-- 备份管理权, 可以同时给多个用户授权
+create table bakss_apply_backup_permis(
+      id int primary key auto_increment,
+      apply_id int,
+      grant_user varchar(100),
+      start_time datetime,
+      end_time datetime,
+      deleted int default 0,
+      create_time datetime default now(),
+      create_by varchar(100),
+      update_time datetime
+);
+
 --
 create table bakss_master_config (
     id int primary key auto_increment,
