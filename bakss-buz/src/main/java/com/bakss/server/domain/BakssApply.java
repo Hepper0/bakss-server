@@ -1,16 +1,16 @@
 package com.bakss.server.domain;
 
 import java.util.Date;
-import com.bakss.common.core.domain.BaseEntity;
 import com.bakss.common.annotation.Excel;
+import com.bakss.common.core.domain.BaseEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 /**
- * 申请对象 bakss_apply
+ * 申请流程对象 bakss_apply
  *
  * @author author
- * @date 2025-03-26
+ * @date 2025-04-02
  */
 public class BakssApply extends BaseEntity
 {
@@ -45,7 +45,7 @@ public class BakssApply extends BaseEntity
 
     /** $column.columnComment */
     @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
-    private Long reviewStatus;
+    private Long flowId;
 
     /** $column.columnComment */
     @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
@@ -114,14 +114,14 @@ public class BakssApply extends BaseEntity
     {
         return backupStatus;
     }
-    public void setReviewStatus(Long reviewStatus)
+    public void setFlowId(Long flowId)
     {
-        this.reviewStatus = reviewStatus;
+        this.flowId = flowId;
     }
 
-    public Long getReviewStatus()
+    public Long getFlowId()
     {
-        return reviewStatus;
+        return flowId;
     }
     public void setDeleted(Long deleted)
     {
@@ -143,7 +143,7 @@ public class BakssApply extends BaseEntity
             .append("backupId", getBackupId())
             .append("backupTime", getBackupTime())
             .append("backupStatus", getBackupStatus())
-            .append("reviewStatus", getReviewStatus())
+            .append("flowId", getFlowId())
             .append("remark", getRemark())
             .append("deleted", getDeleted())
             .append("createTime", getCreateTime())

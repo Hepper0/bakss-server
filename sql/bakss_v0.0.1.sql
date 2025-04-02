@@ -41,7 +41,7 @@ create table bakss_apply(
     backup_id int,
     backup_time datetime,
     backup_status int,
-    review_status int default 0,
+    flow_id int,
     remark varchar(1000),
     deleted int default 0,
     create_time datetime default now(),
@@ -49,6 +49,18 @@ create table bakss_apply(
     update_time datetime
 );
 
+create table bakss_apply_flow (
+    id int primary key auto_increment,
+    flow_step int comment '1 Leader/指派人 2 DBA 3 备份管理员'
+    apply_id varchar(50),
+    review_user varchar(50) common '当前环节最后审批的人',
+    review_status int default 0,
+    remark varchar(500),
+    deleted int default 0,
+    create_time datetime default now(),
+    create_by varchar(100),
+    update_time datetime
+)
 
 -- 备份目录：修改目录
 create table bakss_apply_directory(

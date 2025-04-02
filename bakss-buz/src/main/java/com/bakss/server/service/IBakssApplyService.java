@@ -58,4 +58,6 @@ public interface IBakssApplyService
      * @return 结果
      */
     public int deleteBakssApplyById(String id);
+
+    public void approve(BakssApply apply);
 }

@@ -1,7 +1,15 @@
 package com.bakss.server.service.impl;
 
+import java.util.Arrays;
 import java.util.List;
+
+import com.bakss.common.core.domain.entity.SysUser;
+import com.bakss.common.core.domain.model.LoginUser;
 import com.bakss.common.utils.DateUtils;
+import com.bakss.common.utils.SecurityUtils;
+import com.bakss.server.domain.BakssBackup;
+import com.bakss.server.mapper.BakssBackupMapper;
+import com.bakss.server.service.IBakssBackupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.bakss.server.mapper.BakssApplyMapper;
@@ -21,6 +29,16 @@ public class BakssApplyServiceImpl implements IBakssApplyService
 {
     @Resource
     private BakssApplyMapper bakssApplyMapper;
+
+    @Resource
+    private IBakssBackupService bakssBackupService;
+
+    final int APPROVAL_STATUS_INIT = 0;
+    final int APPROVAL_STATUS_LEADER = 1;  // 直接上级审批完成
+    final int APPROVAL_STATUS_DBA = 2;  // DBA审批完成
+    final int APPROVAL_STATUS_MANAGER = 3; // 备份管理员审批完成
+
+    final List<String> DB_TYPES = Arrays.asList("MySQL", "SQLSERVER", "PostgreSQL", "Oracle");
 
     /**
      * 查询申请
@@ -94,5 +112,35 @@ public class BakssApplyServiceImpl implements IBakssApplyService
     public int deleteBakssApplyById(String id)
     {
         return bakssApplyMapper.deleteBakssApplyById(id);
+    }
+
+
+    public void approve(BakssApply apply){
+        LoginUser user = SecurityUtils.getLoginUser();
+        int status = apply.getReviewStatus();
+        switch (status) {
+            case APPROVAL_STATUS_INIT:
+                // 查询当前用户是否是leader
+                apply.setReviewStatus(APPROVAL_STATUS_LEADER);
+                break;
+            case APPROVAL_STATUS_LEADER:
+                // dba与备份管理员都进来看看
+                BakssBackup backup = bakssBackupService.selectBakssBackupById(apply.getBackupId());
+                if (DB_TYPES.contains(backup.getBackupContent())) {
+                    apply.setReviewStatus(APPROVAL_STATUS_DBA);
+                } else {
+                    apply.setReviewStatus(APPROVAL_STATUS_MANAGER);
+                }
+                break;
+            case APPROVAL_STATUS_DBA:
+                // 查询当前用户是否是备份管理员
+                apply.setReviewStatus(APPROVAL_STATUS_MANAGER);
+                break;
+        }
+
+    }
+
+    public void addFlow(BakssApply apply) {
+        // todo 创建flow,并将flowId回写
     }
 }

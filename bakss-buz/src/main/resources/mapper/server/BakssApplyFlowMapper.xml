@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bakss.server.mapper.BakssApplyFlowMapper">
+    
+    <resultMap type="BakssApplyFlow" id="BakssApplyFlowResult">
+        <result property="id"    column="id"    />
+        <result property="flowStep"    column="flow_step"    />
+        <result property="applyId"    column="apply_id"    />
+        <result property="reviewUser"    column="review_user"    />
+        <result property="reviewStatus"    column="review_status"    />
+        <result property="remark"    column="remark"    />
+        <result property="deleted"    column="deleted"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectBakssApplyFlowVo">
+        select id, flow_step, apply_id, review_user, review_status, remark, deleted, create_time, create_by, update_time from bakss_apply_flow
+    </sql>
+
+    <select id="selectBakssApplyFlowList" parameterType="BakssApplyFlow" resultMap="BakssApplyFlowResult">
+        <include refid="selectBakssApplyFlowVo"/>
+        <where>  
+            <if test="flowStep != null "> and flow_step = #{flowStep}</if>
+            <if test="applyId != null  and applyId != ''"> and apply_id = #{applyId}</if>
+            <if test="reviewUser != null  and reviewUser != ''"> and review_user = #{reviewUser}</if>
+            <if test="reviewStatus != null "> and review_status = #{reviewStatus}</if>
+            <if test="deleted != null "> and deleted = #{deleted}</if>
+        </where>
+    </select>
+    
+    <select id="selectBakssApplyFlowById" parameterType="Long" resultMap="BakssApplyFlowResult">
+        <include refid="selectBakssApplyFlowVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertBakssApplyFlow" parameterType="BakssApplyFlow" useGeneratedKeys="true" keyProperty="id">
+        insert into bakss_apply_flow
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="flowStep != null">flow_step,</if>
+            <if test="applyId != null">apply_id,</if>
+            <if test="reviewUser != null">review_user,</if>
+            <if test="reviewStatus != null">review_status,</if>
+            <if test="remark != null">remark,</if>
+            <if test="deleted != null">deleted,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="flowStep != null">#{flowStep},</if>
+            <if test="applyId != null">#{applyId},</if>
+            <if test="reviewUser != null">#{reviewUser},</if>
+            <if test="reviewStatus != null">#{reviewStatus},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="deleted != null">#{deleted},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBakssApplyFlow" parameterType="BakssApplyFlow">
+        update bakss_apply_flow
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="flowStep != null">flow_step = #{flowStep},</if>
+            <if test="applyId != null">apply_id = #{applyId},</if>
+            <if test="reviewUser != null">review_user = #{reviewUser},</if>
+            <if test="reviewStatus != null">review_status = #{reviewStatus},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="deleted != null">deleted = #{deleted},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBakssApplyFlowById" parameterType="Long">
+        delete from bakss_apply_flow where id = #{id}
+    </delete>
+
+    <delete id="deleteBakssApplyFlowByIds" parameterType="String">
+        delete from bakss_apply_flow where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

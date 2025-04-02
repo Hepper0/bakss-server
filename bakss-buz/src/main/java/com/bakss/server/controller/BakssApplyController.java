@@ -101,4 +101,15 @@ public class BakssApplyController extends BaseController
     {
         return toAjax(bakssApplyService.deleteBakssApplyByIds(ids));
     }
+
+    /**
+     * 审批申请
+     */
+    @Log(title = "申请", businessType = BusinessType.UPDATE)
+    @PutMapping("/approve")
+    public AjaxResult approve(@RequestBody BakssApply bakssApply)
+    {
+        bakssApplyService.approve(bakssApply);
+        return success();
+    }
 }
