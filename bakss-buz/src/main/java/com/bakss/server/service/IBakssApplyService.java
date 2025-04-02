@@ -2,6 +2,7 @@ package com.bakss.server.service;
 
 import java.util.List;
 import com.bakss.server.domain.BakssApply;
+import com.bakss.server.domain.BakssTask;
 
 /**
  * 申请Service接口
@@ -59,5 +60,11 @@ public interface IBakssApplyService
      */
     public int deleteBakssApplyById(String id);
 
-    public void approve(BakssApply apply);
+    public void approved(BakssApply apply);
+
+    public void rejected(BakssApply apply);
+
+    public List<BakssTask> todo();
+
+    public List<BakssTask> done();
 }

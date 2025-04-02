@@ -109,7 +109,38 @@ public class BakssApplyController extends BaseController
     @PutMapping("/approve")
     public AjaxResult approve(@RequestBody BakssApply bakssApply)
     {
-        bakssApplyService.approve(bakssApply);
+        bakssApplyService.approved(bakssApply);
         return success();
+    }
+
+    /**
+     * 审批申请
+     */
+    @Log(title = "申请", businessType = BusinessType.UPDATE)
+    @PutMapping("/reject")
+    public AjaxResult reject(@RequestBody BakssApply bakssApply)
+    {
+        bakssApplyService.rejected(bakssApply);
+        return success();
+    }
+
+    /**
+     * 代办申请
+     */
+    @Log(title = "申请", businessType = BusinessType.UPDATE)
+    @GetMapping("/todo")
+    public TableDataInfo todo()
+    {
+        return getDataTable(bakssApplyService.todo());
+    }
+
+    /**
+     * 已完成申请
+     */
+    @Log(title = "申请", businessType = BusinessType.UPDATE)
+    @GetMapping("/done")
+    public TableDataInfo done()
+    {
+        return getDataTable(bakssApplyService.done());
     }
 }

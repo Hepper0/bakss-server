@@ -1,6 +1,9 @@
 package com.bakss.server.domain;
 
 import com.bakss.common.annotation.Excel;
+import com.bakss.common.core.domain.BaseEntity;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 /**
  * 申请流程对象 bakss_apply_flow
@@ -17,7 +20,7 @@ public class BakssApplyFlow extends BaseEntity
 
     /** 1 Leader/指派人 2 DBA 3 备份管理员 */
     @Excel(name = "1 Leader/指派人 2 DBA 3 备份管理员")
-    private Long flowStep;
+    private int flowStep;
 
     /** $column.columnComment */
     @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
@@ -44,12 +47,12 @@ public class BakssApplyFlow extends BaseEntity
     {
         return id;
     }
-    public void setFlowStep(Long flowStep)
+    public void setFlowStep(int flowStep)
     {
         this.flowStep = flowStep;
     }
 
-    public Long getFlowStep()
+    public int getFlowStep()
     {
         return flowStep;
     }
