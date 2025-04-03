@@ -19,6 +19,7 @@ create table bakss_backup (
 create table bakss_backup_validate (
     id int primary key auto_increment,
     backup_id int,
+    username varchar(100),
     exp_type int,
     start_date date,
     end_date date,
@@ -61,6 +62,16 @@ create table bakss_apply_flow (
     create_by varchar(100),
     update_time datetime
 )
+
+-- create table bakss_apply_backup(
+--     id int primary key auto_increment,
+--     apply_id int,
+--     backup_id int,
+--     deleted int default 0,
+--     create_time datetime default now(),
+--     create_by varchar(100),
+--     update_time datetime
+-- )
 
 -- 备份目录：修改目录
 create table bakss_apply_directory(
@@ -122,6 +133,7 @@ create table bakss_apply_restore(
 create table bakss_apply_backup_permis(
       id int primary key auto_increment,
       apply_id int,
+      backup_id int,
       grant_user varchar(100),
       start_time datetime,
       end_time datetime,
