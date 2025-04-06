@@ -52,9 +52,10 @@ create table bakss_apply(
 
 create table bakss_apply_flow (
     id int primary key auto_increment,
-    flow_step int comment '1 Leader/指派人 2 DBA 3 备份管理员'
+    flow_step varchar(20) comment 'assign,leader,owner,dba,dbaLeader,admin',
+    flow_order int,
     apply_id varchar(50),
-    review_user varchar(50) common '当前环节最后审批的人',
+    review_user varchar(50) comment '当前环节最后审批的人',
     review_status int default 0,
     remark varchar(500),
     deleted int default 0,
@@ -194,3 +195,37 @@ create table bakss_network_store_config (
     create_time datetime default now(),
     update_time datetime
 )
+
+create table bakss_apply_step(
+    id int primary key auto_increment,
+    apply_type int,
+    apply_steps varchar(50) comment 'assign,leader,owner,dba,dbaLeader,admin',
+    is_db int default 0,
+    deleted int default 0,
+    create_time datetime default now(),
+    update_time datetime
+)
+
+insert into bakss_appply_step(apply_type, apply_steps, is_db) values(0, 'dba,admin', 1); -- 申请备份管理权
+insert into bakss_appply_step(apply_type, apply_steps, is_db) values(1, 'assign,dba,admin', 1); -- 授权备份管理权
+insert into bakss_appply_step(apply_type, apply_steps, is_db) values(2, 'dbaLeader,admin', 1); -- 恢复创建
+insert into bakss_appply_step(apply_type, apply_steps, is_db) values(3, 'dba,admin', 1); -- 备份创建
+insert into bakss_appply_step(apply_type, apply_steps, is_db) values(4, 'dba,admin', 1); -- 立即备份
+insert into bakss_appply_step(apply_type, apply_steps, is_db) values(5, 'dba,admin', 1); -- 定时备份
+insert into bakss_appply_step(apply_type, apply_steps, is_db) values(6, 'dba,admin', 1); -- 修改备份目录
+insert into bakss_appply_step(apply_type, apply_steps, is_db) values(7, 'dba,admin', 1); -- 启用备份
+insert into bakss_appply_step(apply_type, apply_steps, is_db) values(8, 'dba,admin', 1); -- 策略禁用
+insert into bakss_appply_step(apply_type, apply_steps, is_db) values(9, 'dba,admin', 1); -- 策略删除
+insert into bakss_appply_step(apply_type, apply_steps, is_db) values(10, 'owner,dba,admin', 1); -- 修改owner
+
+insert into bakss_appply_step(apply_type, apply_steps) values(0, 'admin'); -- 申请备份管理权
+insert into bakss_appply_step(apply_type, apply_steps) values(1, 'assign,admin'); -- 授权备份管理权
+insert into bakss_appply_step(apply_type, apply_steps) values(2, 'leader,admin'); -- 恢复创建
+insert into bakss_appply_step(apply_type, apply_steps) values(3, 'admin'); -- 备份创建
+insert into bakss_appply_step(apply_type, apply_steps) values(4, 'admin'); -- 立即备份
+insert into bakss_appply_step(apply_type, apply_steps) values(5, 'admin'); -- 定时备份
+insert into bakss_appply_step(apply_type, apply_steps) values(6, 'admin'); -- 修改备份目录
+insert into bakss_appply_step(apply_type, apply_steps) values(7, 'admin'); -- 启用备份
+insert into bakss_appply_step(apply_type, apply_steps) values(8, 'admin'); -- 策略禁用
+insert into bakss_appply_step(apply_type, apply_steps) values(9, 'admin'); -- 策略删除
+insert into bakss_appply_step(apply_type, apply_steps) values(10, 'owner,admin'); -- 修改owner

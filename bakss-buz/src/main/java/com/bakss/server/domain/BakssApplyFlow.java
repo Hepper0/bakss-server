@@ -2,15 +2,15 @@ package com.bakss.server.domain;
 
 import com.bakss.common.annotation.Excel;
 import com.bakss.common.core.domain.BaseEntity;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
+import lombok.Data;
 
 /**
- * 申请流程对象 bakss_apply_flow
+ * 【请填写功能名称】对象 bakss_apply_flow
  *
  * @author author
- * @date 2025-04-02
+ * @date 2025-04-06
  */
+@Data
 public class BakssApplyFlow extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
@@ -18,9 +18,13 @@ public class BakssApplyFlow extends BaseEntity
     /** $column.columnComment */
     private Long id;
 
-    /** 1 Leader/指派人 2 DBA 3 备份管理员 */
-    @Excel(name = "1 Leader/指派人 2 DBA 3 备份管理员")
-    private int flowStep;
+    /** assign,leader,owner,dba,dbaLeader,admin */
+    @Excel(name = "assign,leader,owner,dba,dbaLeader,admin")
+    private String flowStep;
+
+    /** $column.columnComment */
+    @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
+    private Integer flowOrder;
 
     /** $column.columnComment */
     @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
@@ -38,74 +42,4 @@ public class BakssApplyFlow extends BaseEntity
     @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
     private Long deleted;
 
-    public void setId(Long id)
-    {
-        this.id = id;
-    }
-
-    public Long getId()
-    {
-        return id;
-    }
-    public void setFlowStep(int flowStep)
-    {
-        this.flowStep = flowStep;
-    }
-
-    public int getFlowStep()
-    {
-        return flowStep;
-    }
-    public void setApplyId(String applyId)
-    {
-        this.applyId = applyId;
-    }
-
-    public String getApplyId()
-    {
-        return applyId;
-    }
-    public void setReviewUser(String reviewUser)
-    {
-        this.reviewUser = reviewUser;
-    }
-
-    public String getReviewUser()
-    {
-        return reviewUser;
-    }
-    public void setReviewStatus(Long reviewStatus)
-    {
-        this.reviewStatus = reviewStatus;
-    }
-
-    public Long getReviewStatus()
-    {
-        return reviewStatus;
-    }
-    public void setDeleted(Long deleted)
-    {
-        this.deleted = deleted;
-    }
-
-    public Long getDeleted()
-    {
-        return deleted;
-    }
-
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("id", getId())
-            .append("flowStep", getFlowStep())
-            .append("applyId", getApplyId())
-            .append("reviewUser", getReviewUser())
-            .append("reviewStatus", getReviewStatus())
-            .append("remark", getRemark())
-            .append("deleted", getDeleted())
-            .append("createTime", getCreateTime())
-            .append("createBy", getCreateBy())
-            .append("updateTime", getUpdateTime())
-            .toString();
-    }
 }

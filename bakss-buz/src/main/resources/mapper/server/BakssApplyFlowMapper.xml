@@ -7,6 +7,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <resultMap type="BakssApplyFlow" id="BakssApplyFlowResult">
         <result property="id"    column="id"    />
         <result property="flowStep"    column="flow_step"    />
+        <result property="flowOrder"    column="flow_order"    />
         <result property="applyId"    column="apply_id"    />
         <result property="reviewUser"    column="review_user"    />
         <result property="reviewStatus"    column="review_status"    />
@@ -18,13 +19,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectBakssApplyFlowVo">
-        select id, flow_step, apply_id, review_user, review_status, remark, deleted, create_time, create_by, update_time from bakss_apply_flow
+        select id, flow_step, flow_order, apply_id, review_user, review_status, remark, deleted, create_time, create_by, update_time from bakss_apply_flow
     </sql>
 
     <select id="selectBakssApplyFlowList" parameterType="BakssApplyFlow" resultMap="BakssApplyFlowResult">
         <include refid="selectBakssApplyFlowVo"/>
         <where>  
             <if test="flowStep != null "> and flow_step = #{flowStep}</if>
+            <if test="flowOrder != null "> and flow_order = #{flowOrder}</if>
             <if test="applyId != null  and applyId != ''"> and apply_id = #{applyId}</if>
             <if test="reviewUser != null  and reviewUser != ''"> and review_user = #{reviewUser}</if>
             <if test="reviewStatus != null "> and review_status = #{reviewStatus}</if>
@@ -37,10 +39,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where id = #{id}
     </select>
 
+    <select id="getBakssApplyNextFlow" parameterType="BakssApplyFlow" resultMap="BakssApplyFlowResult">
+        <include refid="selectBakssApplyFlowVo"/>
+        where apply_id = #{applyId} and apply_order = #{applyOrder} + 1
+    </select>
+
     <insert id="insertBakssApplyFlow" parameterType="BakssApplyFlow" useGeneratedKeys="true" keyProperty="id">
         insert into bakss_apply_flow
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="flowStep != null">flow_step,</if>
+            <if test="flowOrder != null">flow_order,</if>
             <if test="applyId != null">apply_id,</if>
             <if test="reviewUser != null">review_user,</if>
             <if test="reviewStatus != null">review_status,</if>
@@ -52,6 +60,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="flowStep != null">#{flowStep},</if>
+            <if test="flowOrder != null">#{flowOrder},</if>
             <if test="applyId != null">#{applyId},</if>
             <if test="reviewUser != null">#{reviewUser},</if>
             <if test="reviewStatus != null">#{reviewStatus},</if>
@@ -67,6 +76,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         update bakss_apply_flow
         <trim prefix="SET" suffixOverrides=",">
             <if test="flowStep != null">flow_step = #{flowStep},</if>
+            <if test="flowOrder != null">flow_order = #{flowOrder},</if>
             <if test="applyId != null">apply_id = #{applyId},</if>
             <if test="reviewUser != null">review_user = #{reviewUser},</if>
             <if test="reviewStatus != null">review_status = #{reviewStatus},</if>

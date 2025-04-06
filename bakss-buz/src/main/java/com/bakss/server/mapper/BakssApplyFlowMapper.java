@@ -19,6 +19,8 @@ public interface BakssApplyFlowMapper
      */
     public BakssApplyFlow selectBakssApplyFlowById(Long id);
 
+    public BakssApplyFlow getBakssApplyNextFlow(BakssApplyFlow bakssApplyFlow);
+
     /**
      * 查询申请流程列表
      * 
