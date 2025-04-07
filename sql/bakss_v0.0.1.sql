@@ -144,6 +144,18 @@ create table bakss_apply_backup_permis(
       update_time datetime
 );
 
+create table bakss_apply_backup_owner(
+      id int primary key auto_increment,
+      apply_id int,
+      backup_id int,
+      old_owner varchar(100),
+      new_owner varchar(100),
+      deleted int default 0,
+      create_time datetime default now(),
+      create_by varchar(100),
+      update_time datetime
+);
+
 --
 create table bakss_master_config (
     id int primary key auto_increment,

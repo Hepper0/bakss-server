@@ -20,8 +20,30 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updateTime"    column="update_time"    />
     </resultMap>
 
+    <resultMap type="BakssTask" id="BakssTaskResult">
+        <result property="id"    column="id"    />
+        <result property="applyType"    column="apply_type"    />
+        <result property="applyUser"    column="apply_user"    />
+        <result property="applyTime"    column="apply_time"    />
+        <result property="backupId"    column="backup_id"    />
+        <result property="backupTime"    column="backup_time"    />
+        <result property="backupStatus"    column="backup_status"    />
+        <result property="flowId"    column="flow_id"    />
+        <result property="flowStep"    column="flow_step"    />
+        <result property="reviewUser"    column="review_user"    />
+        <result property="remark"    column="remark"    />
+        <result property="deleted"    column="deleted"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
     <sql id="selectBakssApplyVo">
         select id, apply_type, apply_user, apply_time, backup_id, backup_time, backup_status, flow_id, remark, deleted, create_time, create_by, update_time from bakss_apply
+    </sql>
+
+    <sql id="selectBakssTaskVo">
+        select id, apply_type, apply_user, apply_time, backup_id, backup_time, backup_status, flow_id, flow_step, review_user, remark, deleted, create_time, create_by, update_time from bakss_apply
     </sql>
 
     <select id="selectBakssApplyList" parameterType="BakssApply" resultMap="BakssApplyResult">
@@ -106,4 +128,44 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{id}
         </foreach>
     </delete>
+
+    <select id="getDbaTodoTaskList" resultMap="BakssTaskResult">
+        <include refid="selectBakssTaskVo"></include>
+        from bakss_apply a, bakss_apply_flow b
+        where a.flow_id = b.flow_id and b.review_status = 0 and b.flow_step ='dba'
+    </select>
+
+    <select id="getAdminTodoTaskList" resultMap="BakssTaskResult">
+        <include refid="selectBakssTaskVo"></include>
+        from bakss_apply a, bakss_apply_flow b
+        where a.flow_id = b.flow_id and b.review_status = 0 and b.flow_step ='admin'
+    </select>
+
+    <select id="getDbaLeaderTodoTaskList" resultMap="BakssTaskResult">
+        <include refid="selectBakssTaskVo"></include>
+        from bakss_apply a, bakss_apply_flow b
+        where a.flow_id = b.flow_id and b.review_status = 0 and b.flow_step ='dbaLeader'
+    </select>
+
+    <select id="getOwnerTodoTaskList" resultMap="BakssTaskResult">
+        <include refid="selectBakssTaskVo"></include>
+        from bakss_apply a, bakss_apply_flow b, bakss_apply_backup_owner c
+        where a.flow_id = b.flow_id and b.review_status = 0 and b.flow_step ='owner' and a.id = c.apply_id and c.old_owner = #{owner}
+    </select>
+
+    <select id="getLeaderTodoTaskList" resultMap="BakssTaskResult">
+        <include refid="selectBakssTaskVo"></include>
+        from bakss_apply a, bakss_apply_flow b
+        where a.flow_id = b.flow_id and b.review_status = 0 and b.flow_step ='leader' and a.apply_user in (
+            <foreach collection="user" separator=",">
+                #{user}
+            </foreach>
+            )
+    </select>
+
+    <select id="getAssignTodoTaskList" resultMap="BakssTaskResult">
+        <include refid="selectBakssTaskVo"></include>
+        from bakss_apply a, bakss_apply_flow b, bakss_apply_backup_permis c
+        where a.flow_id = b.flow_id and b.review_status = 0 and b.flow_step ='assign' and a.id = c.apply_id and c.grant_user = #{user}
+    </select>
 </mapper>
