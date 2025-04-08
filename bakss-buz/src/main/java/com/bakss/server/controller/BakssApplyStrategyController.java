@@ -29,7 +29,7 @@ import com.bakss.common.core.page.TableDataInfo;
  * @date 2025-04-08
  */
 @RestController
-@RequestMapping("/system/strategy")
+@RequestMapping("/service/strategy")
 public class BakssApplyStrategyController extends BaseController
 {
     @Resource
@@ -38,7 +38,7 @@ public class BakssApplyStrategyController extends BaseController
     /**
      * 查询备份策略申请列表
      */
-    @PreAuthorize("@ss.hasPermi('system:strategy:list')")
+    @PreAuthorize("@ss.hasPermi('service:strategy:list')")
     @GetMapping("/list")
     public TableDataInfo list(BakssApplyStrategy bakssApplyStrategy)
     {
@@ -50,7 +50,7 @@ public class BakssApplyStrategyController extends BaseController
     /**
      * 导出备份策略申请列表
      */
-    @PreAuthorize("@ss.hasPermi('system:strategy:export')")
+    @PreAuthorize("@ss.hasPermi('service:strategy:export')")
     @Log(title = "备份策略申请", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, BakssApplyStrategy bakssApplyStrategy)
@@ -63,7 +63,7 @@ public class BakssApplyStrategyController extends BaseController
     /**
      * 获取备份策略申请详细信息
      */
-    @PreAuthorize("@ss.hasPermi('system:strategy:query')")
+    @PreAuthorize("@ss.hasPermi('service:strategy:query')")
     @GetMapping(value = "/{id}")
     public AjaxResult getInfo(@PathVariable("id") Long id)
     {
@@ -73,7 +73,7 @@ public class BakssApplyStrategyController extends BaseController
     /**
      * 新增备份策略申请
      */
-    @PreAuthorize("@ss.hasPermi('system:strategy:add')")
+    @PreAuthorize("@ss.hasPermi('service:strategy:add')")
     @Log(title = "备份策略申请", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody BakssApplyStrategy bakssApplyStrategy)
@@ -84,7 +84,7 @@ public class BakssApplyStrategyController extends BaseController
     /**
      * 修改备份策略申请
      */
-    @PreAuthorize("@ss.hasPermi('system:strategy:edit')")
+    @PreAuthorize("@ss.hasPermi('service:strategy:edit')")
     @Log(title = "备份策略申请", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody BakssApplyStrategy bakssApplyStrategy)
@@ -95,7 +95,7 @@ public class BakssApplyStrategyController extends BaseController
     /**
      * 删除备份策略申请
      */
-    @PreAuthorize("@ss.hasPermi('system:strategy:remove')")
+    @PreAuthorize("@ss.hasPermi('service:strategy:remove')")
     @Log(title = "备份策略申请", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable Long[] ids)

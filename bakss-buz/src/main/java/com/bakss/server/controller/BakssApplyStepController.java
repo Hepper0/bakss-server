@@ -23,22 +23,22 @@ import com.bakss.common.utils.poi.ExcelUtil;
 import com.bakss.common.core.page.TableDataInfo;
 
 /**
- * 【请填写功能名称】Controller
+ * 申请步骤Controller
  *
  * @author author
  * @date 2025-04-06
  */
 @RestController
-@RequestMapping("/system/step")
+@RequestMapping("/service/step")
 public class BakssApplyStepController extends BaseController
 {
     @Resource
     private IBakssApplyStepService bakssApplyStepService;
 
     /**
-     * 查询【请填写功能名称】列表
+     * 查询申请步骤列表
      */
-    @PreAuthorize("@ss.hasPermi('system:step:list')")
+    @PreAuthorize("@ss.hasPermi('service:step:list')")
     @GetMapping("/list")
     public TableDataInfo list(BakssApplyStep bakssApplyStep)
     {
@@ -48,22 +48,22 @@ public class BakssApplyStepController extends BaseController
     }
 
     /**
-     * 导出【请填写功能名称】列表
+     * 导出申请步骤列表
      */
-    @PreAuthorize("@ss.hasPermi('system:step:export')")
-    @Log(title = "【请填写功能名称】", businessType = BusinessType.EXPORT)
+    @PreAuthorize("@ss.hasPermi('service:step:export')")
+    @Log(title = "申请步骤", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, BakssApplyStep bakssApplyStep)
     {
         List<BakssApplyStep> list = bakssApplyStepService.selectBakssApplyStepList(bakssApplyStep);
         ExcelUtil<BakssApplyStep> util = new ExcelUtil<BakssApplyStep>(BakssApplyStep.class);
-        util.exportExcel(response, list, "【请填写功能名称】数据");
+        util.exportExcel(response, list, "申请步骤数据");
     }
 
     /**
-     * 获取【请填写功能名称】详细信息
+     * 获取申请步骤详细信息
      */
-    @PreAuthorize("@ss.hasPermi('system:step:query')")
+    @PreAuthorize("@ss.hasPermi('service:step:query')")
     @GetMapping(value = "/{id}")
     public AjaxResult getInfo(@PathVariable("id") Long id)
     {
@@ -71,10 +71,10 @@ public class BakssApplyStepController extends BaseController
     }
 
     /**
-     * 新增【请填写功能名称】
+     * 新增申请步骤
      */
-    @PreAuthorize("@ss.hasPermi('system:step:add')")
-    @Log(title = "【请填写功能名称】", businessType = BusinessType.INSERT)
+    @PreAuthorize("@ss.hasPermi('service:step:add')")
+    @Log(title = "申请步骤", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody BakssApplyStep bakssApplyStep)
     {
@@ -82,10 +82,10 @@ public class BakssApplyStepController extends BaseController
     }
 
     /**
-     * 修改【请填写功能名称】
+     * 修改申请步骤
      */
-    @PreAuthorize("@ss.hasPermi('system:step:edit')")
-    @Log(title = "【请填写功能名称】", businessType = BusinessType.UPDATE)
+    @PreAuthorize("@ss.hasPermi('service:step:edit')")
+    @Log(title = "申请步骤", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody BakssApplyStep bakssApplyStep)
     {
@@ -93,10 +93,10 @@ public class BakssApplyStepController extends BaseController
     }
 
     /**
-     * 删除【请填写功能名称】
+     * 删除申请步骤
      */
-    @PreAuthorize("@ss.hasPermi('system:step:remove')")
-    @Log(title = "【请填写功能名称】", businessType = BusinessType.DELETE)
+    @PreAuthorize("@ss.hasPermi('service:step:remove')")
+    @Log(title = "申请步骤", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable Long[] ids)
     {

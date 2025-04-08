@@ -5,7 +5,7 @@ import com.bakss.common.core.domain.BaseEntity;
 import lombok.Data;
 
 /**
- * 【请填写功能名称】对象 bakss_apply_step
+ * 申请步骤对象 bakss_apply_step
  *
  * @author author
  * @date 2025-04-06

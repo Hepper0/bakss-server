@@ -9,7 +9,7 @@ import com.bakss.server.domain.BakssApplyStep;
 import com.bakss.server.service.IBakssApplyStepService;
 
 /**
- * 【请填写功能名称】Service业务层处理
+ * 申请步骤Service业务层处理
  *
  * @author author
  * @date 2025-04-06
@@ -21,10 +21,10 @@ public class BakssApplyStepServiceImpl implements IBakssApplyStepService
     private BakssApplyStepMapper bakssApplyStepMapper;
 
     /**
-     * 查询【请填写功能名称】
+     * 查询申请步骤
      *
-     * @param id 【请填写功能名称】主键
-     * @return 【请填写功能名称】
+     * @param id 申请步骤主键
+     * @return 申请步骤
      */
     @Override
     public BakssApplyStep selectBakssApplyStepById(Long id)
@@ -33,10 +33,10 @@ public class BakssApplyStepServiceImpl implements IBakssApplyStepService
     }
 
     /**
-     * 查询【请填写功能名称】列表
+     * 查询申请步骤列表
      *
-     * @param bakssApplyStep 【请填写功能名称】
-     * @return 【请填写功能名称】
+     * @param bakssApplyStep 申请步骤
+     * @return 申请步骤
      */
     @Override
     public List<BakssApplyStep> selectBakssApplyStepList(BakssApplyStep bakssApplyStep)
@@ -45,9 +45,9 @@ public class BakssApplyStepServiceImpl implements IBakssApplyStepService
     }
 
     /**
-     * 新增【请填写功能名称】
+     * 新增申请步骤
      *
-     * @param bakssApplyStep 【请填写功能名称】
+     * @param bakssApplyStep 申请步骤
      * @return 结果
      */
     @Override
@@ -58,9 +58,9 @@ public class BakssApplyStepServiceImpl implements IBakssApplyStepService
     }
 
     /**
-     * 修改【请填写功能名称】
+     * 修改申请步骤
      *
-     * @param bakssApplyStep 【请填写功能名称】
+     * @param bakssApplyStep 申请步骤
      * @return 结果
      */
     @Override
@@ -71,9 +71,9 @@ public class BakssApplyStepServiceImpl implements IBakssApplyStepService
     }
 
     /**
-     * 批量删除【请填写功能名称】
+     * 批量删除申请步骤
      *
-     * @param ids 需要删除的【请填写功能名称】主键
+     * @param ids 需要删除的申请步骤主键
      * @return 结果
      */
     @Override
@@ -83,9 +83,9 @@ public class BakssApplyStepServiceImpl implements IBakssApplyStepService
     }
 
     /**
-     * 删除【请填写功能名称】信息
+     * 删除申请步骤信息
      *
-     * @param id 【请填写功能名称】主键
+     * @param id 申请步骤主键
      * @return 结果
      */
     @Override
