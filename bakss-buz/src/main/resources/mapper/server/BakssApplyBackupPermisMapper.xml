@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bakss.system.mapper.BakssApplyBackupPermisMapper">
+    
+    <resultMap type="BakssApplyBackupPermis" id="BakssApplyBackupPermisResult">
+        <result property="id"    column="id"    />
+        <result property="applyId"    column="apply_id"    />
+        <result property="backupId"    column="backup_id"    />
+        <result property="grantUser"    column="grant_user"    />
+        <result property="startTime"    column="start_time"    />
+        <result property="endTime"    column="end_time"    />
+        <result property="deleted"    column="deleted"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectBakssApplyBackupPermisVo">
+        select id, apply_id, backup_id, grant_user, start_time, end_time, deleted, create_time, create_by, update_time from bakss_apply_backup_permis
+    </sql>
+
+    <select id="selectBakssApplyBackupPermisList" parameterType="BakssApplyBackupPermis" resultMap="BakssApplyBackupPermisResult">
+        <include refid="selectBakssApplyBackupPermisVo"/>
+        <where>  
+            <if test="applyId != null "> and apply_id = #{applyId}</if>
+            <if test="backupId != null "> and backup_id = #{backupId}</if>
+            <if test="grantUser != null  and grantUser != ''"> and grant_user = #{grantUser}</if>
+            <if test="startTime != null "> and start_time = #{startTime}</if>
+            <if test="endTime != null "> and end_time = #{endTime}</if>
+            <if test="deleted != null "> and deleted = #{deleted}</if>
+        </where>
+    </select>
+    
+    <select id="selectBakssApplyBackupPermisById" parameterType="Long" resultMap="BakssApplyBackupPermisResult">
+        <include refid="selectBakssApplyBackupPermisVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertBakssApplyBackupPermis" parameterType="BakssApplyBackupPermis" useGeneratedKeys="true" keyProperty="id">
+        insert into bakss_apply_backup_permis
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="applyId != null">apply_id,</if>
+            <if test="backupId != null">backup_id,</if>
+            <if test="grantUser != null">grant_user,</if>
+            <if test="startTime != null">start_time,</if>
+            <if test="endTime != null">end_time,</if>
+            <if test="deleted != null">deleted,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="applyId != null">#{applyId},</if>
+            <if test="backupId != null">#{backupId},</if>
+            <if test="grantUser != null">#{grantUser},</if>
+            <if test="startTime != null">#{startTime},</if>
+            <if test="endTime != null">#{endTime},</if>
+            <if test="deleted != null">#{deleted},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBakssApplyBackupPermis" parameterType="BakssApplyBackupPermis">
+        update bakss_apply_backup_permis
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="applyId != null">apply_id = #{applyId},</if>
+            <if test="backupId != null">backup_id = #{backupId},</if>
+            <if test="grantUser != null">grant_user = #{grantUser},</if>
+            <if test="startTime != null">start_time = #{startTime},</if>
+            <if test="endTime != null">end_time = #{endTime},</if>
+            <if test="deleted != null">deleted = #{deleted},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBakssApplyBackupPermisById" parameterType="Long">
+        delete from bakss_apply_backup_permis where id = #{id}
+    </delete>
+
+    <delete id="deleteBakssApplyBackupPermisByIds" parameterType="String">
+        delete from bakss_apply_backup_permis where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
