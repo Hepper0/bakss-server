@@ -3,6 +3,7 @@ package com.bakss.server.service.impl;
 import java.util.Arrays;
 import java.util.List;
 
+import com.bakss.common.core.domain.entity.SysRole;
 import com.bakss.common.core.domain.model.LoginUser;
 import com.bakss.common.utils.DateUtils;
 import com.bakss.common.utils.SecurityUtils;
@@ -188,13 +189,5 @@ public class BakssApplyServiceImpl implements IBakssApplyService
             }
         }
 
-    }
-
-    public List<BakssTask> todo(){
-        return null;
-    }
-
-    public List<BakssTask> done(){
-        return null;
     }
 }

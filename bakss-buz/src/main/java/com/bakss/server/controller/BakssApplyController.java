@@ -123,24 +123,4 @@ public class BakssApplyController extends BaseController
         bakssApplyService.rejected(bakssApply);
         return success();
     }
-
-    /**
-     * 代办申请
-     */
-    @Log(title = "申请", businessType = BusinessType.UPDATE)
-    @GetMapping("/todo")
-    public TableDataInfo todo()
-    {
-        return getDataTable(bakssApplyService.todo());
-    }
-
-    /**
-     * 已完成申请
-     */
-    @Log(title = "申请", businessType = BusinessType.UPDATE)
-    @GetMapping("/done")
-    public TableDataInfo done()
-    {
-        return getDataTable(bakssApplyService.done());
-    }
 }

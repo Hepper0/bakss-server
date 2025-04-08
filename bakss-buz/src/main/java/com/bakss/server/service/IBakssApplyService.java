@@ -64,7 +64,4 @@ public interface IBakssApplyService
 
     public void rejected(BakssApply apply);
 
-    public List<BakssTask> todo();
-
-    public List<BakssTask> done();
 }
