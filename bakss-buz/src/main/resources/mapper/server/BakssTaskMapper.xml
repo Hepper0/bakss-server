@@ -47,7 +47,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="getOwnerTodoTaskList" resultMap="BakssTaskResult">
         <include refid="selectBakssTaskVo"></include>
         from bakss_apply a, bakss_apply_flow b, bakss_apply_backup_owner c
-        where a.flow_id = b.flow_id and b.review_status = 0 and b.flow_step ='owner' and a.id = c.apply_id and c.old_owner = #{owner}
+        where a.flow_id = b.flow_id and b.review_status = 0 and b.flow_step ='owner' and a.id = c.apply_id and c.old_user = #{owner}
     </select>
 
     <select id="getLeaderTodoTaskList" resultMap="BakssTaskResult">

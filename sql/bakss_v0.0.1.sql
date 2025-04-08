@@ -144,12 +144,13 @@ create table bakss_apply_backup_permis(
       update_time datetime
 );
 
+-- 修改owner与修改管理员都用同一个表
 create table bakss_apply_backup_owner(
       id int primary key auto_increment,
       apply_id int,
       backup_id int,
-      old_owner varchar(100),
-      new_owner varchar(100),
+      old_user varchar(100),
+      new_user varchar(100),
       deleted int default 0,
       create_time datetime default now(),
       create_by varchar(100),
