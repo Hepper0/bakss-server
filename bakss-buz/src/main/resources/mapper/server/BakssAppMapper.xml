@@ -2,13 +2,13 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.bakss.server.mapper.BakssApplyMapper">
+<mapper namespace="com.bakss.server.mapper.BakssAppMapper">
     
-    <resultMap type="BakssApply" id="BakssApplyResult">
+    <resultMap type="BakssApp" id="BakssAppResult">
         <result property="id"    column="id"    />
-        <result property="applyType"    column="apply_type"    />
-        <result property="applyUser"    column="apply_user"    />
-        <result property="applyTime"    column="apply_time"    />
+        <result property="appType"    column="app_type"    />
+        <result property="appUser"    column="app_user"    />
+        <result property="appTime"    column="app_time"    />
         <result property="backupId"    column="backup_id"    />
         <result property="backupTime"    column="backup_time"    />
         <result property="backupStatus"    column="backup_status"    />
@@ -22,9 +22,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <resultMap type="BakssTask" id="BakssTaskResult">
         <result property="id"    column="id"    />
-        <result property="applyType"    column="apply_type"    />
-        <result property="applyUser"    column="apply_user"    />
-        <result property="applyTime"    column="apply_time"    />
+        <result property="appType"    column="app_type"    />
+        <result property="appUser"    column="app_user"    />
+        <result property="appTime"    column="app_time"    />
         <result property="backupId"    column="backup_id"    />
         <result property="backupTime"    column="backup_time"    />
         <result property="backupStatus"    column="backup_status"    />
@@ -38,20 +38,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updateTime"    column="update_time"    />
     </resultMap>
 
-    <sql id="selectBakssApplyVo">
-        select id, apply_type, apply_user, apply_time, backup_id, backup_time, backup_status, flow_id, remark, deleted, create_time, create_by, update_time from bakss_apply
+    <sql id="selectBakssAppVo">
+        select id, app_type, app_user, app_time, backup_id, backup_time, backup_status, flow_id, remark, deleted, create_time, create_by, update_time from bakss_app
     </sql>
 
     <sql id="selectBakssTaskVo">
-        select id, apply_type, apply_user, apply_time, backup_id, backup_time, backup_status, flow_id, flow_step, review_user, remark, deleted, create_time, create_by, update_time from bakss_apply
+        select id, app_type, app_user, app_time, backup_id, backup_time, backup_status, flow_id, flow_step, review_user, remark, deleted, create_time, create_by, update_time from bakss_app
     </sql>
 
-    <select id="selectBakssApplyList" parameterType="BakssApply" resultMap="BakssApplyResult">
-        <include refid="selectBakssApplyVo"/>
+    <select id="selectBakssAppList" parameterType="BakssApp" resultMap="BakssAppResult">
+        <include refid="selectBakssAppVo"/>
         <where>  
-            <if test="applyType != null "> and apply_type = #{applyType}</if>
-            <if test="applyUser != null  and applyUser != ''"> and apply_user = #{applyUser}</if>
-            <if test="applyTime != null "> and apply_time = #{applyTime}</if>
+            <if test="appType != null "> and app_type = #{appType}</if>
+            <if test="appUser != null  and appUser != ''"> and app_user = #{appUser}</if>
+            <if test="appTime != null "> and app_time = #{appTime}</if>
             <if test="backupId != null "> and backup_id = #{backupId}</if>
             <if test="backupTime != null "> and backup_time = #{backupTime}</if>
             <if test="backupStatus != null "> and backup_status = #{backupStatus}</if>
@@ -60,18 +60,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
     </select>
     
-    <select id="selectBakssApplyById" parameterType="String" resultMap="BakssApplyResult">
-        <include refid="selectBakssApplyVo"/>
+    <select id="selectBakssAppById" parameterType="String" resultMap="BakssAppResult">
+        <include refid="selectBakssAppVo"/>
         where id = #{id}
     </select>
 
-    <insert id="insertBakssApply" parameterType="BakssApply">
-        insert into bakss_apply
+    <insert id="insertBakssApp" parameterType="BakssApp">
+        insert into bakss_app
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">id,</if>
-            <if test="applyType != null">apply_type,</if>
-            <if test="applyUser != null">apply_user,</if>
-            <if test="applyTime != null">apply_time,</if>
+            <if test="appType != null">app_type,</if>
+            <if test="appUser != null">app_user,</if>
+            <if test="appTime != null">app_time,</if>
             <if test="backupId != null">backup_id,</if>
             <if test="backupTime != null">backup_time,</if>
             <if test="backupStatus != null">backup_status,</if>
@@ -84,9 +84,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">#{id},</if>
-            <if test="applyType != null">#{applyType},</if>
-            <if test="applyUser != null">#{applyUser},</if>
-            <if test="applyTime != null">#{applyTime},</if>
+            <if test="appType != null">#{appType},</if>
+            <if test="appUser != null">#{appUser},</if>
+            <if test="appTime != null">#{appTime},</if>
             <if test="backupId != null">#{backupId},</if>
             <if test="backupTime != null">#{backupTime},</if>
             <if test="backupStatus != null">#{backupStatus},</if>
@@ -99,12 +99,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </trim>
     </insert>
 
-    <update id="updateBakssApply" parameterType="BakssApply">
-        update bakss_apply
+    <update id="updateBakssApp" parameterType="BakssApp">
+        update bakss_app
         <trim prefix="SET" suffixOverrides=",">
-            <if test="applyType != null">apply_type = #{applyType},</if>
-            <if test="applyUser != null">apply_user = #{applyUser},</if>
-            <if test="applyTime != null">apply_time = #{applyTime},</if>
+            <if test="appType != null">app_type = #{appType},</if>
+            <if test="appUser != null">app_user = #{appUser},</if>
+            <if test="appTime != null">app_time = #{appTime},</if>
             <if test="backupId != null">backup_id = #{backupId},</if>
             <if test="backupTime != null">backup_time = #{backupTime},</if>
             <if test="backupStatus != null">backup_status = #{backupStatus},</if>
@@ -118,12 +118,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where id = #{id}
     </update>
 
-    <delete id="deleteBakssApplyById" parameterType="String">
-        delete from bakss_apply where id = #{id}
+    <delete id="deleteBakssAppById" parameterType="String">
+        delete from bakss_app where id = #{id}
     </delete>
 
-    <delete id="deleteBakssApplyByIds" parameterType="String">
-        delete from bakss_apply where id in 
+    <delete id="deleteBakssAppByIds" parameterType="String">
+        delete from bakss_app where id in
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
         </foreach>
@@ -131,32 +131,32 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="getDbaTodoTaskList" resultMap="BakssTaskResult">
         <include refid="selectBakssTaskVo"></include>
-        from bakss_apply a, bakss_apply_flow b
+        from bakss_app a, bakss_app_flow b
         where a.flow_id = b.flow_id and b.review_status = 0 and b.flow_step ='dba'
     </select>
 
     <select id="getAdminTodoTaskList" resultMap="BakssTaskResult">
         <include refid="selectBakssTaskVo"></include>
-        from bakss_apply a, bakss_apply_flow b
+        from bakss_app a, bakss_app_flow b
         where a.flow_id = b.flow_id and b.review_status = 0 and b.flow_step ='admin'
     </select>
 
     <select id="getDbaLeaderTodoTaskList" resultMap="BakssTaskResult">
         <include refid="selectBakssTaskVo"></include>
-        from bakss_apply a, bakss_apply_flow b
+        from bakss_app a, bakss_app_flow b
         where a.flow_id = b.flow_id and b.review_status = 0 and b.flow_step ='dbaLeader'
     </select>
 
     <select id="getOwnerTodoTaskList" resultMap="BakssTaskResult">
         <include refid="selectBakssTaskVo"></include>
-        from bakss_apply a, bakss_apply_flow b, bakss_apply_backup_owner c
-        where a.flow_id = b.flow_id and b.review_status = 0 and b.flow_step ='owner' and a.id = c.apply_id and c.old_owner = #{owner}
+        from bakss_app a, bakss_app_flow b, bakss_app_backup_owner c
+        where a.flow_id = b.flow_id and b.review_status = 0 and b.flow_step ='owner' and a.id = c.app_id and c.old_owner = #{owner}
     </select>
 
     <select id="getLeaderTodoTaskList" resultMap="BakssTaskResult">
         <include refid="selectBakssTaskVo"></include>
-        from bakss_apply a, bakss_apply_flow b
-        where a.flow_id = b.flow_id and b.review_status = 0 and b.flow_step ='leader' and a.apply_user in (
+        from bakss_app a, bakss_app_flow b
+        where a.flow_id = b.flow_id and b.review_status = 0 and b.flow_step ='leader' and a.app_user in (
             <foreach collection="user" separator=",">
                 #{user}
             </foreach>
@@ -165,7 +165,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="getAssignTodoTaskList" resultMap="BakssTaskResult">
         <include refid="selectBakssTaskVo"></include>
-        from bakss_apply a, bakss_apply_flow b, bakss_apply_backup_permis c
-        where a.flow_id = b.flow_id and b.review_status = 0 and b.flow_step ='assign' and a.id = c.apply_id and c.grant_user = #{user}
+        from bakss_app a, bakss_app_flow b, bakss_app_backup_permis c
+        where a.flow_id = b.flow_id and b.review_status = 0 and b.flow_step ='assign' and a.id = c.app_id and c.grant_user = #{user}
     </select>
 </mapper>

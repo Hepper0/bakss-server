@@ -17,8 +17,8 @@ import com.bakss.common.annotation.Log;
 import com.bakss.common.core.controller.BaseController;
 import com.bakss.common.core.domain.AjaxResult;
 import com.bakss.common.enums.BusinessType;
-import com.bakss.server.domain.BakssApplyStep;
-import com.bakss.server.service.IBakssApplyStepService;
+import com.bakss.server.domain.BakssAppStep;
+import com.bakss.server.service.IBakssAppStepService;
 import com.bakss.common.utils.poi.ExcelUtil;
 import com.bakss.common.core.page.TableDataInfo;
 
@@ -30,20 +30,20 @@ import com.bakss.common.core.page.TableDataInfo;
  */
 @RestController
 @RequestMapping("/service/step")
-public class BakssApplyStepController extends BaseController
+public class BakssAppStepController extends BaseController
 {
     @Resource
-    private IBakssApplyStepService bakssApplyStepService;
+    private IBakssAppStepService bakssAppStepService;
 
     /**
      * 查询申请步骤列表
      */
     @PreAuthorize("@ss.hasPermi('service:step:list')")
     @GetMapping("/list")
-    public TableDataInfo list(BakssApplyStep bakssApplyStep)
+    public TableDataInfo list(BakssAppStep bakssAppStep)
     {
         startPage();
-        List<BakssApplyStep> list = bakssApplyStepService.selectBakssApplyStepList(bakssApplyStep);
+        List<BakssAppStep> list = bakssAppStepService.selectBakssAppStepList(bakssAppStep);
         return getDataTable(list);
     }
 
@@ -53,10 +53,10 @@ public class BakssApplyStepController extends BaseController
     @PreAuthorize("@ss.hasPermi('service:step:export')")
     @Log(title = "申请步骤", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
-    public void export(HttpServletResponse response, BakssApplyStep bakssApplyStep)
+    public void export(HttpServletResponse response, BakssAppStep bakssAppStep)
     {
-        List<BakssApplyStep> list = bakssApplyStepService.selectBakssApplyStepList(bakssApplyStep);
-        ExcelUtil<BakssApplyStep> util = new ExcelUtil<BakssApplyStep>(BakssApplyStep.class);
+        List<BakssAppStep> list = bakssAppStepService.selectBakssAppStepList(bakssAppStep);
+        ExcelUtil<BakssAppStep> util = new ExcelUtil<BakssAppStep>(BakssAppStep.class);
         util.exportExcel(response, list, "申请步骤数据");
     }
 
@@ -67,7 +67,7 @@ public class BakssApplyStepController extends BaseController
     @GetMapping(value = "/{id}")
     public AjaxResult getInfo(@PathVariable("id") Long id)
     {
-        return success(bakssApplyStepService.selectBakssApplyStepById(id));
+        return success(bakssAppStepService.selectBakssAppStepById(id));
     }
 
     /**
@@ -76,9 +76,9 @@ public class BakssApplyStepController extends BaseController
     @PreAuthorize("@ss.hasPermi('service:step:add')")
     @Log(title = "申请步骤", businessType = BusinessType.INSERT)
     @PostMapping
-    public AjaxResult add(@RequestBody BakssApplyStep bakssApplyStep)
+    public AjaxResult add(@RequestBody BakssAppStep bakssAppStep)
     {
-        return toAjax(bakssApplyStepService.insertBakssApplyStep(bakssApplyStep));
+        return toAjax(bakssAppStepService.insertBakssAppStep(bakssAppStep));
     }
 
     /**
@@ -87,9 +87,9 @@ public class BakssApplyStepController extends BaseController
     @PreAuthorize("@ss.hasPermi('service:step:edit')")
     @Log(title = "申请步骤", businessType = BusinessType.UPDATE)
     @PutMapping
-    public AjaxResult edit(@RequestBody BakssApplyStep bakssApplyStep)
+    public AjaxResult edit(@RequestBody BakssAppStep bakssAppStep)
     {
-        return toAjax(bakssApplyStepService.updateBakssApplyStep(bakssApplyStep));
+        return toAjax(bakssAppStepService.updateBakssAppStep(bakssAppStep));
     }
 
     /**
@@ -100,6 +100,6 @@ public class BakssApplyStepController extends BaseController
 	@DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable Long[] ids)
     {
-        return toAjax(bakssApplyStepService.deleteBakssApplyStepByIds(ids));
+        return toAjax(bakssAppStepService.deleteBakssAppStepByIds(ids));
     }
 }

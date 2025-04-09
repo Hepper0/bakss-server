@@ -6,7 +6,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     
     <resultMap type="BakssApplyBackupPermis" id="BakssApplyBackupPermisResult">
         <result property="id"    column="id"    />
-        <result property="applyId"    column="apply_id"    />
+        <result property="appId"    column="app_id"    />
         <result property="backupId"    column="backup_id"    />
         <result property="grantUser"    column="grant_user"    />
         <result property="startTime"    column="start_time"    />
@@ -18,13 +18,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectBakssApplyBackupPermisVo">
-        select id, apply_id, backup_id, grant_user, start_time, end_time, deleted, create_time, create_by, update_time from bakss_apply_backup_permis
+        select id, app_id, backup_id, grant_user, start_time, end_time, deleted, create_time, create_by, update_time from bakss_app_backup_permis
     </sql>
 
     <select id="selectBakssApplyBackupPermisList" parameterType="BakssApplyBackupPermis" resultMap="BakssApplyBackupPermisResult">
         <include refid="selectBakssApplyBackupPermisVo"/>
         <where>  
-            <if test="applyId != null "> and apply_id = #{applyId}</if>
+            <if test="appId != null "> and app_id = #{appId}</if>
             <if test="backupId != null "> and backup_id = #{backupId}</if>
             <if test="grantUser != null  and grantUser != ''"> and grant_user = #{grantUser}</if>
             <if test="startTime != null "> and start_time = #{startTime}</if>
@@ -39,9 +39,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
     <insert id="insertBakssApplyBackupPermis" parameterType="BakssApplyBackupPermis" useGeneratedKeys="true" keyProperty="id">
-        insert into bakss_apply_backup_permis
+        insert into bakss_app_backup_permis
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="applyId != null">apply_id,</if>
+            <if test="appId != null">app_id,</if>
             <if test="backupId != null">backup_id,</if>
             <if test="grantUser != null">grant_user,</if>
             <if test="startTime != null">start_time,</if>
@@ -52,7 +52,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateTime != null">update_time,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="applyId != null">#{applyId},</if>
+            <if test="appId != null">#{appId},</if>
             <if test="backupId != null">#{backupId},</if>
             <if test="grantUser != null">#{grantUser},</if>
             <if test="startTime != null">#{startTime},</if>
@@ -65,9 +65,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </insert>
 
     <update id="updateBakssApplyBackupPermis" parameterType="BakssApplyBackupPermis">
-        update bakss_apply_backup_permis
+        update bakss_app_backup_permis
         <trim prefix="SET" suffixOverrides=",">
-            <if test="applyId != null">apply_id = #{applyId},</if>
+            <if test="appId != null">app_id = #{appId},</if>
             <if test="backupId != null">backup_id = #{backupId},</if>
             <if test="grantUser != null">grant_user = #{grantUser},</if>
             <if test="startTime != null">start_time = #{startTime},</if>
@@ -81,11 +81,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </update>
 
     <delete id="deleteBakssApplyBackupPermisById" parameterType="Long">
-        delete from bakss_apply_backup_permis where id = #{id}
+        delete from bakss_app_backup_permis where id = #{id}
     </delete>
 
     <delete id="deleteBakssApplyBackupPermisByIds" parameterType="String">
-        delete from bakss_apply_backup_permis where id in 
+        delete from bakss_app_backup_permis where id in 
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
         </foreach>

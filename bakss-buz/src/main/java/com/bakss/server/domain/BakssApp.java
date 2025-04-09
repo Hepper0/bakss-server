@@ -1,29 +1,35 @@
 package com.bakss.server.domain;
 
 import java.util.Date;
-
-import com.bakss.common.core.domain.BaseEntity;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.bakss.common.annotation.Excel;
+import com.bakss.common.core.domain.BaseEntity;
 import lombok.Data;
 
 /**
- * 备份权限申请对象 bakss_apply_backup_permis
+ * 申请流程对象 bakss_App
  *
  * @author author
- * @date 2025-04-08
+ * @date 2025-04-02
  */
 @Data
-public class BakssApplyBackupPermis extends BaseEntity
+public class BakssApp extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
     /** $column.columnComment */
-    private Long id;
+    private String id;
 
     /** $column.columnComment */
     @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
-    private Long appId;
+    private Long appType;
+
+    /** $column.columnComment */
+    @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
+    private String appUser;
+
+    /** $column.columnComment */
+    @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
+    private Date appTime;
 
     /** $column.columnComment */
     @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
@@ -31,18 +37,17 @@ public class BakssApplyBackupPermis extends BaseEntity
 
     /** $column.columnComment */
     @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
-    private String grantUser;
+    private Date backupTime;
 
     /** $column.columnComment */
     @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
-    private Date startTime;
+    private Long backupStatus;
 
     /** $column.columnComment */
     @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
-    private Date endTime;
+    private Long flowId;
 
     /** $column.columnComment */
     @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
     private Long deleted;
-
 }

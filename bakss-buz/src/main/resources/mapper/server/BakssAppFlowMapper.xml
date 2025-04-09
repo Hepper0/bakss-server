@@ -2,13 +2,13 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.bakss.server.mapper.BakssApplyFlowMapper">
+<mapper namespace="com.bakss.server.mapper.BakssAppFlowMapper">
     
-    <resultMap type="BakssApplyFlow" id="BakssApplyFlowResult">
+    <resultMap type="BakssAppFlow" id="BakssAppFlowResult">
         <result property="id"    column="id"    />
         <result property="flowStep"    column="flow_step"    />
         <result property="flowOrder"    column="flow_order"    />
-        <result property="applyId"    column="apply_id"    />
+        <result property="appId"    column="app_id"    />
         <result property="reviewUser"    column="review_user"    />
         <result property="reviewStatus"    column="review_status"    />
         <result property="remark"    column="remark"    />
@@ -18,38 +18,38 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updateTime"    column="update_time"    />
     </resultMap>
 
-    <sql id="selectBakssApplyFlowVo">
-        select id, flow_step, flow_order, apply_id, review_user, review_status, remark, deleted, create_time, create_by, update_time from bakss_apply_flow
+    <sql id="selectBakssAppFlowVo">
+        select id, flow_step, flow_order, app_id, review_user, review_status, remark, deleted, create_time, create_by, update_time from bakss_app_flow
     </sql>
 
-    <select id="selectBakssApplyFlowList" parameterType="BakssApplyFlow" resultMap="BakssApplyFlowResult">
-        <include refid="selectBakssApplyFlowVo"/>
+    <select id="selectBakssAppFlowList" parameterType="BakssAppFlow" resultMap="BakssAppFlowResult">
+        <include refid="selectBakssAppFlowVo"/>
         <where>  
             <if test="flowStep != null "> and flow_step = #{flowStep}</if>
             <if test="flowOrder != null "> and flow_order = #{flowOrder}</if>
-            <if test="applyId != null  and applyId != ''"> and apply_id = #{applyId}</if>
+            <if test="appId != null  and appId != ''"> and app_id = #{appId}</if>
             <if test="reviewUser != null  and reviewUser != ''"> and review_user = #{reviewUser}</if>
             <if test="reviewStatus != null "> and review_status = #{reviewStatus}</if>
             <if test="deleted != null "> and deleted = #{deleted}</if>
         </where>
     </select>
     
-    <select id="selectBakssApplyFlowById" parameterType="Long" resultMap="BakssApplyFlowResult">
-        <include refid="selectBakssApplyFlowVo"/>
+    <select id="selectBakssAppFlowById" parameterType="Long" resultMap="BakssAppFlowResult">
+        <include refid="selectBakssAppFlowVo"/>
         where id = #{id}
     </select>
 
-    <select id="getBakssApplyNextFlow" parameterType="BakssApplyFlow" resultMap="BakssApplyFlowResult">
-        <include refid="selectBakssApplyFlowVo"/>
-        where apply_id = #{applyId} and apply_order = #{applyOrder} + 1
+    <select id="getBakssAppNextFlow" parameterType="BakssAppFlow" resultMap="BakssAppFlowResult">
+        <include refid="selectBakssAppFlowVo"/>
+        where app_id = #{appId} and app_order = #{appOrder} + 1
     </select>
 
-    <insert id="insertBakssApplyFlow" parameterType="BakssApplyFlow" useGeneratedKeys="true" keyProperty="id">
-        insert into bakss_apply_flow
+    <insert id="insertBakssAppFlow" parameterType="BakssAppFlow" useGeneratedKeys="true" keyProperty="id">
+        insert into bakss_app_flow
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="flowStep != null">flow_step,</if>
             <if test="flowOrder != null">flow_order,</if>
-            <if test="applyId != null">apply_id,</if>
+            <if test="appId != null">app_id,</if>
             <if test="reviewUser != null">review_user,</if>
             <if test="reviewStatus != null">review_status,</if>
             <if test="remark != null">remark,</if>
@@ -61,7 +61,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="flowStep != null">#{flowStep},</if>
             <if test="flowOrder != null">#{flowOrder},</if>
-            <if test="applyId != null">#{applyId},</if>
+            <if test="appId != null">#{appId},</if>
             <if test="reviewUser != null">#{reviewUser},</if>
             <if test="reviewStatus != null">#{reviewStatus},</if>
             <if test="remark != null">#{remark},</if>
@@ -72,12 +72,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </trim>
     </insert>
 
-    <update id="updateBakssApplyFlow" parameterType="BakssApplyFlow">
-        update bakss_apply_flow
+    <update id="updateBakssAppFlow" parameterType="BakssAppFlow">
+        update bakss_app_flow
         <trim prefix="SET" suffixOverrides=",">
             <if test="flowStep != null">flow_step = #{flowStep},</if>
             <if test="flowOrder != null">flow_order = #{flowOrder},</if>
-            <if test="applyId != null">apply_id = #{applyId},</if>
+            <if test="appId != null">app_id = #{appId},</if>
             <if test="reviewUser != null">review_user = #{reviewUser},</if>
             <if test="reviewStatus != null">review_status = #{reviewStatus},</if>
             <if test="remark != null">remark = #{remark},</if>
@@ -89,12 +89,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where id = #{id}
     </update>
 
-    <delete id="deleteBakssApplyFlowById" parameterType="Long">
-        delete from bakss_apply_flow where id = #{id}
+    <delete id="deleteBakssAppFlowById" parameterType="Long">
+        delete from bakss_app_flow where id = #{id}
     </delete>
 
-    <delete id="deleteBakssApplyFlowByIds" parameterType="String">
-        delete from bakss_apply_flow where id in 
+    <delete id="deleteBakssAppFlowByIds" parameterType="String">
+        delete from bakss_app_flow where id in
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
         </foreach>

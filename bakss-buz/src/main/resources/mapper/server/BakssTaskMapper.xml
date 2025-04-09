@@ -6,9 +6,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <resultMap type="BakssTask" id="BakssTaskResult">
         <result property="id"    column="id"    />
-        <result property="applyType"    column="apply_type"    />
-        <result property="applyUser"    column="apply_user"    />
-        <result property="applyTime"    column="apply_time"    />
+        <result property="appType"    column="app_type"    />
+        <result property="appUser"    column="app_user"    />
+        <result property="appTime"    column="app_time"    />
         <result property="backupId"    column="backup_id"    />
         <result property="backupTime"    column="backup_time"    />
         <result property="backupStatus"    column="backup_status"    />
@@ -23,37 +23,37 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectBakssTaskVo">
-        select id, apply_type, apply_user, apply_time, backup_id, backup_time, backup_status, flow_id, flow_step, review_user, remark, deleted, create_time, create_by, update_time from bakss_apply
+        select id, app_type, app_user, app_time, backup_id, backup_time, backup_status, flow_id, flow_step, review_user, remark, deleted, create_time, create_by, update_time from bakss_apply
     </sql>
 
     <select id="getDbaTodoTaskList" resultMap="BakssTaskResult">
         <include refid="selectBakssTaskVo"></include>
-        from bakss_apply a, bakss_apply_flow b
+        from bakss_app a, bakss_app_flow b
         where a.flow_id = b.flow_id and b.review_status = 0 and b.flow_step ='dba'
     </select>
 
     <select id="getAdminTodoTaskList" resultMap="BakssTaskResult">
         <include refid="selectBakssTaskVo"></include>
-        from bakss_apply a, bakss_apply_flow b
+        from bakss_app a, bakss_app_flow b
         where a.flow_id = b.flow_id and b.review_status = 0 and b.flow_step ='admin'
     </select>
 
     <select id="getDbaLeaderTodoTaskList" resultMap="BakssTaskResult">
         <include refid="selectBakssTaskVo"></include>
-        from bakss_apply a, bakss_apply_flow b
+        from bakss_app a, bakss_app_flow b
         where a.flow_id = b.flow_id and b.review_status = 0 and b.flow_step ='dbaLeader'
     </select>
 
     <select id="getOwnerTodoTaskList" resultMap="BakssTaskResult">
         <include refid="selectBakssTaskVo"></include>
-        from bakss_apply a, bakss_apply_flow b, bakss_apply_backup_owner c
-        where a.flow_id = b.flow_id and b.review_status = 0 and b.flow_step ='owner' and a.id = c.apply_id and c.old_user = #{owner}
+        from bakss_app a, bakss_app_flow b, bakss_app_backup_owner c
+        where a.flow_id = b.flow_id and b.review_status = 0 and b.flow_step ='owner' and a.id = c.app_id and c.old_user = #{owner}
     </select>
 
     <select id="getLeaderTodoTaskList" resultMap="BakssTaskResult">
         <include refid="selectBakssTaskVo"></include>
-        from bakss_apply a, bakss_apply_flow b
-        where a.flow_id = b.flow_id and b.review_status = 0 and b.flow_step ='leader' and a.apply_user in (
+        from bakss_app a, bakss_app_flow b
+        where a.flow_id = b.flow_id and b.review_status = 0 and b.flow_step ='leader' and a.app_user in (
             <foreach collection="user" separator=",">
                 #{user}
             </foreach>
@@ -62,19 +62,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="getAssignTodoTaskList" resultMap="BakssTaskResult">
         <include refid="selectBakssTaskVo"></include>
-        from bakss_apply a, bakss_apply_flow b, bakss_apply_backup_permis c
-        where a.flow_id = b.flow_id and b.review_status = 0 and b.flow_step ='assign' and a.id = c.apply_id and c.grant_user = #{user}
+        from bakss_app a, bakss_app_flow b, bakss_apply_backup_permis c
+        where a.flow_id = b.flow_id and b.review_status = 0 and b.flow_step ='assign' and a.id = c.app_id and c.grant_user = #{user}
     </select>
 
     <select id="getAllTodoTaskList" resultMap="BakssTaskResult">
         <include refid="selectBakssTaskVo"></include>
-        from bakss_apply a, bakss_apply_flow b
+        from bakss_app a, bakss_app_flow b
         where a.flow_id = b.flow_id and b.review_status = 0
     </select>
 
     <select id="getDoneTaskList" resultMap="BakssTaskResult">
         <include refid="selectBakssTaskVo"></include>
-        from bakss_apply a, bakss_apply_flow b
+        from bakss_app a, bakss_app_flow b
         where a.flow_id = b.flow_id and b.review_status = 1
     </select>
 </mapper>

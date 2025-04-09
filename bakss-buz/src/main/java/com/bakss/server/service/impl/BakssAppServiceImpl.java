@@ -8,14 +8,14 @@ import com.bakss.common.core.domain.model.LoginUser;
 import com.bakss.common.utils.DateUtils;
 import com.bakss.common.utils.SecurityUtils;
 import com.bakss.server.domain.*;
-import com.bakss.server.mapper.BakssApplyFlowMapper;
-import com.bakss.server.mapper.BakssApplyStepMapper;
+import com.bakss.server.mapper.BakssAppFlowMapper;
+import com.bakss.server.mapper.BakssAppStepMapper;
 import com.bakss.server.service.IBakssBackupService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import com.bakss.server.mapper.BakssApplyMapper;
-import com.bakss.server.service.IBakssApplyService;
+import com.bakss.server.mapper.BakssAppMapper;
+import com.bakss.server.service.IBakssAppService;
 
 import javax.annotation.Resource;
 
@@ -26,19 +26,19 @@ import javax.annotation.Resource;
  * @date 2025-03-26
  */
 @Service
-public class BakssApplyServiceImpl implements IBakssApplyService
+public class BakssAppServiceImpl implements IBakssAppService
 {
 
-    private static final Logger log = LoggerFactory.getLogger(BakssApplyServiceImpl.class);
+    private static final Logger log = LoggerFactory.getLogger(BakssAppServiceImpl.class);
 
     @Resource
-    private BakssApplyMapper bakssApplyMapper;
+    private BakssAppMapper bakssAppMapper;
 
     @Resource
-    private BakssApplyFlowMapper bakssApplyFlowMapper;
+    private BakssAppFlowMapper bakssAppFlowMapper;
 
     @Resource
-    private BakssApplyStepMapper bakssApplyStepMapper;
+    private BakssAppStepMapper bakssAppStepMapper;
 
     @Resource
     private IBakssBackupService bakssBackupService;
@@ -62,50 +62,50 @@ public class BakssApplyServiceImpl implements IBakssApplyService
      * @return 申请
      */
     @Override
-    public BakssApply selectBakssApplyById(String id)
+    public BakssApp selectBakssAppById(String id)
     {
-        return bakssApplyMapper.selectBakssApplyById(id);
+        return bakssAppMapper.selectBakssAppById(id);
     }
 
     /**
      * 查询申请列表
      *
-     * @param bakssApply 申请
+     * @param bakssApp 申请
      * @return 申请
      */
     @Override
-    public List<BakssApply> selectBakssApplyList(BakssApply bakssApply)
+    public List<BakssApp> selectBakssAppList(BakssApp bakssApp)
     {
-        return bakssApplyMapper.selectBakssApplyList(bakssApply);
+        return bakssAppMapper.selectBakssAppList(bakssApp);
     }
 
     /**
      * 新增申请
      *
-     * @param bakssApply 申请
+     * @param bakssApp 申请
      * @return 结果
      */
     @Override
-    public int insertBakssApply(BakssApply bakssApply)
+    public int insertBakssApp(BakssApp bakssApp)
     {
-        bakssApply.setCreateTime(DateUtils.getNowDate());
-        int id = bakssApplyMapper.insertBakssApply(bakssApply);
-        createFlows(bakssApply);
+        bakssApp.setCreateTime(DateUtils.getNowDate());
+        int id = bakssAppMapper.insertBakssApp(bakssApp);
+        createFlows(bakssApp);
         return id;
     }
 
     /**
      * 修改申请
      *
-     * @param bakssApply 申请
+     * @param bakssApp 申请
      * @return 结果
      */
     @Override
-    public int updateBakssApply(BakssApply bakssApply)
+    public int updateBakssApp(BakssApp bakssApp)
     {
-        bakssApply.setUpdateTime(DateUtils.getNowDate());
+        bakssApp.setUpdateTime(DateUtils.getNowDate());
 
-        return bakssApplyMapper.updateBakssApply(bakssApply);
+        return bakssAppMapper.updateBakssApp(bakssApp);
     }
 
     /**
@@ -115,9 +115,9 @@ public class BakssApplyServiceImpl implements IBakssApplyService
      * @return 结果
      */
     @Override
-    public int deleteBakssApplyByIds(String[] ids)
+    public int deleteBakssAppByIds(String[] ids)
     {
-        return bakssApplyMapper.deleteBakssApplyByIds(ids);
+        return bakssAppMapper.deleteBakssAppByIds(ids);
     }
 
     /**
@@ -127,48 +127,48 @@ public class BakssApplyServiceImpl implements IBakssApplyService
      * @return 结果
      */
     @Override
-    public int deleteBakssApplyById(String id)
+    public int deleteBakssAppById(String id)
     {
-        return bakssApplyMapper.deleteBakssApplyById(id);
+        return bakssAppMapper.deleteBakssAppById(id);
     }
 
 
-    public void approved(BakssApply apply){
+    public void approved(BakssApp App){
         LoginUser user = SecurityUtils.getLoginUser();
-        BakssApplyFlow flow = bakssApplyFlowMapper.selectBakssApplyFlowById(apply.getFlowId());
+        BakssAppFlow flow = bakssAppFlowMapper.selectBakssAppFlowById(App.getFlowId());
         flow.setReviewUser(user.getUsername());
         flow.setReviewStatus(APPROVAL_APPROVED);
-        bakssApplyFlowMapper.updateBakssApplyFlow(flow);
+        bakssAppFlowMapper.updateBakssAppFlow(flow);
         // 索引到下一步骤
-        BakssApplyFlow nextFlow = bakssApplyFlowMapper.getBakssApplyNextFlow(flow);
+        BakssAppFlow nextFlow = bakssAppFlowMapper.getBakssAppNextFlow(flow);
         if (nextFlow != null) {
-            apply.setFlowId(nextFlow.getId());
-            bakssApplyMapper.updateBakssApply(apply);
+            App.setFlowId(nextFlow.getId());
+            bakssAppMapper.updateBakssApp(App);
         } else {
-            log.warn("申请单[" + apply.getId() + "]当前流程" + flow.getFlowStep() +  ", 找不到下一个流程.");
-//            throw new RuntimeException("申请单[" + apply.getId() + "]当前流程" + flow.getFlowStep() +  ", 找不到下一个流程.");
+            log.warn("申请单[" + App.getId() + "]当前流程" + flow.getFlowStep() +  ", 找不到下一个流程.");
+//            throw new RuntimeException("申请单[" + App.getId() + "]当前流程" + flow.getFlowStep() +  ", 找不到下一个流程.");
         }
 
     }
 
-    public void rejected(BakssApply apply) {
-        BakssApplyFlow flow = bakssApplyFlowMapper.selectBakssApplyFlowById(apply.getFlowId());
+    public void rejected(BakssApp App) {
+        BakssAppFlow flow = bakssAppFlowMapper.selectBakssAppFlowById(App.getFlowId());
         flow.setReviewStatus(APPROVAL_REJECTED);
         // todo 审核不通过的处理
     }
 
-    public void createFlows(BakssApply apply) {
-        BakssApplyStep bakssApplyStep = bakssApplyStepMapper.getBakssApplyStepByApplyType(apply.getApplyType());
-        String steps = bakssApplyStep.getApplySteps();
+    public void createFlows(BakssApp App) {
+        BakssAppStep bakssAppStep = bakssAppStepMapper.getBakssAppStepByAppType(App.getAppType());
+        String steps = bakssAppStep.getAppSteps();
         String[] stepArr = steps.split(",");
         // todo 同时申请多个备份类型的不能这样关联
-        BakssBackup backup = bakssBackupService.selectBakssBackupById(apply.getBackupId());
+        BakssBackup backup = bakssBackupService.selectBakssBackupById(App.getBackupId());
         boolean isDB = DB_TYPES.contains(backup.getBackupContent());
 
         long flowId = -1;
         for(int i = 0; i< stepArr.length; i++) {
             String step = stepArr[i];
-            if (apply.getApplyType() == CREATE_RESTORE) {
+            if (App.getAppType() == CREATE_RESTORE) {
                 // 创建恢复特殊处理，需要直接经理审批
                 if (!isDB && step.contains("dba")) step = APPROVAL_STATUS_LEADER;
             } else {
@@ -176,16 +176,16 @@ public class BakssApplyServiceImpl implements IBakssApplyService
                 if (!isDB && step.contains("dba")) break;
             }
 
-            BakssApplyFlow flow = new BakssApplyFlow();
-            flow.setApplyId(apply.getId());
+            BakssAppFlow flow = new BakssAppFlow();
+            flow.setAppId(App.getId());
             flow.setFlowStep(step);
             flow.setFlowOrder(i);
             flow.setReviewStatus(0L);
             // 默认索引到第一个流程
             if (flowId == -1) {
-                flowId = bakssApplyFlowMapper.insertBakssApplyFlow(flow);
-                apply.setFlowId(flowId);
-                bakssApplyMapper.updateBakssApply(apply);
+                flowId = bakssAppFlowMapper.insertBakssAppFlow(flow);
+                App.setFlowId(flowId);
+                bakssAppMapper.updateBakssApp(App);
             }
         }
 

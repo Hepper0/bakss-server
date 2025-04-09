@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bakss.server.mapper.BakssAppStepMapper">
+    
+    <resultMap type="BakssAppStep" id="BakssAppStepResult">
+        <result property="id"    column="id"    />
+        <result property="appType"    column="app_type"    />
+        <result property="appSteps"    column="app_steps"    />
+        <result property="deleted"    column="deleted"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectBakssAppStepVo">
+        select id, app_type, app_steps, deleted, create_time, update_time from bakss_app_step
+    </sql>
+
+    <select id="selectBakssAppStepList" parameterType="BakssAppStep" resultMap="BakssAppStepResult">
+        <include refid="selectBakssAppStepVo"/>
+        <where>  
+            <if test="appType != null "> and app_type = #{appType}</if>
+            <if test="appSteps != null  and appSteps != ''"> and app_steps = #{appSteps}</if>
+            <if test="deleted != null "> and deleted = #{deleted}</if>
+        </where>
+    </select>
+    
+    <select id="selectBakssAppStepById" parameterType="Long" resultMap="BakssAppStepResult">
+        <include refid="selectBakssAppStepVo"/>
+        where id = #{id}
+    </select>
+
+    <select id="getBakssAppStepByAppType" parameterType="Long" resultMap="BakssAppStepResult">
+        <include refid="selectBakssAppStepVo"/>
+        where app_type = #{AppType} and deleted = 0
+        order by create_time desc
+        limit 1
+    </select>
+
+    <insert id="insertBakssAppStep" parameterType="BakssAppStep" useGeneratedKeys="true" keyProperty="id">
+        insert into bakss_app_step
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="appType != null">app_type,</if>
+            <if test="appSteps != null">app_steps,</if>
+            <if test="deleted != null">deleted,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="appType != null">#{appType},</if>
+            <if test="appSteps != null">#{appSteps},</if>
+            <if test="deleted != null">#{deleted},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBakssAppStep" parameterType="BakssAppStep">
+        update bakss_app_step
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="appType != null">app_type = #{appType},</if>
+            <if test="appSteps != null">app_steps = #{appSteps},</if>
+            <if test="deleted != null">deleted = #{deleted},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBakssAppStepById" parameterType="Long">
+        delete from bakss_app_step where id = #{id}
+    </delete>
+
+    <delete id="deleteBakssAppStepByIds" parameterType="String">
+        delete from bakss_app_step where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

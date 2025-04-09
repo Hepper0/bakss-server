@@ -1,7 +1,7 @@
 package com.bakss.server.mapper;
 
 import java.util.List;
-import com.bakss.server.domain.BakssApplyFlow;
+import com.bakss.server.domain.BakssAppFlow;
 
 /**
  * 申请流程Mapper接口
@@ -9,7 +9,7 @@ import com.bakss.server.domain.BakssApplyFlow;
  * @author author
  * @date 2025-04-02
  */
-public interface BakssApplyFlowMapper 
+public interface BakssAppFlowMapper
 {
     /**
      * 查询申请流程
@@ -17,33 +17,33 @@ public interface BakssApplyFlowMapper
      * @param id 申请流程主键
      * @return 申请流程
      */
-    public BakssApplyFlow selectBakssApplyFlowById(Long id);
+    public BakssAppFlow selectBakssAppFlowById(Long id);
 
-    public BakssApplyFlow getBakssApplyNextFlow(BakssApplyFlow bakssApplyFlow);
+    public BakssAppFlow getBakssAppNextFlow(BakssAppFlow bakssAppFlow);
 
     /**
      * 查询申请流程列表
      * 
-     * @param bakssApplyFlow 申请流程
+     * @param bakssAppFlow 申请流程
      * @return 申请流程集合
      */
-    public List<BakssApplyFlow> selectBakssApplyFlowList(BakssApplyFlow bakssApplyFlow);
+    public List<BakssAppFlow> selectBakssAppFlowList(BakssAppFlow bakssAppFlow);
 
     /**
      * 新增申请流程
      * 
-     * @param bakssApplyFlow 申请流程
+     * @param bakssAppFlow 申请流程
      * @return 结果
      */
-    public int insertBakssApplyFlow(BakssApplyFlow bakssApplyFlow);
+    public int insertBakssAppFlow(BakssAppFlow bakssAppFlow);
 
     /**
      * 修改申请流程
      * 
-     * @param bakssApplyFlow 申请流程
+     * @param bakssAppFlow 申请流程
      * @return 结果
      */
-    public int updateBakssApplyFlow(BakssApplyFlow bakssApplyFlow);
+    public int updateBakssAppFlow(BakssAppFlow bakssAppFlow);
 
     /**
      * 删除申请流程
@@ -51,7 +51,7 @@ public interface BakssApplyFlowMapper
      * @param id 申请流程主键
      * @return 结果
      */
-    public int deleteBakssApplyFlowById(Long id);
+    public int deleteBakssAppFlowById(Long id);
 
     /**
      * 批量删除申请流程
@@ -59,5 +59,5 @@ public interface BakssApplyFlowMapper
      * @param ids 需要删除的数据主键集合
      * @return 结果
      */
-    public int deleteBakssApplyFlowByIds(Long[] ids);
+    public int deleteBakssAppFlowByIds(Long[] ids);
 }

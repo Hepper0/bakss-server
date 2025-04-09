@@ -5,7 +5,7 @@ import com.bakss.common.core.domain.BaseEntity;
 import lombok.Data;
 
 /**
- * 备份策略申请对象 bakss_apply_strategy
+ * 备份策略申请对象 bakss_App_strategy
  *
  * @author author
  * @date 2025-04-08
@@ -20,7 +20,7 @@ public class BakssApplyStrategy extends BaseEntity
 
     /** $column.columnComment */
     @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
-    private Long applyId;
+    private Long appId;
 
     /** $column.columnComment */
     @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")

@@ -1,7 +1,7 @@
 package com.bakss.server.mapper;
 
 import java.util.List;
-import com.bakss.server.domain.BakssApplyStep;
+import com.bakss.server.domain.BakssAppStep;
 
 /**
  * 申请步骤Mapper接口
@@ -9,7 +9,7 @@ import com.bakss.server.domain.BakssApplyStep;
  * @author author
  * @date 2025-04-06
  */
-public interface BakssApplyStepMapper 
+public interface BakssAppStepMapper
 {
     /**
      * 查询申请步骤
@@ -17,33 +17,33 @@ public interface BakssApplyStepMapper
      * @param id 申请步骤主键
      * @return 申请步骤
      */
-    public BakssApplyStep selectBakssApplyStepById(Long id);
+    public BakssAppStep selectBakssAppStepById(Long id);
 
-    public BakssApplyStep getBakssApplyStepByApplyType(Long applyType);
+    public BakssAppStep getBakssAppStepByAppType(Long AppType);
 
     /**
      * 查询申请步骤列表
      * 
-     * @param bakssApplyStep 申请步骤
+     * @param bakssAppStep 申请步骤
      * @return 申请步骤集合
      */
-    public List<BakssApplyStep> selectBakssApplyStepList(BakssApplyStep bakssApplyStep);
+    public List<BakssAppStep> selectBakssAppStepList(BakssAppStep bakssAppStep);
 
     /**
      * 新增申请步骤
      * 
-     * @param bakssApplyStep 申请步骤
+     * @param bakssAppStep 申请步骤
      * @return 结果
      */
-    public int insertBakssApplyStep(BakssApplyStep bakssApplyStep);
+    public int insertBakssAppStep(BakssAppStep bakssAppStep);
 
     /**
      * 修改申请步骤
      * 
-     * @param bakssApplyStep 申请步骤
+     * @param bakssAppStep 申请步骤
      * @return 结果
      */
-    public int updateBakssApplyStep(BakssApplyStep bakssApplyStep);
+    public int updateBakssAppStep(BakssAppStep bakssAppStep);
 
     /**
      * 删除申请步骤
@@ -51,7 +51,7 @@ public interface BakssApplyStepMapper
      * @param id 申请步骤主键
      * @return 结果
      */
-    public int deleteBakssApplyStepById(Long id);
+    public int deleteBakssAppStepById(Long id);
 
     /**
      * 批量删除申请步骤
@@ -59,5 +59,5 @@ public interface BakssApplyStepMapper
      * @param ids 需要删除的数据主键集合
      * @return 结果
      */
-    public int deleteBakssApplyStepByIds(Long[] ids);
+    public int deleteBakssAppStepByIds(Long[] ids);
 }

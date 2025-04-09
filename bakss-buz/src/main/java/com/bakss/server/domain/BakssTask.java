@@ -9,7 +9,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import java.util.Date;
 
 /**
- * 申请流程对象 bakss_apply
+ * 申请流程对象 bakss_App
  *
  * @author author
  * @date 2025-04-02
@@ -24,15 +24,15 @@ public class BakssTask extends BaseEntity
 
     /** $column.columnComment */
     @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
-    private Long applyType;
+    private Long appType;
 
     /** $column.columnComment */
     @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
-    private String applyUser;
+    private String appUser;
 
     /** $column.columnComment */
     @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
-    private Date applyTime;
+    private Date appTime;
 
     /** $column.columnComment */
     @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
@@ -57,105 +57,4 @@ public class BakssTask extends BaseEntity
     /** $column.columnComment */
     @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
     private Long deleted;
-
-//    public void setId(String id)
-//    {
-//        this.id = id;
-//    }
-//
-//    public String getId()
-//    {
-//        return id;
-//    }
-//    public void setApplyType(Long applyType)
-//    {
-//        this.applyType = applyType;
-//    }
-//
-//    public Long getApplyType()
-//    {
-//        return applyType;
-//    }
-//    public void setApplyUser(String applyUser)
-//    {
-//        this.applyUser = applyUser;
-//    }
-//
-//    public String getApplyUser()
-//    {
-//        return applyUser;
-//    }
-//    public void setApplyTime(Date applyTime)
-//    {
-//        this.applyTime = applyTime;
-//    }
-//
-//    public Date getApplyTime()
-//    {
-//        return applyTime;
-//    }
-//    public void setBackupId(Long backupId)
-//    {
-//        this.backupId = backupId;
-//    }
-//
-//    public Long getBackupId()
-//    {
-//        return backupId;
-//    }
-//    public void setBackupTime(Date backupTime)
-//    {
-//        this.backupTime = backupTime;
-//    }
-//
-//    public Date getBackupTime()
-//    {
-//        return backupTime;
-//    }
-//    public void setBackupStatus(Long backupStatus)
-//    {
-//        this.backupStatus = backupStatus;
-//    }
-//
-//    public Long getBackupStatus()
-//    {
-//        return backupStatus;
-//    }
-//    public void setFlowId(Long flowId)
-//    {
-//        this.flowId = flowId;
-//    }
-//
-//    public Long getFlowId()
-//    {
-//        return flowId;
-//    }
-//    public void setDeleted(Long deleted)
-//    {
-//        this.deleted = deleted;
-//    }
-//
-//    public Long getDeleted()
-//    {
-//        return deleted;
-//    }
-
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("id", getId())
-            .append("applyType", getApplyType())
-            .append("applyUser", getApplyUser())
-            .append("applyTime", getApplyTime())
-            .append("backupId", getBackupId())
-            .append("backupTime", getBackupTime())
-            .append("backupStatus", getBackupStatus())
-            .append("flowId", getFlowId())
-            .append("remark", getRemark())
-            .append("deleted", getDeleted())
-            .append("createTime", getCreateTime())
-            .append("createBy", getCreateBy())
-            .append("updateTime", getUpdateTime())
-            .toString();
-    }
 }

@@ -17,8 +17,8 @@ import com.bakss.common.annotation.Log;
 import com.bakss.common.core.controller.BaseController;
 import com.bakss.common.core.domain.AjaxResult;
 import com.bakss.common.enums.BusinessType;
-import com.bakss.server.domain.BakssApplyFlow;
-import com.bakss.server.service.IBakssApplyFlowService;
+import com.bakss.server.domain.BakssAppFlow;
+import com.bakss.server.service.IBakssAppFlowService;
 import com.bakss.common.utils.poi.ExcelUtil;
 import com.bakss.common.core.page.TableDataInfo;
 
@@ -30,20 +30,20 @@ import com.bakss.common.core.page.TableDataInfo;
  */
 @RestController
 @RequestMapping("/service/flow")
-public class BakssApplyFlowController extends BaseController
+public class BakssAppFlowController extends BaseController
 {
     @Resource
-    private IBakssApplyFlowService bakssApplyFlowService;
+    private IBakssAppFlowService bakssAppFlowService;
 
     /**
      * 查询申请流程列表
      */
     @PreAuthorize("@ss.hasPermi('service:flow:list')")
     @GetMapping("/list")
-    public TableDataInfo list(BakssApplyFlow bakssApplyFlow)
+    public TableDataInfo list(BakssAppFlow bakssAppFlow)
     {
         startPage();
-        List<BakssApplyFlow> list = bakssApplyFlowService.selectBakssApplyFlowList(bakssApplyFlow);
+        List<BakssAppFlow> list = bakssAppFlowService.selectBakssAppFlowList(bakssAppFlow);
         return getDataTable(list);
     }
 
@@ -53,10 +53,10 @@ public class BakssApplyFlowController extends BaseController
     @PreAuthorize("@ss.hasPermi('service:flow:export')")
     @Log(title = "申请流程", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
-    public void export(HttpServletResponse response, BakssApplyFlow bakssApplyFlow)
+    public void export(HttpServletResponse response, BakssAppFlow bakssAppFlow)
     {
-        List<BakssApplyFlow> list = bakssApplyFlowService.selectBakssApplyFlowList(bakssApplyFlow);
-        ExcelUtil<BakssApplyFlow> util = new ExcelUtil<BakssApplyFlow>(BakssApplyFlow.class);
+        List<BakssAppFlow> list = bakssAppFlowService.selectBakssAppFlowList(bakssAppFlow);
+        ExcelUtil<BakssAppFlow> util = new ExcelUtil<BakssAppFlow>(BakssAppFlow.class);
         util.exportExcel(response, list, "申请流程数据");
     }
 
@@ -67,7 +67,7 @@ public class BakssApplyFlowController extends BaseController
     @GetMapping(value = "/{id}")
     public AjaxResult getInfo(@PathVariable("id") Long id)
     {
-        return success(bakssApplyFlowService.selectBakssApplyFlowById(id));
+        return success(bakssAppFlowService.selectBakssAppFlowById(id));
     }
 
     /**
@@ -76,9 +76,9 @@ public class BakssApplyFlowController extends BaseController
     @PreAuthorize("@ss.hasPermi('service:flow:add')")
     @Log(title = "申请流程", businessType = BusinessType.INSERT)
     @PostMapping
-    public AjaxResult add(@RequestBody BakssApplyFlow bakssApplyFlow)
+    public AjaxResult add(@RequestBody BakssAppFlow bakssAppFlow)
     {
-        return toAjax(bakssApplyFlowService.insertBakssApplyFlow(bakssApplyFlow));
+        return toAjax(bakssAppFlowService.insertBakssAppFlow(bakssAppFlow));
     }
 
     /**
@@ -87,9 +87,9 @@ public class BakssApplyFlowController extends BaseController
     @PreAuthorize("@ss.hasPermi('service:flow:edit')")
     @Log(title = "申请流程", businessType = BusinessType.UPDATE)
     @PutMapping
-    public AjaxResult edit(@RequestBody BakssApplyFlow bakssApplyFlow)
+    public AjaxResult edit(@RequestBody BakssAppFlow bakssAppFlow)
     {
-        return toAjax(bakssApplyFlowService.updateBakssApplyFlow(bakssApplyFlow));
+        return toAjax(bakssAppFlowService.updateBakssAppFlow(bakssAppFlow));
     }
 
     /**
@@ -100,6 +100,6 @@ public class BakssApplyFlowController extends BaseController
 	@DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable Long[] ids)
     {
-        return toAjax(bakssApplyFlowService.deleteBakssApplyFlowByIds(ids));
+        return toAjax(bakssAppFlowService.deleteBakssAppFlowByIds(ids));
     }
 }

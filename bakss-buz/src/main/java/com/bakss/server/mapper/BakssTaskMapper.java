@@ -1,6 +1,6 @@
 package com.bakss.server.mapper;
 
-import com.bakss.server.domain.BakssApply;
+import com.bakss.server.domain.BakssApp;
 import com.bakss.server.domain.BakssTask;
 
 import java.util.List;

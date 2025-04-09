@@ -2,6 +2,7 @@ package com.bakss.server.domain;
 
 import com.bakss.common.annotation.Excel;
 import com.bakss.common.core.domain.BaseEntity;
+import lombok.Data;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -11,6 +12,8 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  * @author author
  * @date 2025-03-25
  */
+
+@Data
 public class BakssBackup extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
@@ -56,123 +59,4 @@ public class BakssBackup extends BaseEntity
     @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
     private Long deleted;
 
-    public void setId(Long id)
-    {
-        this.id = id;
-    }
-
-    public Long getId()
-    {
-        return id;
-    }
-    public void setBackupSoftware(String backupSoftware)
-    {
-        this.backupSoftware = backupSoftware;
-    }
-
-    public String getBackupSoftware()
-    {
-        return backupSoftware;
-    }
-    public void setSoftwareVersion(String softwareVersion)
-    {
-        this.softwareVersion = softwareVersion;
-    }
-
-    public String getSoftwareVersion()
-    {
-        return softwareVersion;
-    }
-    public void setClientName(String clientName)
-    {
-        this.clientName = clientName;
-    }
-
-    public String getClientName()
-    {
-        return clientName;
-    }
-    public void setBackupContent(String backupContent)
-    {
-        this.backupContent = backupContent;
-    }
-
-    public String getBackupContent()
-    {
-        return backupContent;
-    }
-    public void setBackupIP(String backupIP)
-    {
-        this.backupIP = backupIP;
-    }
-
-    public String getBackupIP()
-    {
-        return backupIP;
-    }
-    public void setAppName(String appName)
-    {
-        this.appName = appName;
-    }
-
-    public String getAppName()
-    {
-        return appName;
-    }
-    public void setEnv(String env)
-    {
-        this.env = env;
-    }
-
-    public String getEnv()
-    {
-        return env;
-    }
-    public void setPlatform(String platform)
-    {
-        this.platform = platform;
-    }
-
-    public String getPlatform()
-    {
-        return platform;
-    }
-    public void setOwner(String owner)
-    {
-        this.owner = owner;
-    }
-
-    public String getOwner()
-    {
-        return owner;
-    }
-    public void setDeleted(Long deleted)
-    {
-        this.deleted = deleted;
-    }
-
-    public Long getDeleted()
-    {
-        return deleted;
-    }
-
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("id", getId())
-            .append("backupSoftware", getBackupSoftware())
-            .append("softwareVersion", getSoftwareVersion())
-            .append("clientName", getClientName())
-            .append("backupContent", getBackupContent())
-            .append("backupIP", getBackupIP())
-            .append("appName", getAppName())
-            .append("env", getEnv())
-            .append("platform", getPlatform())
-            .append("owner", getOwner())
-            .append("deleted", getDeleted())
-            .append("createTime", getCreateTime())
-            .append("createBy", getCreateBy())
-            .append("updateTime", getUpdateTime())
-            .toString();
-    }
 }

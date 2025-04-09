@@ -1,7 +1,7 @@
 package com.bakss.server.service;
 
 import java.util.List;
-import com.bakss.server.domain.BakssApply;
+import com.bakss.server.domain.BakssApp;
 import com.bakss.server.domain.BakssTask;
 
 /**
@@ -10,7 +10,7 @@ import com.bakss.server.domain.BakssTask;
  * @author author
  * @date 2025-03-26
  */
-public interface IBakssApplyService 
+public interface IBakssAppService
 {
     /**
      * 查询申请
@@ -18,31 +18,31 @@ public interface IBakssApplyService
      * @param id 申请主键
      * @return 申请
      */
-    public BakssApply selectBakssApplyById(String id);
+    public BakssApp selectBakssAppById(String id);
 
     /**
      * 查询申请列表
      * 
-     * @param bakssApply 申请
+     * @param bakssApp 申请
      * @return 申请集合
      */
-    public List<BakssApply> selectBakssApplyList(BakssApply bakssApply);
+    public List<BakssApp> selectBakssAppList(BakssApp bakssApp);
 
     /**
      * 新增申请
      * 
-     * @param bakssApply 申请
+     * @param bakssApp 申请
      * @return 结果
      */
-    public int insertBakssApply(BakssApply bakssApply);
+    public int insertBakssApp(BakssApp bakssApp);
 
     /**
      * 修改申请
      * 
-     * @param bakssApply 申请
+     * @param bakssApp 申请
      * @return 结果
      */
-    public int updateBakssApply(BakssApply bakssApply);
+    public int updateBakssApp(BakssApp bakssApp);
 
     /**
      * 批量删除申请
@@ -50,7 +50,7 @@ public interface IBakssApplyService
      * @param ids 需要删除的申请主键集合
      * @return 结果
      */
-    public int deleteBakssApplyByIds(String[] ids);
+    public int deleteBakssAppByIds(String[] ids);
 
     /**
      * 删除申请信息
@@ -58,10 +58,10 @@ public interface IBakssApplyService
      * @param id 申请主键
      * @return 结果
      */
-    public int deleteBakssApplyById(String id);
+    public int deleteBakssAppById(String id);
 
-    public void approved(BakssApply apply);
+    public void approved(BakssApp App);
 
-    public void rejected(BakssApply apply);
+    public void rejected(BakssApp App);
 
 }

@@ -5,13 +5,13 @@ import com.bakss.common.core.domain.BaseEntity;
 import lombok.Data;
 
 /**
- * 申请流程对象 bakss_apply_flow
+ * 申请流程对象 bakss_App_flow
  *
  * @author author
  * @date 2025-04-06
  */
 @Data
-public class BakssApplyFlow extends BaseEntity
+public class BakssAppFlow extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
@@ -28,7 +28,7 @@ public class BakssApplyFlow extends BaseEntity
 
     /** $column.columnComment */
     @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
-    private String applyId;
+    private String appId;
 
     /** 当前环节最后审批的人 */
     @Excel(name = "当前环节最后审批的人")
