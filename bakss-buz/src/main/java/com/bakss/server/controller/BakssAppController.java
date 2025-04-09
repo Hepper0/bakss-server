@@ -28,7 +28,7 @@ import com.bakss.common.core.page.TableDataInfo;
  * @date 2025-03-26
  */
 @RestController
-@RequestMapping("/service/App")
+@RequestMapping("/service/application")
 public class BakssAppController extends BaseController
 {
     @Autowired
@@ -37,7 +37,7 @@ public class BakssAppController extends BaseController
     /**
      * 查询申请列表
      */
-    @PreAuthorize("@ss.hasPermi('service:App:list')")
+    @PreAuthorize("@ss.hasPermi('service:apply:list')")
     @GetMapping("/list")
     public TableDataInfo list(BakssApp bakssApp)
     {
@@ -49,7 +49,7 @@ public class BakssAppController extends BaseController
     /**
      * 导出申请列表
      */
-    @PreAuthorize("@ss.hasPermi('service:App:export')")
+    @PreAuthorize("@ss.hasPermi('service:apply:export')")
     @Log(title = "申请", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, BakssApp bakssApp)
@@ -62,7 +62,7 @@ public class BakssAppController extends BaseController
     /**
      * 获取申请详细信息
      */
-    @PreAuthorize("@ss.hasPermi('service:App:query')")
+    @PreAuthorize("@ss.hasPermi('service:apply:query')")
     @GetMapping(value = "/{id}")
     public AjaxResult getInfo(@PathVariable("id") String id)
     {
@@ -72,7 +72,7 @@ public class BakssAppController extends BaseController
     /**
      * 新增申请
      */
-    @PreAuthorize("@ss.hasPermi('service:App:add')")
+    @PreAuthorize("@ss.hasPermi('service:apply:add')")
     @Log(title = "申请", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody BakssApp bakssApp)
@@ -83,7 +83,7 @@ public class BakssAppController extends BaseController
     /**
      * 修改申请
      */
-    @PreAuthorize("@ss.hasPermi('service:App:edit')")
+    @PreAuthorize("@ss.hasPermi('service:apply:edit')")
     @Log(title = "申请", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody BakssApp bakssApp)
@@ -94,7 +94,7 @@ public class BakssAppController extends BaseController
     /**
      * 删除申请
      */
-    @PreAuthorize("@ss.hasPermi('service:App:remove')")
+    @PreAuthorize("@ss.hasPermi('service:apply:remove')")
     @Log(title = "申请", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable String[] ids)

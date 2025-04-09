@@ -44,6 +44,7 @@ create table bakss_app(
     backup_status int,
     flow_id int,
     remark varchar(1000),
+    status int default 1,
     deleted int default 0,
     create_time datetime default now(),
     create_by varchar(100),

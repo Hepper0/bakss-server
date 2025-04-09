@@ -50,4 +50,6 @@ public class BakssApp extends BaseEntity
     /** $column.columnComment */
     @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
     private Long deleted;
+
+    private Long status;
 }
