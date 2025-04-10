@@ -19,7 +19,7 @@ public interface BakssAppStepMapper
      */
     public BakssAppStep selectBakssAppStepById(Long id);
 
-    public BakssAppStep getBakssAppStepByAppType(Long AppType);
+    public BakssAppStep getBakssAppStepByAppType(Long AppType, Boolean isDB);
 
     /**
      * 查询申请步骤列表

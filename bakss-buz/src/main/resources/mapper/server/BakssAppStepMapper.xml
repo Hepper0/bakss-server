@@ -31,9 +31,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where id = #{id}
     </select>
 
-    <select id="getBakssAppStepByAppType" parameterType="Long" resultMap="BakssAppStepResult">
+    <select id="getBakssAppStepByAppType" resultMap="BakssAppStepResult">
         <include refid="selectBakssAppStepVo"/>
-        where app_type = #{AppType} and deleted = 0
+        where app_type = #{AppType} and is_db = #{isDB} and deleted = 0
         order by create_time desc
         limit 1
     </select>

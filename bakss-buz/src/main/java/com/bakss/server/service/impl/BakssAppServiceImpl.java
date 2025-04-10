@@ -158,23 +158,23 @@ public class BakssAppServiceImpl implements IBakssAppService
     }
 
     public void createFlows(BakssApp App) {
-        BakssAppStep bakssAppStep = bakssAppStepMapper.getBakssAppStepByAppType(App.getAppType());
-        String steps = bakssAppStep.getAppSteps();
-        String[] stepArr = steps.split(",");
         // todo 同时申请多个备份类型的不能这样关联
         BakssBackup backup = bakssBackupService.selectBakssBackupById(App.getBackupId());
         boolean isDB = DB_TYPES.contains(backup.getBackupContent());
+        BakssAppStep bakssAppStep = bakssAppStepMapper.getBakssAppStepByAppType(App.getAppType(), isDB);
+        String steps = bakssAppStep.getAppSteps();
+        String[] stepArr = steps.split(",");
 
         long flowId = -1;
         for(int i = 0; i< stepArr.length; i++) {
             String step = stepArr[i];
-            if (App.getAppType() == CREATE_RESTORE) {
-                // 创建恢复特殊处理，需要直接经理审批
-                if (!isDB && step.contains("dba")) step = APPROVAL_STATUS_LEADER;
-            } else {
-                // 非数据库备份，跳过DBA审核
-                if (!isDB && step.contains("dba")) break;
-            }
+//            if (App.getAppType() == CREATE_RESTORE) {
+//                // 创建恢复特殊处理，需要直接经理审批
+//                if (!isDB && step.contains("dba")) step = APPROVAL_STATUS_LEADER;
+//            } else {
+//                // 非数据库备份，跳过DBA审核
+//                if (!isDB && step.contains("dba")) break;
+//            }
 
             BakssAppFlow flow = new BakssAppFlow();
             flow.setAppId(App.getId());

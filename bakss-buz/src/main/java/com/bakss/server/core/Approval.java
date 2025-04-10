@@ -1,6 +1,6 @@
 package com.bakss.server.core;
 
-import com.bakss.server.domain.BakssApply;
+import com.bakss.server.domain.BakssApp;
 
 /*
 审批流程
