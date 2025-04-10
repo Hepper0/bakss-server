@@ -20,7 +20,7 @@ VALUES
 
 -- 菜单
 INSERT INTO `bakss`.`sys_menu`(`menu_id`, `menu_name`, `parent_id`, `order_num`, `path`, `component`, `query`, `route_name`, `is_frame`, `is_cache`, `menu_type`, `visible`, `status`, `perms`, `icon`, `create_by`, remark)
-VALUES (202, '创建备份', 5, 2, 'create', 'service/CreateBackup/index', NULL, '', 1, 0, 'C', '0', '0', 'service:backup:apply', 'tree', 'admin', '申请备份管理权菜单'),
+VALUES (202, '创建备份', 5, 2, 'create', 'service/CreateBackup/index', NULL, '', 1, 0, 'C', '0', '0', 'service:backup:apply', 'tree', 'admin', '申请备份管理权菜单');
 -- 按钮
 INSERT INTO `bakss`.`sys_menu`(`menu_id`, `menu_name`, `parent_id`, `order_num`, `path`, `component`, `query`, `route_name`, `is_frame`, `is_cache`, `menu_type`, `visible`, `status`, `perms`, `icon`, `create_by`)
 VALUES (2021, '备份创建', 202, 1, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'service:backup:create', '#', 'admin');
@@ -79,7 +79,7 @@ VALUES (601, '详情', 8, 1, '/review/detail', 'review/detail', NULL, '', 1, 0, 
 
 -- 主菜单
 INSERT INTO `bakss`.`sys_menu`(`menu_id`, `menu_name`, `parent_id`, `order_num`, `path`, `component`, `query`, `route_name`, `is_frame`, `is_cache`, `menu_type`, `visible`, `status`, `perms`, `icon`, `create_by`, `remark`)
-VALUES (9, '我的任务', 0, 0, 'task', 'task/index', '', '', 1, 0, 'C', '0', '0', '', 'task:list', 'document', 'admin', '我的任务菜单');
+VALUES (9, '我的任务', 0, 0, 'task', 'task/index', '', '', 1, 0, 'C', '0', '0', 'task:list', 'document', 'admin', '我的任务菜单');
 -- 菜单
 INSERT INTO `bakss`.`sys_menu`(`menu_id`, `menu_name`, `parent_id`, `order_num`, `path`, `component`, `query`, `route_name`, `is_frame`, `is_cache`, `menu_type`, `visible`, `status`, `perms`, `icon`, `create_by`, remark)
 VALUES (701, '详情', 8, 1, '/task/detail', 'task/detail', NULL, '', 1, 0, 'C', '1', '0', 'task:detail', '', 'admin', '任务详情页面');
