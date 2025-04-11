@@ -33,6 +33,8 @@ public class BakssApplyBackupPermis extends BaseEntity
     @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
     private String grantUser;
 
+    private Integer expiration;
+
     /** $column.columnComment */
     @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
     private Date startTime;

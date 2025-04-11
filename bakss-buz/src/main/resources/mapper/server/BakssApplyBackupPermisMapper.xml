@@ -3,12 +3,13 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.bakss.system.mapper.BakssApplyBackupPermisMapper">
-    
+
     <resultMap type="BakssApplyBackupPermis" id="BakssApplyBackupPermisResult">
         <result property="id"    column="id"    />
         <result property="appId"    column="app_id"    />
         <result property="backupId"    column="backup_id"    />
         <result property="grantUser"    column="grant_user"    />
+        <result property="expiration"    column="expiration"    />
         <result property="startTime"    column="start_time"    />
         <result property="endTime"    column="end_time"    />
         <result property="deleted"    column="deleted"    />
@@ -23,16 +24,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectBakssApplyBackupPermisList" parameterType="BakssApplyBackupPermis" resultMap="BakssApplyBackupPermisResult">
         <include refid="selectBakssApplyBackupPermisVo"/>
-        <where>  
+        <where>
             <if test="appId != null "> and app_id = #{appId}</if>
             <if test="backupId != null "> and backup_id = #{backupId}</if>
             <if test="grantUser != null  and grantUser != ''"> and grant_user = #{grantUser}</if>
+            <if test="expiration != null  and expiration != ''"> and expiration = #{expiration}</if>
             <if test="startTime != null "> and start_time = #{startTime}</if>
             <if test="endTime != null "> and end_time = #{endTime}</if>
             <if test="deleted != null "> and deleted = #{deleted}</if>
         </where>
     </select>
-    
+
     <select id="selectBakssApplyBackupPermisById" parameterType="Long" resultMap="BakssApplyBackupPermisResult">
         <include refid="selectBakssApplyBackupPermisVo"/>
         where id = #{id}
@@ -44,6 +46,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="appId != null">app_id,</if>
             <if test="backupId != null">backup_id,</if>
             <if test="grantUser != null">grant_user,</if>
+            <if test="expiration != null">expiration,</if>
             <if test="startTime != null">start_time,</if>
             <if test="endTime != null">end_time,</if>
             <if test="deleted != null">deleted,</if>
@@ -54,6 +57,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="appId != null">#{appId},</if>
             <if test="backupId != null">#{backupId},</if>
+            <if test="expiration != null">#{expiration},</if>
             <if test="grantUser != null">#{grantUser},</if>
             <if test="startTime != null">#{startTime},</if>
             <if test="endTime != null">#{endTime},</if>
@@ -64,12 +68,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </trim>
     </insert>
 
+    <insert id="batchInsertApplyBackupPermis" parameterType="BakssApplyBackupPermis">
+        insert into bakss_app_backup_permis(app_id, backup_id, grant_user, expiration, start_time, end_time)
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.appId}, #{item.backupId}, #{grantUser}, #{expiration}, #{item.startTime}, #{item.endTime})
+        </foreach>
+    </insert>
+
     <update id="updateBakssApplyBackupPermis" parameterType="BakssApplyBackupPermis">
         update bakss_app_backup_permis
         <trim prefix="SET" suffixOverrides=",">
             <if test="appId != null">app_id = #{appId},</if>
             <if test="backupId != null">backup_id = #{backupId},</if>
             <if test="grantUser != null">grant_user = #{grantUser},</if>
+            <if test="expiration != null">expiration = #{expiration},</if>
             <if test="startTime != null">start_time = #{startTime},</if>
             <if test="endTime != null">end_time = #{endTime},</if>
             <if test="deleted != null">deleted = #{deleted},</if>
@@ -85,7 +98,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <delete id="deleteBakssApplyBackupPermisByIds" parameterType="String">
-        delete from bakss_app_backup_permis where id in 
+        delete from bakss_app_backup_permis where id in
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
         </foreach>

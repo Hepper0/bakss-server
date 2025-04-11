@@ -89,9 +89,7 @@ public class BakssAppServiceImpl implements IBakssAppService
     public int insertBakssApp(BakssApp bakssApp)
     {
         bakssApp.setCreateTime(DateUtils.getNowDate());
-        int id = bakssAppMapper.insertBakssApp(bakssApp);
-        createFlows(bakssApp);
-        return id;
+        return bakssAppMapper.insertBakssApp(bakssApp);
     }
 
     /**
@@ -158,10 +156,10 @@ public class BakssAppServiceImpl implements IBakssAppService
     }
 
     public void createFlows(BakssApp App) {
-        // todo 同时申请多个备份类型的不能这样关联
-        BakssBackup backup = bakssBackupService.selectBakssBackupById(App.getBackupId());
+        String backupId = App.getBackupId().split(",")[0];
+        BakssBackup backup = bakssBackupService.selectBakssBackupById(Long.valueOf(backupId));
         boolean isDB = DB_TYPES.contains(backup.getBackupContent());
-        BakssAppStep bakssAppStep = bakssAppStepMapper.getBakssAppStepByAppType(App.getAppType(), isDB);
+        BakssAppStep bakssAppStep = bakssAppStepMapper.getBakssAppStepByAppType((long)App.getAppType(), isDB);
         String steps = bakssAppStep.getAppSteps();
         String[] stepArr = steps.split(",");
 

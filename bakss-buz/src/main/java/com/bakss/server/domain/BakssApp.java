@@ -21,7 +21,7 @@ public class BakssApp extends BaseEntity
 
     /** $column.columnComment */
     @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
-    private Long appType;
+    private Integer appType;
 
     /** $column.columnComment */
     @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
@@ -33,7 +33,7 @@ public class BakssApp extends BaseEntity
 
     /** $column.columnComment */
     @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
-    private Long backupId;
+    private String backupId;
 
     /** $column.columnComment */
     @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")

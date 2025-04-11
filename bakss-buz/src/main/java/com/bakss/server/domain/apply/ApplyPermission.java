@@ -9,9 +9,10 @@ public class ApplyPermission {
 
     private Integer appId;
     private String backupIds;
+    private Integer appType;
     private String applyUser;
     private String grantUser;
-    private String expiration;
+    private Integer expiration;
     private Date startTime;
     private Date endTime;
     private String remark;

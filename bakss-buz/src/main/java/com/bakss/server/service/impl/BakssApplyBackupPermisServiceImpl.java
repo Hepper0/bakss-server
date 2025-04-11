@@ -8,6 +8,8 @@ import com.bakss.server.mapper.BakssApplyBackupPermisMapper;
 import com.bakss.server.domain.BakssApplyBackupPermis;
 import com.bakss.server.service.IBakssApplyBackupPermisService;
 
+import javax.annotation.Resource;
+
 /**
  * 备份权限申请Service业务层处理
  *
@@ -17,7 +19,7 @@ import com.bakss.server.service.IBakssApplyBackupPermisService;
 @Service
 public class BakssApplyBackupPermisServiceImpl implements IBakssApplyBackupPermisService
 {
-    @Autowired
+    @Resource
     private BakssApplyBackupPermisMapper bakssApplyBackupPermisMapper;
 
     /**
@@ -55,6 +57,13 @@ public class BakssApplyBackupPermisServiceImpl implements IBakssApplyBackupPermi
     {
         bakssApplyBackupPermis.setCreateTime(DateUtils.getNowDate());
         return bakssApplyBackupPermisMapper.insertBakssApplyBackupPermis(bakssApplyBackupPermis);
+    }
+
+    @Override
+    public void batchInsertApplyBackupPermis(List<BakssApplyBackupPermis> bakssApplyBackupPermis)
+    {
+        bakssApplyBackupPermis.forEach(bakssApplyBackupPermis1 -> bakssApplyBackupPermis1.setCreateTime(DateUtils.getNowDate()));
+        bakssApplyBackupPermisMapper.batchInsertApplyBackupPermis(bakssApplyBackupPermis);
     }
 
     /**
