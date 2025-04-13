@@ -8,4 +8,6 @@ public interface IBakssTaskService {
     public List<BakssTask> todo();
 
     public List<BakssTask> done();
+
+    public List<BakssTask> list();
 }

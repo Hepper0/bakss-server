@@ -2,6 +2,7 @@ package com.bakss.server.mapper;
 
 import com.bakss.server.domain.BakssApp;
 import com.bakss.server.domain.BakssTask;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -13,11 +14,11 @@ import java.util.List;
  */
 public interface BakssTaskMapper {
     List<BakssTask> getLeaderTodoTaskList();
-    List<BakssTask> getOwnerTodoTaskList(String owner);
+    List<BakssTask> getOwnerTodoTaskList(@Param("owner") String owner);
     List<BakssTask> getDbaLeaderTodoTaskList();
     List<BakssTask> getAdminTodoTaskList();
     List<BakssTask> getDbaTodoTaskList();
-    List<BakssTask> getAssignTodoTaskList(String user);
+    List<BakssTask> getAssignTodoTaskList(@Param("user") String user);
     List<BakssTask> getAllTodoTaskList();
-    List<BakssTask> getDoneTaskList();
+    List<BakssTask> getTaskList(@Param("reviewStatus") Integer reviewStatus);
 }

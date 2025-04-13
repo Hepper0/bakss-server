@@ -26,7 +26,6 @@ public class BakssTaskController extends BaseController
     /**
      * 代办申请
      */
-    @Log(title = "申请", businessType = BusinessType.UPDATE)
     @GetMapping("/todo")
     public TableDataInfo todo()
     {
@@ -36,10 +35,15 @@ public class BakssTaskController extends BaseController
     /**
      * 已完成申请
      */
-    @Log(title = "申请", businessType = BusinessType.UPDATE)
     @GetMapping("/done")
     public TableDataInfo done()
     {
         return getDataTable(taskService.done());
+    }
+
+    @GetMapping("/list")
+    public TableDataInfo list()
+    {
+        return getDataTable(taskService.list());
     }
 }

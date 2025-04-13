@@ -61,6 +61,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="flowId != null "> and flow_id = #{flowId}</if>
             <if test="status != null "> and status = #{status}</if>
         </where>
+        order by create_time desc
     </select>
     
     <select id="selectBakssAppById" parameterType="String" resultMap="BakssAppResult">

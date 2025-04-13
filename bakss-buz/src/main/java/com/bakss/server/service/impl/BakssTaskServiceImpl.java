@@ -63,6 +63,10 @@ public class BakssTaskServiceImpl implements IBakssTaskService {
     }
 
     public List<BakssTask> done(){
-        return taskMapper.getDoneTaskList();
+        return taskMapper.getTaskList(1);
+    }
+
+    public List<BakssTask> list(){
+        return taskMapper.getTaskList(null);
     }
 }

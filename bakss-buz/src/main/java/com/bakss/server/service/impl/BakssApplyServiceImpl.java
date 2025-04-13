@@ -1,6 +1,9 @@
 package com.bakss.server.service.impl;
 
+import com.bakss.common.core.domain.model.LoginUser;
 import com.bakss.common.utils.DateUtils;
+import com.bakss.common.utils.SecurityUtils;
+import com.bakss.common.utils.uuid.IdUtils;
 import com.bakss.server.domain.BakssApp;
 import com.bakss.server.domain.BakssApplyBackupPermis;
 import com.bakss.server.domain.apply.ApplyPermission;
@@ -10,6 +13,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class BakssApplyServiceImpl implements IBakssApplyService {
@@ -35,14 +39,18 @@ public class BakssApplyServiceImpl implements IBakssApplyService {
 
     // 申请 与 授权
     public void addBackupPermissionApplication(ApplyPermission applyPermission) {
-//        LoginUser user = SecurityUtils.getLoginUser();
-        String[] backupIds = applyPermission.getBackupIds().split(",");
+        LoginUser user = SecurityUtils.getLoginUser();
+        List<String> backupIds = applyPermission.getBackupIds();
         BakssApp app = new BakssApp();
+        String appId = IdUtils.simpleUUID();
+        app.setId(appId);
         app.setAppTime(DateUtils.getNowDate());
         app.setAppType(applyPermission.getAppType());
-        app.setAppUser(applyPermission.getApplyUser());
+        app.setAppUser(user.getUsername());
+        app.setRemark(applyPermission.getRemark());
+        app.setBackupId(backupIds.stream().map(Object::toString).collect(Collectors.joining(",")));
         // 创建申请单
-        int appId = appService.insertBakssApp(app);
+        appService.insertBakssApp(app);
         // 创建申请补助
         appService.createFlows(app);
         // 创建申请内容
@@ -50,7 +58,7 @@ public class BakssApplyServiceImpl implements IBakssApplyService {
         for(String backupId : backupIds) {
             BakssApplyBackupPermis backupPermis = new BakssApplyBackupPermis();
             backupPermis.setBackupId(Long.getLong(backupId));
-            backupPermis.setAppId((long) appId);
+            backupPermis.setAppId(appId);
             backupPermis.setGrantUser(applyPermission.getGrantUser());
             backupPermis.setExpiration(applyPermission.getExpiration());
             backupPermis.setStartTime(applyPermission.getStartTime());

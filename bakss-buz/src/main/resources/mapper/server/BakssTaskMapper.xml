@@ -24,58 +24,66 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectBakssTaskVo">
-        select id, app_type, app_user, app_time, backup_id, backup_time, backup_status, flow_id, flow_step, review_user, remark, deleted, create_time, create_by, update_time from bakss_apply
+        select a.id, app_type, app_user, app_time, backup_id, backup_time, backup_status, flow_id, flow_step, review_user, a.remark, a.deleted, a.create_time, a.create_by, a.update_time
+        from bakss_app a, bakss_app_flow b
     </sql>
 
     <select id="getDbaTodoTaskList" resultMap="BakssTaskResult">
         <include refid="selectBakssTaskVo"></include>
-        from bakss_app a, bakss_app_flow b
-        where a.deleted = 0 and a.status = 1 a.flow_id = b.flow_id and b.review_status = 0 and b.flow_step ='dba'
+        where a.deleted = 0 and a.status = 1 and a.flow_id = b.id and b.review_status = 0 and b.flow_step ='dba'
+        order by create_time desc;
     </select>
 
     <select id="getAdminTodoTaskList" resultMap="BakssTaskResult">
         <include refid="selectBakssTaskVo"></include>
-        from bakss_app a, bakss_app_flow b
-        where a.deleted = 0 and a.status = 1 a.flow_id = b.flow_id and b.review_status = 0 and b.flow_step ='admin'
+        where a.deleted = 0 and a.status = 1 and a.flow_id = b.id and b.review_status = 0 and b.flow_step ='admin'
+        order by create_time desc;
     </select>
 
     <select id="getDbaLeaderTodoTaskList" resultMap="BakssTaskResult">
         <include refid="selectBakssTaskVo"></include>
-        from bakss_app a, bakss_app_flow b
-        where a.deleted = 0 and a.status = 1 a.flow_id = b.flow_id and b.review_status = 0 and b.flow_step ='dbaLeader'
+        where a.deleted = 0 and a.status = 1 and a.flow_id = b.id and b.review_status = 0 and b.flow_step ='dbaLeader'
+        order by create_time desc;
     </select>
 
     <select id="getOwnerTodoTaskList" resultMap="BakssTaskResult">
         <include refid="selectBakssTaskVo"></include>
-        from bakss_app a, bakss_app_flow b, bakss_app_backup_owner c
-        where a.deleted = 0 and a.status = 1 a.flow_id = b.flow_id and b.review_status = 0 and b.flow_step ='owner' and a.id = c.app_id and c.old_user = #{owner}
+        , bakss_app_backup_owner c
+        where a.deleted = 0 and a.status = 1 and a.flow_id = b.id and b.review_status = 0 and b.flow_step ='owner' and a.id = c.app_id and c.old_user = #{owner}
+        order by create_time desc;
     </select>
 
     <select id="getLeaderTodoTaskList" resultMap="BakssTaskResult">
         <include refid="selectBakssTaskVo"></include>
-        from bakss_app a, bakss_app_flow b
-        where a.deleted = 0 and a.status = 1 a.flow_id = b.flow_id and b.review_status = 0 and b.flow_step ='leader' and a.app_user in (
+        where a.deleted = 0 and a.status = 1 and a.flow_id = b.id and b.review_status = 0 and b.flow_step ='leader' and a.app_user in (
             <foreach collection="user" separator=",">
                 #{user}
             </foreach>
             )
+        order by create_time desc;
     </select>
 
     <select id="getAssignTodoTaskList" resultMap="BakssTaskResult">
         <include refid="selectBakssTaskVo"></include>
-        from bakss_app a, bakss_app_flow b, bakss_apply_backup_permis c
-        where a.deleted = 0 and a.status = 1 a.flow_id = b.flow_id and b.review_status = 0 and b.flow_step ='assign' and a.id = c.app_id and c.grant_user = #{user}
+        , bakss_apply_backup_permis c
+        where a.deleted = 0 and a.status = 1 and a.flow_id = b.id and b.review_status = 0 and b.flow_step ='assign' and a.id = c.app_id and c.grant_user = #{user}
+        order by create_time desc;
     </select>
 
     <select id="getAllTodoTaskList" resultMap="BakssTaskResult">
         <include refid="selectBakssTaskVo"></include>
-        from bakss_app a, bakss_app_flow b
-        where a.deleted = 0 and a.status = 1 a.flow_id = b.flow_id and b.review_status = 0
+        where a.deleted = 0 and a.status = 1 and a.flow_id = b.id and b.review_status = 0
+        order by create_time desc;
     </select>
 
-    <select id="getDoneTaskList" resultMap="BakssTaskResult">
+    <select id="getTaskList" parameterType="String" resultMap="BakssTaskResult">
         <include refid="selectBakssTaskVo"></include>
-        from bakss_app a, bakss_app_flow b
-        where a.deleted = 0 and a.status = 1 a.flow_id = b.flow_id and b.review_status = 1
+        where a.deleted = 0 and a.status = 1 and a.flow_id = b.id
+        <if test="reviewStatus != null and reviewStatus != ''">
+            and b.review_status = #{reviewStatus}
+        </if>
+        order by create_time desc;
     </select>
+
+
 </mapper>

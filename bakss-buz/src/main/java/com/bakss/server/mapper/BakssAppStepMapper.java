@@ -2,6 +2,7 @@ package com.bakss.server.mapper;
 
 import java.util.List;
 import com.bakss.server.domain.BakssAppStep;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * 申请步骤Mapper接口
@@ -19,7 +20,7 @@ public interface BakssAppStepMapper
      */
     public BakssAppStep selectBakssAppStepById(Long id);
 
-    public BakssAppStep getBakssAppStepByAppType(Long AppType, Boolean isDB);
+    public BakssAppStep getBakssAppStepByAppType(@Param("appType") Long appType, @Param("isDB") Boolean isDB);
 
     /**
      * 查询申请步骤列表

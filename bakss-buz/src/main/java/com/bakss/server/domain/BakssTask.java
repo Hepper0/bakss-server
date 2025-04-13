@@ -36,7 +36,7 @@ public class BakssTask extends BaseEntity
 
     /** $column.columnComment */
     @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
-    private Long backupId;
+    private String backupId;
 
     /** $column.columnComment */
     @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
@@ -50,7 +50,7 @@ public class BakssTask extends BaseEntity
     @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
     private Long flowId;
 
-    private Integer flowStep;
+    private String flowStep;
 
     private String reviewUser;
 

@@ -76,6 +76,10 @@ public class BakssAppServiceImpl implements IBakssAppService
     @Override
     public List<BakssApp> selectBakssAppList(BakssApp bakssApp)
     {
+        LoginUser user = SecurityUtils.getLoginUser();
+        if (!user.getUser().isAdmin()) {
+            bakssApp.setAppUser(user.getUsername());
+        }
         return bakssAppMapper.selectBakssAppList(bakssApp);
     }
 
@@ -181,7 +185,8 @@ public class BakssAppServiceImpl implements IBakssAppService
             flow.setReviewStatus(0L);
             // 默认索引到第一个流程
             if (flowId == -1) {
-                flowId = bakssAppFlowMapper.insertBakssAppFlow(flow);
+                bakssAppFlowMapper.insertBakssAppFlow(flow);
+                flowId = flow.getId();
                 App.setFlowId(flowId);
                 bakssAppMapper.updateBakssApp(App);
             }
