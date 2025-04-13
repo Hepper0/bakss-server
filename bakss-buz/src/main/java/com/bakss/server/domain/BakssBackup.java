@@ -56,6 +56,8 @@ public class BakssBackup extends BaseEntity
     @Excel(name = "负责人", readConverterExp = "$column.readConverterExp()")
     private String owner;
 
+    private String manager;
+
     @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
     private Long deleted;
 

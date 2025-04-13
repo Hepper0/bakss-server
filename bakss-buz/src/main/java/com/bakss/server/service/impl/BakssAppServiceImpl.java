@@ -1,6 +1,7 @@
 package com.bakss.server.service.impl;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import com.bakss.common.core.domain.entity.SysRole;
@@ -140,6 +141,7 @@ public class BakssAppServiceImpl implements IBakssAppService
         BakssAppFlow flow = bakssAppFlowMapper.selectBakssAppFlowById(App.getFlowId());
         flow.setReviewUser(user.getUsername());
         flow.setReviewStatus(APPROVAL_APPROVED);
+        flow.setReviewTime(DateUtils.getNowDate());
         bakssAppFlowMapper.updateBakssAppFlow(flow);
         // 索引到下一步骤
         BakssAppFlow nextFlow = bakssAppFlowMapper.getBakssAppNextFlow(flow);
@@ -154,8 +156,11 @@ public class BakssAppServiceImpl implements IBakssAppService
     }
 
     public void rejected(BakssApp App) {
+        LoginUser user = SecurityUtils.getLoginUser();
         BakssAppFlow flow = bakssAppFlowMapper.selectBakssAppFlowById(App.getFlowId());
         flow.setReviewStatus(APPROVAL_REJECTED);
+        flow.setReviewUser(user.getUsername());
+        flow.setReviewTime(DateUtils.getNowDate());
         // todo 审核不通过的处理
     }
 

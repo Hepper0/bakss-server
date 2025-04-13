@@ -15,6 +15,7 @@
         <result property="env"    column="env"    />
         <result property="platform"    column="platform"    />
         <result property="owner"    column="owner"    />
+        <result property="manager"    column="manager"    />
         <result property="deleted"    column="deleted"    />
         <result property="createTime"    column="create_time"    />
         <result property="createBy"    column="create_by"    />
@@ -22,7 +23,7 @@
     </resultMap>
 
     <sql id="selectBakssBackupVo">
-        select id, backupSoftware, softwareVersion, clientName, backupContent, backupIP, appName, env, platform, owner, deleted, create_time, create_by, update_time from bakss_backup
+        select id, backupSoftware, softwareVersion, clientName, backupContent, backupIP, appName, env, platform, owner, manager, deleted, create_time, create_by, update_time from bakss_backup
     </sql>
 
     <select id="selectBakssBackupList" parameterType="BakssBackup" resultMap="BakssBackupResult">
@@ -37,6 +38,7 @@
             <if test="env != null  and env != ''"> and env = #{env} </if>
             <if test="platform != null  and platform != ''"> and platform = #{platform}</if>
             <if test="owner != null  and owner != ''"> and owner = #{owner}</if>
+            <if test="manager != null  and manager != ''"> and manager = #{manager}</if>
             <if test="deleted != null "> and deleted = #{deleted}</if>
         </where>
     </select>
@@ -58,6 +60,7 @@
             <if test="env != null">env,</if>
             <if test="platform != null">platform,</if>
             <if test="owner != null">owner,</if>
+            <if test="manager != null">manager,</if>
             <if test="deleted != null">deleted,</if>
             <if test="createTime != null">create_time,</if>
             <if test="createBy != null">create_by,</if>
@@ -73,6 +76,7 @@
             <if test="env != null">#{env},</if>
             <if test="platform != null">#{platform},</if>
             <if test="owner != null">#{owner},</if>
+            <if test="manager != null">#{manager},</if>
             <if test="deleted != null">#{deleted},</if>
             <if test="createTime != null">#{createTime},</if>
             <if test="createBy != null">#{createBy},</if>
@@ -92,6 +96,7 @@
             <if test="env != null">env = #{env},</if>
             <if test="platform != null">platform = #{platform},</if>
             <if test="owner != null">owner = #{owner},</if>
+            <if test="manager != null">manager = #{manager},</if>
             <if test="deleted != null">deleted = #{deleted},</if>
             <if test="createTime != null">create_time = #{createTime},</if>
             <if test="createBy != null">create_by = #{createBy},</if>

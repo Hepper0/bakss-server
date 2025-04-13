@@ -3,6 +3,7 @@ package com.bakss.server.domain;
 import com.bakss.common.annotation.Excel;
 import com.bakss.common.core.domain.BaseEntity;
 import lombok.Data;
+import java.util.Date;
 
 /**
  * 申请流程对象 bakss_App_flow
@@ -37,6 +38,8 @@ public class BakssAppFlow extends BaseEntity
     /** $column.columnComment */
     @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
     private Long reviewStatus;
+
+    private Date reviewTime;
 
     /** $column.columnComment */
     @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")

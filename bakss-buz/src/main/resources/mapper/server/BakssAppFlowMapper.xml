@@ -11,6 +11,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="appId"    column="app_id"    />
         <result property="reviewUser"    column="review_user"    />
         <result property="reviewStatus"    column="review_status"    />
+        <result property="reviewTime"    column="review_time"    />
         <result property="remark"    column="remark"    />
         <result property="deleted"    column="deleted"    />
         <result property="createTime"    column="create_time"    />
@@ -19,7 +20,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectBakssAppFlowVo">
-        select id, flow_step, flow_order, app_id, review_user, review_status, remark, deleted, create_time, create_by, update_time from bakss_app_flow
+        select id, flow_step, flow_order, app_id, review_user, review_status, review_time, remark, deleted, create_time, create_by, update_time from bakss_app_flow
     </sql>
 
     <select id="selectBakssAppFlowList" parameterType="BakssAppFlow" resultMap="BakssAppFlowResult">
@@ -30,6 +31,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="appId != null  and appId != ''"> and app_id = #{appId}</if>
             <if test="reviewUser != null  and reviewUser != ''"> and review_user = #{reviewUser}</if>
             <if test="reviewStatus != null "> and review_status = #{reviewStatus}</if>
+            <if test="reviewTime != null "> and review_time = #{reviewTime}</if>
             <if test="deleted != null "> and deleted = #{deleted}</if>
         </where>
     </select>
@@ -52,6 +54,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="appId != null">app_id,</if>
             <if test="reviewUser != null">review_user,</if>
             <if test="reviewStatus != null">review_status,</if>
+            <if test="reviewTime != null">review_time,</if>
             <if test="remark != null">remark,</if>
             <if test="deleted != null">deleted,</if>
             <if test="createTime != null">create_time,</if>
@@ -64,6 +67,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="appId != null">#{appId},</if>
             <if test="reviewUser != null">#{reviewUser},</if>
             <if test="reviewStatus != null">#{reviewStatus},</if>
+            <if test="reviewTime != null">#{reviewTime},</if>
             <if test="remark != null">#{remark},</if>
             <if test="deleted != null">#{deleted},</if>
             <if test="createTime != null">#{createTime},</if>
@@ -80,6 +84,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="appId != null">app_id = #{appId},</if>
             <if test="reviewUser != null">review_user = #{reviewUser},</if>
             <if test="reviewStatus != null">review_status = #{reviewStatus},</if>
+            <if test="reviewTime != null">review_time = #{reviewTime},</if>
             <if test="remark != null">remark = #{remark},</if>
             <if test="deleted != null">deleted = #{deleted},</if>
             <if test="createTime != null">create_time = #{createTime},</if>

@@ -9,6 +9,7 @@ create table bakss_backup (
     appName varchar(50),
     platform varchar(50),
     owner varchar(100),
+    manager varchar(100),
     deleted int default 0,
     create_time datetime default now(),
     create_by varchar(100),
@@ -58,6 +59,7 @@ create table bakss_app_flow (
     app_id varchar(50),
     review_user varchar(50) comment '当前环节最后审批的人',
     review_status int default 0,
+    review_time datetime,
     remark varchar(500),
     deleted int default 0,
     create_time datetime default now(),
@@ -221,7 +223,7 @@ create table bakss_app_step(
     update_time datetime
 )
 
-    insert into bakss_app_step(app_type, app_steps, is_db) values(0, 'dba,admin', 1); -- 申请备份管理权
+insert into bakss_app_step(app_type, app_steps, is_db) values(0, 'dba,admin', 1); -- 申请备份管理权
 insert into bakss_app_step(app_type, app_steps, is_db) values(1, 'assign,dba,admin', 1); -- 授权备份管理权
 insert into bakss_app_step(app_type, app_steps, is_db) values(2, 'dbaLeader,admin', 1); -- 恢复创建
 insert into bakss_app_step(app_type, app_steps, is_db) values(3, 'dba,admin', 1); -- 备份创建
