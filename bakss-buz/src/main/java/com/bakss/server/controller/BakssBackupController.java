@@ -2,6 +2,9 @@ package com.bakss.server.controller;
 
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
+
+import com.bakss.common.core.domain.model.LoginUser;
+import com.bakss.common.utils.SecurityUtils;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -43,6 +46,16 @@ public class BakssBackupController extends BaseController
     {
         startPage();
         List<BakssBackup> list = bakssBackupService.selectBakssBackupList(bakssBackup);
+        return getDataTable(list);
+    }
+
+    @PreAuthorize("@ss.hasPermi('service:backup:query')")
+    @GetMapping("/my")
+    public TableDataInfo myList(BakssBackup bakssBackup)
+    {
+        LoginUser user = SecurityUtils.getLoginUser();
+        startPage();
+        List<BakssBackup> list = bakssBackupService.getBackupList(user.getUsername());
         return getDataTable(list);
     }
 

@@ -2,6 +2,7 @@ package com.bakss.server.service;
 
 import java.util.List;
 import com.bakss.server.domain.BakssBackup;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * 备份Service接口
@@ -26,6 +27,9 @@ public interface IBakssBackupService
      * @return 备份集合
      */
     public List<BakssBackup> selectBakssBackupList(BakssBackup bakssBackup);
+
+    public List<BakssBackup> getBackupList(String user);
+
 
     /**
      * 新增备份

@@ -45,6 +45,10 @@ public class BakssBackupServiceImpl implements IBakssBackupService
         return bakssBackupMapper.selectBakssBackupList(bakssBackup);
     }
 
+    public List<BakssBackup> getBackupList(String user) {
+        return bakssBackupMapper.getBackupList(user);
+    }
+
     /**
      * 新增备份管理
      *

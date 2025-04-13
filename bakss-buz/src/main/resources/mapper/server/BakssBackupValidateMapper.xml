@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bakss.system.mapper.BakssBackupValidateMapper">
+    
+    <resultMap type="BakssBackupValidate" id="BakssBackupValidateResult">
+        <result property="id"    column="id"    />
+        <result property="backupId"    column="backup_id"    />
+        <result property="username"    column="username"    />
+        <result property="expType"    column="exp_type"    />
+        <result property="startDate"    column="start_date"    />
+        <result property="endDate"    column="end_date"    />
+        <result property="deleted"    column="deleted"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectBakssBackupValidateVo">
+        select id, backup_id, username, exp_type, start_date, end_date, deleted, create_time, create_by, update_time from bakss_backup_validate
+    </sql>
+
+    <select id="selectBakssBackupValidateList" parameterType="BakssBackupValidate" resultMap="BakssBackupValidateResult">
+        <include refid="selectBakssBackupValidateVo"/>
+        <where>  
+            <if test="backupId != null "> and backup_id = #{backupId}</if>
+            <if test="username != null  and username != ''"> and username like concat('%', #{username}, '%')</if>
+            <if test="expType != null "> and exp_type = #{expType}</if>
+            <if test="startDate != null "> and start_date = #{startDate}</if>
+            <if test="endDate != null "> and end_date = #{endDate}</if>
+            <if test="deleted != null "> and deleted = #{deleted}</if>
+        </where>
+    </select>
+    
+    <select id="selectBakssBackupValidateById" parameterType="Long" resultMap="BakssBackupValidateResult">
+        <include refid="selectBakssBackupValidateVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertBakssBackupValidate" parameterType="BakssBackupValidate" useGeneratedKeys="true" keyProperty="id">
+        insert into bakss_backup_validate
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="backupId != null">backup_id,</if>
+            <if test="username != null">username,</if>
+            <if test="expType != null">exp_type,</if>
+            <if test="startDate != null">start_date,</if>
+            <if test="endDate != null">end_date,</if>
+            <if test="deleted != null">deleted,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="backupId != null">#{backupId},</if>
+            <if test="username != null">#{username},</if>
+            <if test="expType != null">#{expType},</if>
+            <if test="startDate != null">#{startDate},</if>
+            <if test="endDate != null">#{endDate},</if>
+            <if test="deleted != null">#{deleted},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBakssBackupValidate" parameterType="BakssBackupValidate">
+        update bakss_backup_validate
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="backupId != null">backup_id = #{backupId},</if>
+            <if test="username != null">username = #{username},</if>
+            <if test="expType != null">exp_type = #{expType},</if>
+            <if test="startDate != null">start_date = #{startDate},</if>
+            <if test="endDate != null">end_date = #{endDate},</if>
+            <if test="deleted != null">deleted = #{deleted},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBakssBackupValidateById" parameterType="Long">
+        delete from bakss_backup_validate where id = #{id}
+    </delete>
+
+    <delete id="deleteBakssBackupValidateByIds" parameterType="String">
+        delete from bakss_backup_validate where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

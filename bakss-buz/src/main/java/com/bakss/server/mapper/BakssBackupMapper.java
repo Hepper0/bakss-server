@@ -2,6 +2,7 @@ package com.bakss.server.mapper;
 
 import java.util.List;
 import com.bakss.server.domain.BakssBackup;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * 备份管理Mapper接口
@@ -26,6 +27,8 @@ public interface BakssBackupMapper
      * @return 备份管理集合
      */
     public List<BakssBackup> selectBakssBackupList(BakssBackup bakssBackup);
+
+    public List<BakssBackup> getBackupList(@Param("user") String user);
 
     /**
      * 新增备份管理

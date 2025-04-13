@@ -23,7 +23,8 @@
     </resultMap>
 
     <sql id="selectBakssBackupVo">
-        select id, backupSoftware, softwareVersion, clientName, backupContent, backupIP, appName, env, platform, owner, manager, deleted, create_time, create_by, update_time from bakss_backup
+        select a.id, backupSoftware, softwareVersion, clientName, backupContent, backupIP, appName, env, platform, owner, manager, a.deleted, a.create_time, a.create_by, a.update_time
+        from bakss_backup a
     </sql>
 
     <select id="selectBakssBackupList" parameterType="BakssBackup" resultMap="BakssBackupResult">
@@ -115,4 +116,17 @@
             #{id}
         </foreach>
     </delete>
+
+    <select id="getBackupList">
+        <include refid="selectBakssBackupVo"/>
+        where (owner = #{user} or manager=#{user}) and a.deleted = 0
+        union
+        <include refid="selectBakssBackupVo"/>
+        inner join bakss_backup_validate b on a.id = b.backup_id and b.exp_type = 2 and b.start_date >= now() and now() >= b.end_date
+        where a.deleted = 0
+        union
+        <include refid="selectBakssBackupVo"/>
+        inner join bakss_backup_validate b on a.id = b.backup_id and b.exp_type = 1
+        where a.deleted = 0
+    </select>
 </mapper>
