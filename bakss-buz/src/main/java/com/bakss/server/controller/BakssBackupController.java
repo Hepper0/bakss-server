@@ -41,6 +41,18 @@ public class BakssBackupController extends BaseController
      * 查询备份列表
      */
     @PreAuthorize("@ss.hasPermi('service:backup:query')")
+    @GetMapping("")
+    public TableDataInfo getListByIds(Integer[] ids)
+    {
+        startPage();
+        List<BakssBackup> list = bakssBackupService.selectBakssBackupByIds(ids);
+        return getDataTable(list);
+    }
+
+    /**
+     * 查询备份列表
+     */
+    @PreAuthorize("@ss.hasPermi('service:backup:query')")
     @GetMapping("/list")
     public TableDataInfo list(BakssBackup bakssBackup)
     {

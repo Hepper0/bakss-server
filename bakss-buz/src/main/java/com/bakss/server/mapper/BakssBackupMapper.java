@@ -23,9 +23,10 @@ public interface BakssBackupMapper
     /**
      * 查询备份管理列表
      * 
-     * @param bakssBackup 备份管理
      * @return 备份管理集合
      */
+    public List<BakssBackup> selectBakssBackupByIds(Integer[] ids);
+
     public List<BakssBackup> selectBakssBackupList(BakssBackup bakssBackup);
 
     public List<BakssBackup> getBackupList(@Param("user") String user);

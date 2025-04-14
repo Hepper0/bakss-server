@@ -49,6 +49,14 @@
         where id = #{id}
     </select>
 
+    <select id="selectBakssBackupByIds" parameterType="String">
+        <include refid="selectBakssBackupVo"/>
+        where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+
     <insert id="insertBakssBackup" parameterType="BakssBackup" useGeneratedKeys="true" keyProperty="id">
         insert into bakss_backup
         <trim prefix="(" suffix=")" suffixOverrides=",">
