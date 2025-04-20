@@ -75,6 +75,30 @@ public class BakssApplyServiceImpl implements IBakssApplyService {
         }
     }
 
+    // 修改目录
+    public void applyModifyBackupDirectory(ApplyModifyDirectory modifyDirectory) {
+        String appId = addApplication(modifyDirectory, Integer.toString(modifyDirectory.getBackupId()));
+        // todo addChangeBackupUser
+    }
+
+    // 修改负责人与管理员
+    public void applyChangeUser(ApplyChangeUser changeUser) {
+        String backupIds = changeUser.getBackupIds();
+        String appId = addApplication(changeUser, backupIds);
+        // todo addChangeBackupUser
+    }
+
+    public void applyBackup(ApplyBackup applyBackup) {
+        String appId = addApplication(applyBackup, null);
+        // todo createBackup
+    }
+
+    public void applyRestore(ApplyRestore applyRestore) {
+        String backupId = applyRestore.getBackupId().toString();
+        String appId = addApplication(applyRestore, backupId);
+        // todo createRestore
+    }
+
     public String addApplication(ApplyBase apply, String backupId) {
         LoginUser user = SecurityUtils.getLoginUser();
         BakssApp app = new BakssApp();
@@ -84,18 +108,12 @@ public class BakssApplyServiceImpl implements IBakssApplyService {
         app.setAppType(apply.getAppType());
         app.setAppUser(user.getUsername());
         app.setRemark(apply.getRemark());
-        app.setBackupId(backupId);
+        if (backupId != null) app.setBackupId(backupId);
         // 创建申请单
         appService.insertBakssApp(app);
         // 创建申请补助
         appService.createFlows(app);
         return appId;
-    }
-
-    // 修改目录
-    public void addBackupModifyDirectory(ApplyModifyDirectory modifyDirectory) {
-        String appId = addApplication(modifyDirectory, Integer.toString(modifyDirectory.getBackupId()));
-        // todo addChangeBackupUser
     }
 
     // 启用策略
@@ -111,12 +129,5 @@ public class BakssApplyServiceImpl implements IBakssApplyService {
     // 删除策略
     public void deleteBackupStrategy(ApplyStrategy strategy) {
 
-    }
-
-    // 修改负责人与管理员
-    public void addBackupChangeUser(ApplyChangeUser changeUser) {
-        String backupIds = changeUser.getBackupIds();
-        String appId = addApplication(changeUser, backupIds);
-        // todo addChangeBackupUser
     }
 }
