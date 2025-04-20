@@ -16,6 +16,15 @@ create table bakss_backup (
     update_time datetime
 );
 
+create table bakss_backup_strategy (
+    id int primary key auto_increment,
+    backup_id int,
+    deleted int default 0,
+    create_time datetime default now(),
+    create_by varchar(100),
+    update_time datetime
+)
+
 -- 控制被授权人员的有效期
 create table bakss_backup_validate (
     id int primary key auto_increment,
@@ -42,6 +51,7 @@ create table bakss_app(
     app_time datetime,
     backup_id varchar(200),
     backup_time datetime,
+    backup_exec_type int,
     backup_status int,
     flow_id int,
     remark varchar(1000),

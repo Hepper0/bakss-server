@@ -11,6 +11,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="appTime"    column="app_time"    />
         <result property="backupId"    column="backup_id"    />
         <result property="backupTime"    column="backup_time"    />
+        <result property="backupExecType"    column="backup_exec_type"    />
         <result property="backupStatus"    column="backup_status"    />
         <result property="flowId"    column="flow_id"    />
         <result property="remark"    column="remark"    />
@@ -28,6 +29,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="appTime"    column="app_time"    />
         <result property="backupId"    column="backup_id"    />
         <result property="backupTime"    column="backup_time"    />
+        <result property="backupExecType"    column="backup_exec_type"    />
         <result property="backupStatus"    column="backup_status"    />
         <result property="flowId"    column="flow_id"    />
         <result property="flowStep"    column="flow_step"    />
@@ -41,11 +43,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectBakssAppVo">
-        select id, app_type, app_user, app_time, backup_id, backup_time, backup_status, flow_id, remark, status, deleted, create_time, create_by, update_time from bakss_app
+        select id, app_type, app_user, app_time, backup_id, backup_time, backup_exec_type, backup_status, flow_id, remark, status, deleted, create_time, create_by, update_time from bakss_app
     </sql>
 
     <sql id="selectBakssTaskVo">
-        select id, app_type, app_user, app_time, backup_id, backup_time, backup_status, flow_id, flow_step, review_user, remark, status, deleted, create_time, create_by, update_time from bakss_app
+        select id, app_type, app_user, app_time, backup_id, backup_time, backup_exec_type, backup_status, flow_id, flow_step, review_user, remark, status, deleted, create_time, create_by, update_time from bakss_app
     </sql>
 
     <select id="selectBakssAppList" parameterType="BakssApp" resultMap="BakssAppResult">
@@ -57,6 +59,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="appTime != null "> and app_time = #{appTime}</if>
             <if test="backupId != null "> and backup_id = #{backupId}</if>
             <if test="backupTime != null "> and backup_time = #{backupTime}</if>
+            <if test="backupExecType != null "> and backup_exec_type = #{backupExecType}</if>
             <if test="backupStatus != null "> and backup_status = #{backupStatus}</if>
             <if test="flowId != null "> and flow_id = #{flowId}</if>
             <if test="status != null "> and status = #{status}</if>
@@ -78,6 +81,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="appTime != null">app_time,</if>
             <if test="backupId != null">backup_id,</if>
             <if test="backupTime != null">backup_time,</if>
+            <if test="backupExecType != null">backup_exec_type,</if>
             <if test="backupStatus != null">backup_status,</if>
             <if test="flowId != null">flow_id,</if>
             <if test="remark != null">remark,</if>
@@ -94,6 +98,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="appTime != null">#{appTime},</if>
             <if test="backupId != null">#{backupId},</if>
             <if test="backupTime != null">#{backupTime},</if>
+            <if test="backupExecType != null">#{backupExecType},</if>
             <if test="backupStatus != null">#{backupStatus},</if>
             <if test="flowId != null">#{flowId},</if>
             <if test="remark != null">#{remark},</if>
@@ -113,6 +118,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="appTime != null">app_time = #{appTime},</if>
             <if test="backupId != null">backup_id = #{backupId},</if>
             <if test="backupTime != null">backup_time = #{backupTime},</if>
+            <if test="backupExecType != null">backup_exec_type = #{backupExecType},</if>
             <if test="backupStatus != null">backup_status = #{backupStatus},</if>
             <if test="flowId != null">flow_id = #{flowId},</if>
             <if test="remark != null">remark = #{remark},</if>

@@ -7,29 +7,31 @@ import com.bakss.common.utils.uuid.IdUtils;
 import com.bakss.server.domain.BakssApp;
 import com.bakss.server.domain.BakssApplyBackupPermis;
 import com.bakss.server.domain.apply.ApplyPermission;
+import com.bakss.server.domain.apply.ApplyStrategy;
 import com.bakss.server.service.IBakssApplyService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 public class BakssApplyServiceImpl implements IBakssApplyService {
 
-    Long APPLY_BACKUP_PERMISSION = 0L;
-    Long GRANT_BACKUP_PERMISSION = 1L;
-    Long CREATE_RESTORE = 2L;
-    Long CREATE_BACKUP = 3L;
-    Long BACKUP_RIGHT_NOW = 4L;
-    Long BACKUP_AT_TIME = 5L;
-    Long MODIFY_DIRECTORY = 6L;
-    Long ENABLE_STRATEGY = 7L;
-    Long DISABLE_STRATEGY = 8L;
-    Long DELETE_STRATEGY = 9L;
-    Long MODIFY_OWNER = 10L;
-    Long MODIFY_MANAGER = 11L;
+    Integer APPLY_BACKUP_PERMISSION = 0;
+    Integer GRANT_BACKUP_PERMISSION = 1;
+    Integer CREATE_RESTORE = 2;
+    Integer CREATE_BACKUP = 3;
+    Integer BACKUP_RIGHT_NOW = 4;
+    Integer BACKUP_AT_TIME = 5;
+    Integer MODIFY_DIRECTORY = 6;
+    Integer ENABLE_STRATEGY = 7;
+    Integer DISABLE_STRATEGY = 8;
+    Integer DELETE_STRATEGY = 9;
+    Integer MODIFY_OWNER = 10;
+    Integer MODIFY_MANAGER = 11;
 
     @Resource
     private BakssAppServiceImpl appService;
@@ -74,13 +76,34 @@ public class BakssApplyServiceImpl implements IBakssApplyService {
         appService.createFlows(bakssApp);
     }
 
+    public void modifyBackupStrategy(ApplyStrategy strategy) {
+        Integer appType = strategy.getAppType();
+        if (appType.equals(ENABLE_STRATEGY)) {
+            enableBackupStrategy(strategy);
+        } else if (appType.equals(DISABLE_STRATEGY)) {
+            disableBackupStrategy(strategy);
+        } else if (appType.equals(DELETE_STRATEGY)) {
+            deleteBackupStrategy(strategy);
+        }
+    }
+
     // 修改目录
     public void addBackupModifyDirectory() {
 
     }
 
-    // 策略
-    public void addBackupStrategy() {
+    // 启用策略
+    public void enableBackupStrategy(ApplyStrategy strategy) {
+
+    }
+
+    // 禁用策略
+    public void disableBackupStrategy(ApplyStrategy strategy) {
+
+    }
+
+    // 删除策略
+    public void deleteBackupStrategy(ApplyStrategy strategy) {
 
     }
 

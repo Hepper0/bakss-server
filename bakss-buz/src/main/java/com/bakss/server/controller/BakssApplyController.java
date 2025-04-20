@@ -5,7 +5,9 @@ import com.bakss.common.annotation.Log;
 import com.bakss.common.core.controller.BaseController;
 import com.bakss.common.core.domain.AjaxResult;
 import com.bakss.common.enums.BusinessType;
+import com.bakss.server.domain.BakssApp;
 import com.bakss.server.domain.apply.ApplyPermission;
+import com.bakss.server.domain.apply.ApplyStrategy;
 import com.bakss.server.service.IBakssApplyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -68,7 +70,7 @@ public class BakssApplyController extends BaseController
     @PreAuthorize("@ss.hasPermi('service:apply:add')")
     @Log(title = "申请", businessType = BusinessType.INSERT)
     @PostMapping("/strategy")
-    public AjaxResult strategy(@RequestBody JSONObject requestJson)
+    public AjaxResult strategy(@RequestBody ApplyStrategy strategy)
     {
         return success();
     }
@@ -84,8 +86,9 @@ public class BakssApplyController extends BaseController
     @PreAuthorize("@ss.hasPermi('service:apply:add')")
     @Log(title = "申请", businessType = BusinessType.INSERT)
     @PostMapping("/backup")
-    public AjaxResult backup(@RequestBody JSONObject requestJson)
+    public AjaxResult backup(@RequestBody BakssApp bakssApp)
     {
+        this.bakssApplyService.addBackupOnce(bakssApp);
         return success();
     }
 

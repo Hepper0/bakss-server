@@ -131,10 +131,10 @@
         union
         <include refid="selectBakssBackupVo"/>
         inner join bakss_backup_validate b on a.id = b.backup_id and b.exp_type = 2 and b.start_date >= now() and now() >= b.end_date
-        where a.deleted = 0
+        where a.deleted = 0 and b.deleted = 0
         union
         <include refid="selectBakssBackupVo"/>
         inner join bakss_backup_validate b on a.id = b.backup_id and b.exp_type = 1
-        where a.deleted = 0
+        where a.deleted = 0 and b.deleted = 0
     </select>
 </mapper>
