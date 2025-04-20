@@ -6,8 +6,7 @@ import com.bakss.common.core.controller.BaseController;
 import com.bakss.common.core.domain.AjaxResult;
 import com.bakss.common.enums.BusinessType;
 import com.bakss.server.domain.BakssApp;
-import com.bakss.server.domain.apply.ApplyPermission;
-import com.bakss.server.domain.apply.ApplyStrategy;
+import com.bakss.server.domain.apply.*;
 import com.bakss.server.service.IBakssApplyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -46,24 +45,27 @@ public class BakssApplyController extends BaseController
     @PreAuthorize("@ss.hasPermi('service:apply:add')")
     @Log(title = "申请", businessType = BusinessType.INSERT)
     @PostMapping("/modifyDirectory")
-    public AjaxResult modifyDirectory(@RequestBody JSONObject requestJson)
+    public AjaxResult modifyDirectory(@RequestBody ApplyModifyDirectory modifyDirectory)
     {
+        bakssApplyService.applyModifyBackupDirectory(modifyDirectory);
         return success();
     }
 
     @PreAuthorize("@ss.hasPermi('service:apply:add')")
     @Log(title = "申请", businessType = BusinessType.INSERT)
     @PostMapping("/createBackup")
-    public AjaxResult createBackup(@RequestBody JSONObject requestJson)
+    public AjaxResult createBackup(@RequestBody ApplyBackup backup)
     {
+        bakssApplyService.applyBackup(backup);
         return success();
     }
 
     @PreAuthorize("@ss.hasPermi('service:apply:add')")
     @Log(title = "申请", businessType = BusinessType.INSERT)
     @PostMapping("/createRestore")
-    public AjaxResult createRestore(@RequestBody JSONObject requestJson)
+    public AjaxResult createRestore(@RequestBody ApplyRestore restore)
     {
+        bakssApplyService.applyRestore(restore);
         return success();
     }
 
@@ -72,14 +74,16 @@ public class BakssApplyController extends BaseController
     @PostMapping("/strategy")
     public AjaxResult strategy(@RequestBody ApplyStrategy strategy)
     {
+        bakssApplyService.applyModifyBackupStrategy(strategy);
         return success();
     }
 
     @PreAuthorize("@ss.hasPermi('service:apply:add')")
     @Log(title = "申请", businessType = BusinessType.INSERT)
     @PostMapping("/changeUser")
-    public AjaxResult changeUser(@RequestBody JSONObject requestJson)
+    public AjaxResult changeUser(@RequestBody ApplyChangeUser changeUser)
     {
+        bakssApplyService.applyChangeUser(changeUser);
         return success();
     }
 

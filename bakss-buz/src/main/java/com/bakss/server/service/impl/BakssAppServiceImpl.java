@@ -188,9 +188,9 @@ public class BakssAppServiceImpl implements IBakssAppService
             flow.setFlowStep(step);
             flow.setFlowOrder(i);
             flow.setReviewStatus(0L);
+            bakssAppFlowMapper.insertBakssAppFlow(flow);
             // 默认索引到第一个流程
             if (flowId == -1) {
-                bakssAppFlowMapper.insertBakssAppFlow(flow);
                 flowId = flow.getId();
                 App.setFlowId(flowId);
                 bakssAppMapper.updateBakssApp(App);
