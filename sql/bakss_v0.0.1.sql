@@ -159,7 +159,7 @@ create table bakss_apply_backup_permis(
 );
 
 -- 修改owner与修改管理员都用同一个表
-create table bakss_apply_backup_owner(
+create table bakss_apply_change_backup_user(
       id int primary key auto_increment,
       app_id varchar(50),
       backup_id int,

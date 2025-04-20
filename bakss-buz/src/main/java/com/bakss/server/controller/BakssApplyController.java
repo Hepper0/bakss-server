@@ -36,7 +36,7 @@ public class BakssApplyController extends BaseController
     @PostMapping("/permission")
     public AjaxResult permission(@RequestBody ApplyPermission applyPermission)
     {
-        bakssApplyService.addBackupPermissionApplication(applyPermission);
+        bakssApplyService.applyBackupPermission(applyPermission);
         return success();
     }
 
@@ -77,8 +77,8 @@ public class BakssApplyController extends BaseController
 
     @PreAuthorize("@ss.hasPermi('service:apply:add')")
     @Log(title = "申请", businessType = BusinessType.INSERT)
-    @PostMapping("/modifyUser")
-    public AjaxResult modifyUser(@RequestBody JSONObject requestJson)
+    @PostMapping("/changeUser")
+    public AjaxResult changeUser(@RequestBody JSONObject requestJson)
     {
         return success();
     }
@@ -88,7 +88,7 @@ public class BakssApplyController extends BaseController
     @PostMapping("/backup")
     public AjaxResult backup(@RequestBody BakssApp bakssApp)
     {
-        this.bakssApplyService.addBackupOnce(bakssApp);
+        this.bakssApplyService.applyBackupOnce(bakssApp);
         return success();
     }
 

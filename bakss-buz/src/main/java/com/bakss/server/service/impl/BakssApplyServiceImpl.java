@@ -6,8 +6,7 @@ import com.bakss.common.utils.SecurityUtils;
 import com.bakss.common.utils.uuid.IdUtils;
 import com.bakss.server.domain.BakssApp;
 import com.bakss.server.domain.BakssApplyBackupPermis;
-import com.bakss.server.domain.apply.ApplyPermission;
-import com.bakss.server.domain.apply.ApplyStrategy;
+import com.bakss.server.domain.apply.*;
 import com.bakss.server.service.IBakssApplyService;
 import org.springframework.stereotype.Service;
 
@@ -40,21 +39,10 @@ public class BakssApplyServiceImpl implements IBakssApplyService {
     private BakssApplyBackupPermisServiceImpl applyBackupPermisService;
 
     // 申请 与 授权
-    public void addBackupPermissionApplication(ApplyPermission applyPermission) {
-        LoginUser user = SecurityUtils.getLoginUser();
+    public void applyBackupPermission(ApplyPermission applyPermission) {
+
         List<String> backupIds = applyPermission.getBackupIds();
-        BakssApp app = new BakssApp();
-        String appId = IdUtils.simpleUUID();
-        app.setId(appId);
-        app.setAppTime(DateUtils.getNowDate());
-        app.setAppType(applyPermission.getAppType());
-        app.setAppUser(user.getUsername());
-        app.setRemark(applyPermission.getRemark());
-        app.setBackupId(backupIds.stream().map(Object::toString).collect(Collectors.joining(",")));
-        // 创建申请单
-        appService.insertBakssApp(app);
-        // 创建申请补助
-        appService.createFlows(app);
+        String appId = addApplication(applyPermission, backupIds.stream().map(Object::toString).collect(Collectors.joining(",")));
         // 创建申请内容
         List<BakssApplyBackupPermis> bakssApplyBackupPermis = new ArrayList<>();
         for(String backupId : backupIds) {
@@ -71,12 +59,12 @@ public class BakssApplyServiceImpl implements IBakssApplyService {
     }
 
     // 立即备份 与 定时备份
-    public void addBackupOnce(BakssApp bakssApp) {
+    public void applyBackupOnce(BakssApp bakssApp) {
         appService.insertBakssApp(bakssApp);
         appService.createFlows(bakssApp);
     }
 
-    public void modifyBackupStrategy(ApplyStrategy strategy) {
+    public void applyModifyBackupStrategy(ApplyStrategy strategy) {
         Integer appType = strategy.getAppType();
         if (appType.equals(ENABLE_STRATEGY)) {
             enableBackupStrategy(strategy);
@@ -87,9 +75,27 @@ public class BakssApplyServiceImpl implements IBakssApplyService {
         }
     }
 
-    // 修改目录
-    public void addBackupModifyDirectory() {
+    public String addApplication(ApplyBase apply, String backupId) {
+        LoginUser user = SecurityUtils.getLoginUser();
+        BakssApp app = new BakssApp();
+        String appId = IdUtils.simpleUUID();
+        app.setId(appId);
+        app.setAppTime(DateUtils.getNowDate());
+        app.setAppType(apply.getAppType());
+        app.setAppUser(user.getUsername());
+        app.setRemark(apply.getRemark());
+        app.setBackupId(backupId);
+        // 创建申请单
+        appService.insertBakssApp(app);
+        // 创建申请补助
+        appService.createFlows(app);
+        return appId;
+    }
 
+    // 修改目录
+    public void addBackupModifyDirectory(ApplyModifyDirectory modifyDirectory) {
+        String appId = addApplication(modifyDirectory, Integer.toString(modifyDirectory.getBackupId()));
+        // todo addChangeBackupUser
     }
 
     // 启用策略
@@ -108,7 +114,9 @@ public class BakssApplyServiceImpl implements IBakssApplyService {
     }
 
     // 修改负责人与管理员
-    public void addBackupModifyUser() {
-
+    public void addBackupChangeUser(ApplyChangeUser changeUser) {
+        String backupIds = changeUser.getBackupIds();
+        String appId = addApplication(changeUser, backupIds);
+        // todo addChangeBackupUser
     }
 }
