@@ -60,6 +60,11 @@ public class BakssApplyServiceImpl implements IBakssApplyService {
 
     // 立即备份 与 定时备份
     public void applyBackupOnce(BakssApp bakssApp) {
+        LoginUser user = SecurityUtils.getLoginUser();
+        String appId = IdUtils.simpleUUID();
+        bakssApp.setId(appId);
+        bakssApp.setAppTime(DateUtils.getNowDate());
+        bakssApp.setAppUser(user.getUsername());
         appService.insertBakssApp(bakssApp);
         appService.createFlows(bakssApp);
     }
