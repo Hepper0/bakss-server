@@ -72,10 +72,10 @@ VALUES
 
 -- 主菜单
 INSERT INTO `bakss`.`sys_menu`(`menu_id`, `menu_name`, `parent_id`, `order_num`, `path`, `component`, `query`, `route_name`, `is_frame`, `is_cache`, `menu_type`, `visible`, `status`, `perms`, `icon`, `create_by`, `remark`)
-VALUES (8, '申请查看', 0, 0, 'review/index', 'review/index', '', '', 1, 0, 'C', '0', '0', 'review:query', 'message', 'admin', '申请查看菜单');
+VALUES (8, '申请查看', 0, 0, 'application/index', 'application/index', '', '', 1, 0, 'C', '0', '0', 'application:query', 'message', 'admin', '申请查看菜单');
 -- 菜单
 INSERT INTO `bakss`.`sys_menu`(`menu_id`, `menu_name`, `parent_id`, `order_num`, `path`, `component`, `query`, `route_name`, `is_frame`, `is_cache`, `menu_type`, `visible`, `status`, `perms`, `icon`, `create_by`, remark)
-VALUES (601, '详情', 8, 1, '/review/detail', 'review/detail', NULL, '', 1, 0, 'C', '1', '0', 'review:detail', '', 'admin', '申请详情页面');
+VALUES (601, '详情', 8, 1, '/application/detail', 'application/detail', NULL, '', 1, 0, 'C', '1', '0', 'application:detail', '', 'admin', '申请详情页面');
 
 -- 主菜单
 INSERT INTO `bakss`.`sys_menu`(`menu_id`, `menu_name`, `parent_id`, `order_num`, `path`, `component`, `query`, `route_name`, `is_frame`, `is_cache`, `menu_type`, `visible`, `status`, `perms`, `icon`, `create_by`, `remark`)
