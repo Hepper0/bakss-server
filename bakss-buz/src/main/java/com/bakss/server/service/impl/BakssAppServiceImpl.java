@@ -1,10 +1,7 @@
 package com.bakss.server.service.impl;
 
-import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
-import com.bakss.common.core.domain.entity.SysRole;
 import com.bakss.common.core.domain.model.LoginUser;
 import com.bakss.common.utils.DateUtils;
 import com.bakss.common.utils.SecurityUtils;
@@ -19,6 +16,8 @@ import com.bakss.server.mapper.BakssAppMapper;
 import com.bakss.server.service.IBakssAppService;
 
 import javax.annotation.Resource;
+
+import static com.bakss.server.config.Config.*;
 
 /**
  * 申请Service业务层处理
@@ -43,18 +42,6 @@ public class BakssAppServiceImpl implements IBakssAppService
 
     @Resource
     private IBakssBackupService bakssBackupService;
-
-    final String APPROVAL_STATUS_LEADER = "leader";  // 直接上级审批
-    final String APPROVAL_STATUS_OWNER = "owner";  // 直接上级审批
-    final String APPROVAL_STATUS_ASSIGN = "assign";  // 直接上级审批
-    final String APPROVAL_STATUS_DBA = "dba";  // DBA审批
-    final String APPROVAL_STATUS_DBA_LEADER = "dbaLeader";  // DBA审批
-    final String APPROVAL_STATUS_MANAGER = "admin"; // 备份管理员审批
-    final Long APPROVAL_APPROVED = 1L;
-    final Long APPROVAL_REJECTED = -1L;
-    final int CREATE_RESTORE = 2;
-
-    final List<String> DB_TYPES = Arrays.asList("MySQL", "SQLSERVER", "PostgreSQL", "Oracle");
 
     /**
      * 查询申请

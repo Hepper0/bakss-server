@@ -18,4 +18,6 @@ public interface IBakssApplyService {
     public void applyBackup(ApplyBackup applyBackup);
 
     public void applyRestore(ApplyRestore applyBackup);
+
+    public void cancelApplication(String appId);
 }

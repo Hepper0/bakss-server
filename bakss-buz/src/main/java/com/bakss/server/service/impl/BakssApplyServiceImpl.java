@@ -12,25 +12,13 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.bakss.server.config.Config.*;
+
 @Service
 public class BakssApplyServiceImpl implements IBakssApplyService {
-
-    Integer APPLY_BACKUP_PERMISSION = 0;
-    Integer GRANT_BACKUP_PERMISSION = 1;
-    Integer CREATE_RESTORE = 2;
-    Integer CREATE_BACKUP = 3;
-    Integer BACKUP_RIGHT_NOW = 4;
-    Integer BACKUP_AT_TIME = 5;
-    Integer MODIFY_DIRECTORY = 6;
-    Integer ENABLE_STRATEGY = 7;
-    Integer DISABLE_STRATEGY = 8;
-    Integer DELETE_STRATEGY = 9;
-    Integer MODIFY_OWNER = 10;
-    Integer MODIFY_MANAGER = 11;
 
     @Resource
     private BakssAppServiceImpl appService;
@@ -70,6 +58,8 @@ public class BakssApplyServiceImpl implements IBakssApplyService {
     }
 
     public void applyModifyBackupStrategy(ApplyStrategy strategy) {
+        String appId = addApplication(strategy, strategy.getBackupId().toString());
+        strategy.setAppId(appId);
         Integer appType = strategy.getAppType();
         if (appType.equals(ENABLE_STRATEGY)) {
             enableBackupStrategy(strategy);
@@ -104,6 +94,13 @@ public class BakssApplyServiceImpl implements IBakssApplyService {
         // todo createRestore
     }
 
+    public void cancelApplication(String appId) {
+        BakssApp app = new BakssApp();
+        app.setId(appId);
+        app.setStatus(CANCEL_APPLICATION);
+        appService.updateBakssApp(app);
+    }
+
     public String addApplication(ApplyBase apply, String backupId) {
         LoginUser user = SecurityUtils.getLoginUser();
         BakssApp app = new BakssApp();
@@ -116,7 +113,7 @@ public class BakssApplyServiceImpl implements IBakssApplyService {
         if (backupId != null) app.setBackupId(backupId);
         // 创建申请单
         appService.insertBakssApp(app);
-        // 创建申请补助
+        // 创建申请步骤
         appService.createFlows(app);
         return appId;
     }

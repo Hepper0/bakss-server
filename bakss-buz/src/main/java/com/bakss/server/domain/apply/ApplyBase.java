@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class ApplyBase {
-    private Integer appId;
+    private String appId;
     private Integer appType;
     private String appUser;
     private String remark;

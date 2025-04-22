@@ -96,4 +96,13 @@ public class BakssApplyController extends BaseController
         return success();
     }
 
+    @PreAuthorize("@ss.hasPermi('service:apply:add')")
+    @Log(title = "申请", businessType = BusinessType.DELETE)
+    @DeleteMapping("/cancel/{appId}")
+    public AjaxResult cancel(@PathVariable String appId)
+    {
+        this.bakssApplyService.cancelApplication(appId);
+        return success();
+    }
+
 }
