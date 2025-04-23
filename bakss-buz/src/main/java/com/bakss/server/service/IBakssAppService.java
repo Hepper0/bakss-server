@@ -26,7 +26,7 @@ public interface IBakssAppService
      * @param bakssApp 申请
      * @return 申请集合
      */
-    public List<BakssApp> selectBakssAppList(BakssApp bakssApp);
+    public List<BakssTask> selectBakssAppList(BakssApp bakssApp);
 
     /**
      * 新增申请

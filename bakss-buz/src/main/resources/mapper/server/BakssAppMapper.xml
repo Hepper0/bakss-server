@@ -34,6 +34,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="flowId"    column="flow_id"    />
         <result property="flowStep"    column="flow_step"    />
         <result property="reviewUser"    column="review_user"    />
+        <result property="reviewStatus"    column="review_status"    />
+        <result property="reviewTime"    column="review_time"    />
         <result property="remark"    column="remark"    />
         <result property="status"    column="status"    />
         <result property="deleted"    column="deleted"    />
@@ -47,13 +49,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </sql>
 
     <sql id="selectBakssTaskVo">
-        select id, app_type, app_user, app_time, backup_id, backup_time, backup_exec_type, backup_status, flow_id, flow_step, review_user, remark, status, deleted, create_time, create_by, update_time from bakss_app
+        select a.id, app_type, app_user, app_time, backup_id, backup_time, backup_exec_type, backup_status, flow_id, flow_step, review_user, review_status, review_time, a.remark, a.status, a.deleted, a.create_time, a.create_by, a.update_time
+        from bakss_app a
+        inner join bakss_app_flow b on a.flow_id = b.id and b.deleted = 0
     </sql>
 
-    <select id="selectBakssAppList" parameterType="BakssApp" resultMap="BakssAppResult">
-        <include refid="selectBakssAppVo"/>
+    <select id="selectBakssAppList" parameterType="BakssApp" resultMap="BakssTaskResult">
+        <include refid="selectBakssTaskVo"/>
         <where>
-            deleted = 0
+            a.deleted = 0
             <if test="appType != null "> and app_type = #{appType}</if>
             <if test="appUser != null  and appUser != ''"> and app_user = #{appUser}</if>
             <if test="appTime != null "> and app_time = #{appTime}</if>
@@ -142,43 +146,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </foreach>
     </delete>
 
-    <select id="getDbaTodoTaskList" resultMap="BakssTaskResult">
+    <select id="getTaskList" parameterType="String" resultMap="BakssTaskResult">
         <include refid="selectBakssTaskVo"></include>
-        from bakss_app a, bakss_app_flow b
-        where a.deleted = 0 and a.status = 1 and a.flow_id = b.flow_id and b.review_status = 0 and b.flow_step ='dba'
+        where a.deleted = 0 and a.status = 1 and a.flow_id = b.id
+        <if test="reviewStatus != null and reviewStatus != ''">
+            and b.review_status = #{reviewStatus}
+        </if>
+        order by create_time desc;
     </select>
 
-    <select id="getAdminTodoTaskList" resultMap="BakssTaskResult">
-        <include refid="selectBakssTaskVo"></include>
-        from bakss_app a, bakss_app_flow b
-        where a.deleted = 0 and a.status = 1 and a.flow_id = b.flow_id and b.review_status = 0 and b.flow_step ='admin'
-    </select>
-
-    <select id="getDbaLeaderTodoTaskList" resultMap="BakssTaskResult">
-        <include refid="selectBakssTaskVo"></include>
-        from bakss_app a, bakss_app_flow b
-        where a.deleted = 0 and a.status = 1 and a.flow_id = b.flow_id and b.review_status = 0 and b.flow_step ='dbaLeader'
-    </select>
-
-    <select id="getOwnerTodoTaskList" resultMap="BakssTaskResult">
-        <include refid="selectBakssTaskVo"></include>
-        from bakss_app a, bakss_app_flow b, bakss_app_backup_owner c
-        where a.deleted = 0 and a.status = 1 and a.flow_id = b.flow_id and b.review_status = 0 and b.flow_step ='owner' and a.id = c.app_id and c.old_owner = #{owner}
-    </select>
-
-    <select id="getLeaderTodoTaskList" resultMap="BakssTaskResult">
-        <include refid="selectBakssTaskVo"></include>
-        from bakss_app a, bakss_app_flow b
-        where a.deleted = 0 and a.status = 1 and a.flow_id = b.flow_id and b.review_status = 0 and b.flow_step ='leader' and a.app_user in (
-            <foreach collection="user" separator=",">
-                #{user}
-            </foreach>
-            )
-    </select>
-
-    <select id="getAssignTodoTaskList" resultMap="BakssTaskResult">
-        <include refid="selectBakssTaskVo"></include>
-        from bakss_app a, bakss_app_flow b, bakss_app_backup_permis c
-        where a.deleted = 0 and a.status = 1 and a.flow_id = b.flow_id and b.review_status = 0 and b.flow_step ='assign' and a.id = c.app_id and c.grant_user = #{user}
-    </select>
 </mapper>

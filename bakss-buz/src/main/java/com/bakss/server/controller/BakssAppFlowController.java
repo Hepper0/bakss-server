@@ -29,7 +29,7 @@ import com.bakss.common.core.page.TableDataInfo;
  * @date 2025-04-02
  */
 @RestController
-@RequestMapping("/service/flow")
+@RequestMapping("/service/application/flow")
 public class BakssAppFlowController extends BaseController
 {
     @Resource

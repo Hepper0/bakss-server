@@ -2,6 +2,8 @@ package com.bakss.server.controller;
 
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
+
+import com.bakss.server.domain.BakssTask;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -42,7 +44,7 @@ public class BakssAppController extends BaseController
     public TableDataInfo list(BakssApp bakssApp)
     {
         startPage();
-        List<BakssApp> list = bakssAppService.selectBakssAppList(bakssApp);
+        List<BakssTask> list = bakssAppService.selectBakssAppList(bakssApp);
         return getDataTable(list);
     }
 
@@ -54,8 +56,8 @@ public class BakssAppController extends BaseController
     @PostMapping("/export")
     public void export(HttpServletResponse response, BakssApp bakssApp)
     {
-        List<BakssApp> list = bakssAppService.selectBakssAppList(bakssApp);
-        ExcelUtil<BakssApp> util = new ExcelUtil<BakssApp>(BakssApp.class);
+        List<BakssTask> list = bakssAppService.selectBakssAppList(bakssApp);
+        ExcelUtil<BakssTask> util = new ExcelUtil<BakssTask>(BakssTask.class);
         util.exportExcel(response, list, "申请数据");
     }
 

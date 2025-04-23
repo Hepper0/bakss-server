@@ -62,7 +62,7 @@ public class BakssAppServiceImpl implements IBakssAppService
      * @return 申请
      */
     @Override
-    public List<BakssApp> selectBakssAppList(BakssApp bakssApp)
+    public List<BakssTask> selectBakssAppList(BakssApp bakssApp)
     {
         LoginUser user = SecurityUtils.getLoginUser();
         if (!user.getUser().isAdmin()) {

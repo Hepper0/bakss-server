@@ -5,9 +5,11 @@ import java.util.List;
 
 public interface Config {
     // 申请单状态
-    public final  Long APPROVAL_APPROVED = 1L;
-    public final  Long APPROVAL_REJECTED = -1L;
     public final  Long CANCEL_APPLICATION = 2L;
+
+    // 审批步骤状态
+    public final  Long APPROVAL_APPROVED = 1L;
+    public final  Long APPROVAL_REJECTED = 2L;
 
     // 申请审核步骤
     final  String APPROVAL_STATUS_LEADER = "leader";  // 直接上级审批
