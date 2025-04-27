@@ -127,3 +127,6 @@ xss:
   excludes: /system/notice
   # 匹配链接
   urlPatterns: /system/*,/monitor/*,/tool/*
+
+veeap:
+  api: http://192.168.1.104

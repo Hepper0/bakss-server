@@ -31,6 +31,7 @@
         <velocity.version>2.3</velocity.version>
         <jwt.version>0.9.1</jwt.version>
         <lombok.version>1.18.24</lombok.version>
+        <hutool.version>5.8.11</hutool.version>
     </properties>
 
     <!-- 依赖声明 -->
@@ -189,6 +190,13 @@
                 <version>${bakss.version}</version>
             </dependency>
 
+            <!-- Veeam业务 -->
+            <dependency>
+                <groupId>com.bakss</groupId>
+                <artifactId>bakss-veeam</artifactId>
+                <version>${bakss.version}</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 
@@ -200,6 +208,7 @@
         <module>bakss-generator</module>
         <module>bakss-common</module>
         <module>bakss-buz</module>
+        <module>bakss-veeam</module>
     </modules>
     <packaging>pom</packaging>
 
@@ -214,6 +223,12 @@
             <groupId>com.oceanbase</groupId>
             <artifactId>oceanbase-client</artifactId>
             <version>2.4.0</version>
+        </dependency>
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+            <version>${hutool.version}</version>
+            <scope>provided</scope>
         </dependency>
 <!--        <dependency>-->
 <!--            <groupId>com.oceanbase</groupId>-->
