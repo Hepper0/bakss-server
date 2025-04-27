@@ -8,6 +8,8 @@ import com.bakss.server.mapper.BakssAppFlowMapper;
 import com.bakss.server.domain.BakssAppFlow;
 import com.bakss.server.service.IBakssAppFlowService;
 
+import javax.annotation.Resource;
+
 /**
  * 申请流程Service业务层处理
  *
@@ -17,7 +19,7 @@ import com.bakss.server.service.IBakssAppFlowService;
 @Service
 public class BakssAppFlowServiceImpl implements IBakssAppFlowService
 {
-    @Autowired
+    @Resource
     private BakssAppFlowMapper bakssAppFlowMapper;
 
     /**
