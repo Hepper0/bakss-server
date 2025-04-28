@@ -41,95 +41,13 @@ public class VeeamBasicService {
         expireAt = loginResponse.getExpireAt();
     }
 
-    public void validate() {
+    public String validate() {
         // todo 确认返回expireAt单位
         if (expireAt < System.currentTimeMillis()) {
             login();
         }
+        return token;
     }
 
-    public List<BackupJob> getBackupJobList(Integer page, Integer pageSize) {
-        validate();
-        String path = "/job/getJobList";
-        Map<String, String> header = new HashMap<>();
-        header.put("x-token", token);
-        Map<String, Object> query = new HashMap<>();
-        query.put("page", page);
-        query.put("pageSize", pageSize);
-        Response response = HttpUtils.get(openApiUrl + path, header, query);
-        JSONObject data = response.getData();
-        JSONArray jobList = data.getJSONArray("list");
-        List<BackupJob> backupJobs = new ArrayList<>();
-        if (jobList.size() > 0) {
-            for (Object job: jobList) {
-                BackupJob backupJob = BeanUtils.mapToBean((JSONObject)job, BackupJob.class);
-                backupJobs.add(backupJob);
-            }
-        }
-        return backupJobs;
-    }
 
-    public Response operateJob(String type, String path, String name) {
-        Map<String, String> header = new HashMap<>();
-        header.put("x-token", token);
-        Map<String, Object> data = new HashMap<>();
-        data.put("name", name);
-        Response response = null;
-        switch (type) {
-            case "get":
-                response = HttpUtils.get(openApiUrl + path, header, data);
-                break;
-            case "post":
-                response = HttpUtils.post(openApiUrl + path, header, data);
-                break;
-            case "put":
-                response = HttpUtils.put(openApiUrl + path, header, data);
-                break;
-            case "delete":
-                response = HttpUtils.delete(openApiUrl + path, header, data);
-                break;
-        }
-        return response;
-    }
-
-    public BackupJobDetail getJobDetail(String name) {
-        validate();
-        String path = "/job/findJob";
-        Response response = operateJob("get", path, name);
-        return BeanUtils.mapToBean(response.getData(), BackupJobDetail.class);
-    }
-
-    public void startJob(String name) {
-        validate();
-        String path = "/job/startJob";
-        operateJob("put", path, name);
-    }
-
-    public void stopJob(String name) {
-        validate();
-        String path = "/job/stopJob";
-        operateJob("put", path, name);
-    }
-
-    public void enableJob(String name) {
-        validate();
-        String path = "/job/enableJob";
-        operateJob("put", path, name);
-    }
-
-    public void disableJob(String name) {
-        validate();
-        String path = "/job/disableJob";
-        operateJob("put", path, name);
-    }
-
-    public void deleteJob(String name) {
-        validate();
-        String path = "/job/deleteJob";
-        operateJob("delete", path, name);
-    }
-
-    public void createJob() {
-
-    }
 }

@@ -16,7 +16,7 @@ public class BackupJobDetail {
     Boolean keepFullBackupEnabled;
     JSONObject fullBackupGfsConfig;
     String backupRepositoryName;
-    Boolean applicationAwareEnabled;
+    Boolean applicationAwareEnabled; //
     JSONObject guestInteractionProxy;
     String defaultGuestOSCred;
     List<Object> individualCreds;
