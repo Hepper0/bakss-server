@@ -128,5 +128,8 @@ xss:
   # 匹配链接
   urlPatterns: /system/*,/monitor/*,/tool/*
 
-veeap:
-  api: http://192.168.1.104
+veeam:
+  openApiUrl: http://192.168.1.104
+  username: admin
+  password: 123456
+  captchaId: nH00YUnCvHz0XHx3232333

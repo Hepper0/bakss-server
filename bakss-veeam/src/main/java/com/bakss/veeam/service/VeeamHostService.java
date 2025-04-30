@@ -2,11 +2,11 @@ package com.bakss.veeam.service;
 
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
+import com.bakss.veeam.config.VeeamConfig;
 import com.bakss.veeam.domain.Response;
 import com.bakss.veeam.domain.host.*;
 import com.bakss.veeam.utils.BeanUtils;
 import com.bakss.veeam.utils.HttpUtils;
-import org.springframework.beans.factory.annotation.Value;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -19,8 +19,7 @@ public class VeeamHostService {
     @Resource
     VeeamBasicService basicService;
 
-    @Value("${veeam.api}")
-    private String openApiUrl;
+    private final String openApiUrl = VeeamConfig.openApiUrl;
 
     private String token;
 

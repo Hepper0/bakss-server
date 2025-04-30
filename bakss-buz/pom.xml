@@ -28,6 +28,11 @@
             <artifactId>bakss-framework</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.bakss</groupId>
+            <artifactId>bakss-veeam</artifactId>
+        </dependency>
+
     </dependencies>
 
 </project>

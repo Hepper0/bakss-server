@@ -2,12 +2,12 @@ package com.bakss.veeam.service;
 
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
+import com.bakss.veeam.config.VeeamConfig;
 import com.bakss.veeam.domain.Response;
 import com.bakss.veeam.domain.proxy.BackupProxy;
 import com.bakss.veeam.domain.proxy.BackupProxyDetail;
 import com.bakss.veeam.utils.BeanUtils;
 import com.bakss.veeam.utils.HttpUtils;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -22,8 +22,7 @@ public class VeeamProxyService {
     @Resource
     VeeamBasicService basicService;
 
-    @Value("${veeam.api}")
-    private String openApiUrl;
+    private final String openApiUrl = VeeamConfig.openApiUrl;
 
     private String token;
 
@@ -36,6 +35,7 @@ public class VeeamProxyService {
         query.put("page", page);
         query.put("pageSize", pageSize);
         Response response = HttpUtils.get(openApiUrl + path, header, query);
+        assert response != null : "请求返回为空";
         JSONObject data = response.getData();
         JSONArray proxyList = data.getJSONArray("list");
         List<BackupProxy> backupProxyList = new ArrayList<>();

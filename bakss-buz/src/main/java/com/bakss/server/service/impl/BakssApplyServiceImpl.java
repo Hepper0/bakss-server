@@ -8,8 +8,10 @@ import com.bakss.server.domain.BakssApp;
 import com.bakss.server.domain.BakssApplyBackupPermis;
 import com.bakss.server.domain.apply.*;
 import com.bakss.server.service.IBakssApplyService;
+import com.bakss.veeam.service.VeeamJobService;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +26,15 @@ public class BakssApplyServiceImpl implements IBakssApplyService {
     private BakssAppServiceImpl appService;
 
     @Resource
+    private VeeamJobService veeamJobService;
+
+    @Resource
     private BakssApplyBackupPermisServiceImpl applyBackupPermisService;
+
+//    @PostConstruct
+//    void init() {
+//        veeamJobService.getJobDetail("123");
+//    }
 
     // 申请 与 授权
     public void applyBackupPermission(ApplyPermission applyPermission) {

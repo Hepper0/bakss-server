@@ -18,47 +18,53 @@ public class HttpUtils {
 
     public static Response get(String URL, Map<String, String> headers, Map<String, Object> query) {
         try {
+            log.info("发送get请求，url：{}，headers：{}，,query: {},", URL, headers, query);
             String result = HttpRequest
                     .get(URL)
                     .headerMap(headers, true)
                     .form(query == null ? new HashMap<>() : query)
                     .execute()
                     .body();
-            log.info("发送Get请求成功，url：{}，headers：{}，,query: {}, response：{}", URL, headers, query, result);
+            log.info("get请求成功，url：{}， response：{}", URL, result);
+            assert result != null : URL + "请求返回为空";
             return BeanUtils.mapToBean(JSONObject.parseObject(result), Response.class);
         } catch (Exception e) {
-            log.error("发送Get请求失败: ", e);
+            log.error("发送get请求失败", e);
         }
         return null;
     }
 
     public static Response delete(String URL, Map<String, String> headers, Map<String, Object> query) {
         try {
+            log.info("发送delete请求，url：{}，headers：{}，,query: {},", URL, headers, query);
             String result = HttpRequest
                     .delete(URL)
                     .headerMap(headers, true)
                     .form(query == null ? new HashMap<>() : query)
                     .execute()
                     .body();
-            log.info("发送Delete请求成功，url：{}，headers：{}，,query: {}, response：{}", URL, headers, query, result);
+            assert result != null : URL + "请求返回为空";
+            log.info("delete请求成功，url：{}， response：{}", URL, result);
             return BeanUtils.mapToBean(JSONObject.parseObject(result), Response.class);
         } catch (Exception e) {
-            log.error("发送Delete请求失败: ", e);
+            log.error("发送delete请求失败", e);
         }
         return null;
     }
 
     public static Response post(String URL, Map<String, String> headers, Map<String, Object> data) {
         try {
+            log.info("发送post请求，url：{}，headers：{}，,query: {},", URL, headers, data);
             String result = HttpRequest.post(URL).headerMap(headers, true).body(data.toString()).execute().body();
-            log.info("发送Post请求成功,url: {}, headers: {}, data: {}, response: {}", URL, headers, data, result);
+            assert result != null : URL + "请求返回为空";
+            log.info("post请求成功,url: {}, response: {}", URL,  result);
             Response response = BeanUtils.mapToBean(JSONObject.parseObject(result), Response.class);
             if (!response.getCode().equals(0)) {
                 throw new VeeanExecError("return code: " + response.getCode() + ", msg: " + response.getMsg());
             }
             return response;
         } catch (Exception e) {
-            log.error("发送Post请求失败: ", e);
+            log.error("发送post请求失败", e);
             // 远程端执行的错误要抛出去
             if (e.getClass() == VeeanExecError.class) {
                 throw new RuntimeException(e);
@@ -69,15 +75,17 @@ public class HttpUtils {
 
     public static Response put(String URL, Map<String, String> headers, Map<String, Object> data) {
         try {
+            log.info("发送put请求，url：{}，headers：{}，,query: {},", URL, headers, data);
             String result = HttpRequest.put(URL).headerMap(headers, true).body(data.toString()).execute().body();
-            log.info("发送Put请求成功,url: {}, headers: {}, data: {}, response: {}", URL, headers, data, result);
+            assert result != null : URL + "请求返回为空";
+            log.info("put请求成功,url: {}, response: {}", URL, result);
             Response response = BeanUtils.mapToBean(JSONObject.parseObject(result), Response.class);
             if (!response.getCode().equals(0)) {
                 throw new VeeanExecError("return code: " + response.getCode() + ", msg: " + response.getMsg());
             }
             return response;
         } catch (Exception e) {
-            log.error("发送Put请求失败: ", e);
+            log.error("发送put请求失败", e);
             // 远程端执行的错误要抛出去
             if (e.getClass() == VeeanExecError.class) {
                 throw new RuntimeException(e);
