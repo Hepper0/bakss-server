@@ -1,6 +1,7 @@
 package com.bakss.veeam.domain.job;
 
 import com.alibaba.fastjson2.JSONObject;
+import com.bakss.veeam.domain.host.ViEntity;
 import lombok.Data;
 
 import java.util.List;
@@ -10,7 +11,7 @@ public class BackupJobDetail {
     String id;
     String name;
     String description;
-    List<Object> selectedVmObjects;
+    List<ViEntity> selectedVmObjects;
     JSONObject backupProxyOptions;
     JSONObject jobOptions;
     Boolean keepFullBackupEnabled;

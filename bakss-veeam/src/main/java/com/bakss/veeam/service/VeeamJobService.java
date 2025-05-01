@@ -5,6 +5,7 @@ import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import com.bakss.veeam.config.VeeamConfig;
 import com.bakss.veeam.domain.Response;
+import com.bakss.veeam.domain.host.ViEntity;
 import com.bakss.veeam.domain.job.BackupJob;
 import com.bakss.veeam.domain.job.BackupJobDetail;
 import com.bakss.veeam.utils.BeanUtils;
@@ -109,7 +110,7 @@ public class VeeamJobService {
         operateJob("delete", path, name);
     }
 
-    public void createJob(String name, String description, JSONArray vmObjects, String repository, String afterJobName) {
+    public void createJob(String name, String description, List<ViEntity> vmObjects, String repository, String afterJobName) {
         token = basicService.validate();
         String path = "/job/createJob";
         BackupJobDetail jobDetail = new BackupJobDetail();
@@ -199,5 +200,13 @@ public class VeeamJobService {
         Map<String, String> header = new HashMap<>();
         header.put("x-token", token);
         HttpUtils.post(openApiUrl + path, header, BeanUtils.beanToMap(jobDetail));
+    }
+
+    public void updateJob(BackupJobDetail jobDetail) {
+        token = basicService.validate();
+        String path = "/job/updateJob";
+        Map<String, String> header = new HashMap<>();
+        header.put("x-token", token);
+        HttpUtils.put(openApiUrl + path, header, BeanUtils.beanToMap(jobDetail));
     }
 }
