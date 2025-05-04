@@ -3,7 +3,9 @@ package com.bakss.veeam.utils;
 import cn.hutool.http.HttpRequest;
 import com.alibaba.fastjson2.JSONObject;
 import com.bakss.veeam.domain.Response;
+import com.bakss.veeam.domain.ResponseList;
 import com.bakss.veeam.domain.VeeanExecError;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,6 +19,10 @@ public class HttpUtils {
     private static final Logger log = LoggerFactory.getLogger(HttpUtils.class);
 
     public static Response get(String URL, Map<String, String> headers, Map<String, Object> query) {
+        return get(URL, headers, query, false);
+    }
+
+    public static Response get(String URL, Map<String, String> headers, Map<String, Object> query, Boolean isList) {
         try {
             log.info("发送get请求，url：{}，headers：{}，,query: {},", URL, headers, query);
             String result = HttpRequest
@@ -27,7 +33,12 @@ public class HttpUtils {
                     .body();
             log.info("get请求成功，url：{}， response：{}", URL, result);
             assert result != null : URL + "请求返回为空";
-            return BeanUtils.mapToBean(JSONObject.parseObject(result), Response.class);
+            if (isList) {
+                return BeanUtils.mapToBean(JSONObject.parseObject(result), ResponseList.class);
+            } else {
+                return BeanUtils.mapToBean(JSONObject.parseObject(result), Response.class);
+            }
+
         } catch (Exception e) {
             log.error("发送get请求失败", e);
         }
