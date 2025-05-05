@@ -9,6 +9,7 @@ import com.bakss.veeam.domain.backup.*;
 import com.bakss.veeam.domain.repository.VeeamRepositoryDetail;
 import com.bakss.veeam.utils.BeanUtils;
 import com.bakss.veeam.utils.HttpUtils;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -16,6 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Service
 public class VeeamBackupService {
 
     @Resource
@@ -34,7 +36,7 @@ public class VeeamBackupService {
         query.put("page", page);
         query.put("pageSize", pageSize);
         Response response = HttpUtils.get(openApiUrl + path, header, query);
-        JSONObject data = response.getData();
+        JSONObject data = (JSONObject)response.getData();
         JSONArray backups = data.getJSONArray("list");
         List<Backup> backupList = new ArrayList<>();
         if (backups.size() > 0) {
@@ -53,7 +55,7 @@ public class VeeamBackupService {
         Map<String, Object> query = new HashMap<>();
         query.put("id", parentId);
         Response response = HttpUtils.get(openApiUrl + path, header, query);
-        JSONObject data = response.getData();
+        JSONObject data = (JSONObject)response.getData();
         JSONArray backups = data.getJSONArray("list");
         List<ChildBackup> childBackupList = new ArrayList<>();
         if (backups.size() > 0) {
@@ -88,8 +90,7 @@ public class VeeamBackupService {
         Map<String, Object> query = new HashMap<>();
         query.put("ID", ID);
         Response response = HttpUtils.get(openApiUrl + path, header, query);
-        JSONObject data = response.getData();
-        return BeanUtils.mapToBean(data, Backup.class);
+        return BeanUtils.mapToBean(response.getData(), Backup.class);
     }
 
     public VMPointDetail getVMPointDetail(String ID, String backupId) {
@@ -101,8 +102,7 @@ public class VeeamBackupService {
         query.put("id", ID);
         query.put("backupId", backupId);
         Response response = HttpUtils.get(openApiUrl + path, header, query);
-        JSONObject data = response.getData();
-        return BeanUtils.mapToBean(data, VMPointDetail.class);
+        return BeanUtils.mapToBean(response.getData(), VMPointDetail.class);
     }
 
     public List<VMPoint> getVMPoints(String backupId, String vmName) {
@@ -114,7 +114,7 @@ public class VeeamBackupService {
         query.put("backupId", backupId);
         query.put("vmName", vmName);
         Response response = HttpUtils.get(openApiUrl + path, header, query);
-        JSONObject data = response.getData();
+        JSONObject data = (JSONObject)response.getData();
         JSONArray points = data.getJSONArray("list");
         List<VMPoint> vmPointList = new ArrayList<>();
         if (points.size() > 0) {

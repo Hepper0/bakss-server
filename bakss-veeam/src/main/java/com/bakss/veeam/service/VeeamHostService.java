@@ -7,6 +7,7 @@ import com.bakss.veeam.domain.Response;
 import com.bakss.veeam.domain.host.*;
 import com.bakss.veeam.utils.BeanUtils;
 import com.bakss.veeam.utils.HttpUtils;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -14,6 +15,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
+@Service
 public class VeeamHostService {
 
     @Resource
@@ -32,7 +35,7 @@ public class VeeamHostService {
         query.put("page", page);
         query.put("pageSize", pageSize);
         Response response = HttpUtils.get(openApiUrl + path, header, query);
-        JSONObject data = response.getData();
+        JSONObject data = (JSONObject)response.getData();
         JSONArray hostList = data.getJSONArray("list");
         List<VeeamHost> veeamHostList = new ArrayList<>();
         if (hostList.size() > 0) {
@@ -53,7 +56,7 @@ public class VeeamHostService {
         query.put("serverName", serverName);
         query.put("viewMode", viewMode);
         Response response = HttpUtils.get(openApiUrl + path, header, query);
-        JSONObject data = response.getData();
+        JSONObject data = (JSONObject)response.getData();
         return BeanUtils.mapToBean(data, ViEntity.class);
     }
 
@@ -65,7 +68,7 @@ public class VeeamHostService {
         Map<String, Object> query = new HashMap<>();
         query.put("serverName", serverName);
         Response response = HttpUtils.get(openApiUrl + path, header, query);
-        JSONObject data = response.getData();
+        JSONObject data = (JSONObject)response.getData();
         return BeanUtils.mapToBean(data, ViDataStore.class);
     }
 
@@ -77,7 +80,7 @@ public class VeeamHostService {
         Map<String, Object> query = new HashMap<>();
         query.put("serverName", serverName);
         Response response = HttpUtils.get(openApiUrl + path, header, query);
-        JSONObject data = response.getData();
+        JSONObject data = (JSONObject)response.getData();
         return BeanUtils.mapToBean(data, ViResourcePool.class);
     }
 
@@ -89,7 +92,7 @@ public class VeeamHostService {
         Map<String, Object> query = new HashMap<>();
         query.put("serverName", serverName);
         Response response = HttpUtils.get(openApiUrl + path, header, query);
-        JSONObject data = response.getData();
+        JSONObject data = (JSONObject)response.getData();
         return BeanUtils.mapToBean(data, ViSwitch.class);
     }
 
@@ -101,7 +104,7 @@ public class VeeamHostService {
         Map<String, Object> query = new HashMap<>();
         query.put("serverName", serverName);
         Response response = HttpUtils.get(openApiUrl + path, header, query);
-        JSONObject data = response.getData();
+        JSONObject data = (JSONObject)response.getData();
         return BeanUtils.mapToBean(data, ViNetwork.class);
     }
 
@@ -113,7 +116,7 @@ public class VeeamHostService {
         Map<String, Object> query = new HashMap<>();
         query.put("serverName", serverName);
         Response response = HttpUtils.get(openApiUrl + path, header, query);
-        JSONObject data = response.getData();
+        JSONObject data = (JSONObject)response.getData();
         return BeanUtils.mapToBean(data, ViFolder.class);
     }
 

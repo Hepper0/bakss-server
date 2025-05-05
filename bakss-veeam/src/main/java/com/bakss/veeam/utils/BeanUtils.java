@@ -3,6 +3,7 @@ package com.bakss.veeam.utils;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
 import cn.hutool.core.util.ObjectUtil;
+import com.alibaba.fastjson2.JSONObject;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -35,6 +36,10 @@ public class BeanUtils extends BeanUtil {
      */
     public static <T> T mapToBean(Map<?, ?> map, Class<T> beanClass) {
         return mapToBean(map, beanClass, true, CopyOptions.create());
+    }
+
+    public static <T> T mapToBean(Object obj, Class<T> beanClass) {
+        return mapToBean((JSONObject)obj, beanClass, true, CopyOptions.create());
     }
 
     /**

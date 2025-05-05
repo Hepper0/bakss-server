@@ -4,6 +4,7 @@ import cn.hutool.http.HttpRequest;
 import com.alibaba.fastjson2.JSONObject;
 import com.bakss.veeam.domain.Response;
 import com.bakss.veeam.domain.ResponseList;
+import com.bakss.veeam.domain.ResponseObject;
 import com.bakss.veeam.domain.VeeanExecError;
 import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.slf4j.Logger;
@@ -36,7 +37,7 @@ public class HttpUtils {
             if (isList) {
                 return BeanUtils.mapToBean(JSONObject.parseObject(result), ResponseList.class);
             } else {
-                return BeanUtils.mapToBean(JSONObject.parseObject(result), Response.class);
+                return BeanUtils.mapToBean(JSONObject.parseObject(result), ResponseObject.class);
             }
 
         } catch (Exception e) {

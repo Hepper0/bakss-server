@@ -36,7 +36,7 @@ public class VeeamProxyService {
         query.put("pageSize", pageSize);
         Response response = HttpUtils.get(openApiUrl + path, header, query);
         assert response != null : "请求返回为空";
-        JSONObject data = response.getData();
+        JSONObject data = (JSONObject)response.getData();
         JSONArray proxyList = data.getJSONArray("list");
         List<BackupProxy> backupProxyList = new ArrayList<>();
         if (proxyList.size() > 0) {
@@ -56,7 +56,7 @@ public class VeeamProxyService {
         Map<String, Object> query = new HashMap<>();
         query.put("ID", ID);
         Response response = HttpUtils.get(openApiUrl + path, header, query);
-        JSONObject data = response.getData();
+        JSONObject data = (JSONObject)response.getData();
         return BeanUtils.mapToBean(data, BackupProxyDetail.class);
     }
 

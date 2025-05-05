@@ -38,7 +38,7 @@ public class VeeamJobService {
         query.put("page", page);
         query.put("pageSize", pageSize);
         Response response = HttpUtils.get(openApiUrl + path, header, query);
-        JSONObject data = response.getData();
+        JSONObject data = (JSONObject)response.getData();
         JSONArray jobList = data.getJSONArray("list");
         List<BackupJob> backupJobs = new ArrayList<>();
         if (jobList.size() > 0) {

@@ -34,7 +34,7 @@ public class VeeamRepositoryService {
         query.put("page", page);
         query.put("pageSize", pageSize);
         Response response = HttpUtils.get(openApiUrl + path, header, query);
-        JSONObject data = response.getData();
+        JSONObject data = (JSONObject)response.getData();
         JSONArray repositoryList = data.getJSONArray("list");
         List<VeeamRepository> VeeamRepositoryList = new ArrayList<>();
         if (repositoryList.size() > 0) {
@@ -54,7 +54,7 @@ public class VeeamRepositoryService {
         Map<String, Object> query = new HashMap<>();
         query.put("ID", ID);
         Response response = HttpUtils.get(openApiUrl + path, header, query);
-        JSONObject data = response.getData();
+        JSONObject data = (JSONObject)response.getData();
         return BeanUtils.mapToBean(data, VeeamRepositoryDetail.class);
     }
 
