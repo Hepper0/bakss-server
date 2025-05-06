@@ -77,15 +77,19 @@ create table bakss_app_flow (
     update_time datetime
 )
 
--- create table bakss_apply_backup(
---     id int primary key auto_increment,
---     app_id int,
---     backup_id int,
---     deleted int default 0,
---     create_time datetime default now(),
---     create_by varchar(100),
---     update_time datetime
--- )
+create table bakss_apply_backup(
+    id int primary key auto_increment,
+    app_id varchar(50),
+    name varchar(200),
+    repository varchar(100),
+    vm_objects varchar(200),
+    after_job varchar(200),
+    description varchar(2000),
+    deleted int default 0,
+    create_time datetime default now(),
+    create_by varchar(100),
+    update_time datetime
+)
 
 -- 备份目录：修改目录
 create table bakss_apply_directory(

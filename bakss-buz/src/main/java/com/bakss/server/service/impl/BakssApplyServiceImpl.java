@@ -3,8 +3,10 @@ package com.bakss.server.service.impl;
 import com.bakss.common.core.domain.model.LoginUser;
 import com.bakss.common.utils.DateUtils;
 import com.bakss.common.utils.SecurityUtils;
+import com.bakss.common.utils.StringUtils;
 import com.bakss.common.utils.uuid.IdUtils;
 import com.bakss.server.domain.BakssApp;
+import com.bakss.server.domain.BakssApplyBackup;
 import com.bakss.server.domain.BakssApplyBackupPermis;
 import com.bakss.server.domain.apply.*;
 import com.bakss.server.service.IBakssApplyService;
@@ -30,6 +32,9 @@ public class BakssApplyServiceImpl implements IBakssApplyService {
 
     @Resource
     private BakssApplyBackupPermisServiceImpl applyBackupPermisService;
+
+    @Resource
+    private BakssApplyBackupServiceImpl applyBackupService;
 
 //    @PostConstruct
 //    void init() {
@@ -95,7 +100,13 @@ public class BakssApplyServiceImpl implements IBakssApplyService {
 
     public void applyBackup(ApplyBackup applyBackup) {
         String appId = addApplication(applyBackup, null);
-        // todo createBackup
+        BakssApplyBackup createBackup = new BakssApplyBackup();
+        createBackup.setAppId(appId);
+        createBackup.setName(applyBackup.getName());
+        createBackup.setRepository(applyBackup.getRepository());
+        createBackup.setAfterJob(applyBackup.getAfterJobName());
+        createBackup.setVmObjects(StringUtils.join(applyBackup.getVmObjects(), ","));
+        applyBackupService.insertBakssApplyBackup(createBackup);
     }
 
     public void applyRestore(ApplyRestore applyRestore) {

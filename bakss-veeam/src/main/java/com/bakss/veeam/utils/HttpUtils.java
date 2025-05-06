@@ -42,8 +42,8 @@ public class HttpUtils {
 
         } catch (Exception e) {
             log.error("发送get请求失败", e);
+            throw e;
         }
-        return null;
     }
 
     public static Response delete(String URL, Map<String, String> headers, Map<String, Object> query) {
@@ -60,8 +60,8 @@ public class HttpUtils {
             return BeanUtils.mapToBean(JSONObject.parseObject(result), Response.class);
         } catch (Exception e) {
             log.error("发送delete请求失败", e);
+            throw e;
         }
-        return null;
     }
 
     public static Response post(String URL, Map<String, String> headers, Map<String, Object> data) {

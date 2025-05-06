@@ -28,37 +28,37 @@ public class VeeamJobController extends BaseController {
     }
 
     @PostMapping("start")
-    public AjaxResult startJob(@RequestParam String name) {
+    public AjaxResult startJob(@RequestBody String name) {
         jobService.startJob(name);
         return success();
     }
 
     @PostMapping("stop")
-    public AjaxResult stopJob(@RequestParam String name) {
+    public AjaxResult stopJob(@RequestBody String name) {
         jobService.stopJob(name);
         return success();
     }
 
     @PostMapping("enable")
-    public AjaxResult enableJob(@RequestParam String name) {
+    public AjaxResult enableJob(@RequestBody String name) {
         jobService.enableJob(name);
         return success();
     }
 
     @PostMapping("disable")
-    public AjaxResult disableJob(@RequestParam String name) {
+    public AjaxResult disableJob(@RequestBody String name) {
         jobService.disableJob(name);
         return success();
     }
 
     @PostMapping("create")
-    public AjaxResult createJob(@RequestParam BackupJobRO job) {
+    public AjaxResult createJob(@RequestBody BackupJobRO job) {
         jobService.createJob(job.getName(), job.getDescription(), job.getVmObjects(), job.getRepository(), job.getAfterJobName());
         return success();
     }
 
     @PostMapping("update")
-    public AjaxResult updateJob(@RequestParam BackupJobDetail job) {
+    public AjaxResult updateJob(@RequestBody BackupJobDetail job) {
         jobService.updateJob(job);
         return success();
     }

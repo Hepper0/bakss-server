@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bakss.system.mapper.BakssApplyBackupMapper">
+    
+    <resultMap type="BakssApplyBackup" id="BakssApplyBackupResult">
+        <result property="id"    column="id"    />
+        <result property="appId"    column="app_id"    />
+        <result property="name"    column="name"    />
+        <result property="repository"    column="repository"    />
+        <result property="vmObjects"    column="vm_objects"    />
+        <result property="afterJob"    column="after_job"    />
+        <result property="description"    column="description"    />
+        <result property="deleted"    column="deleted"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectBakssApplyBackupVo">
+        select id, app_id, name, repository, vm_objects, after_job, description, deleted, create_time, create_by, update_time from bakss_apply_backup
+    </sql>
+
+    <select id="selectBakssApplyBackupList" parameterType="BakssApplyBackup" resultMap="BakssApplyBackupResult">
+        <include refid="selectBakssApplyBackupVo"/>
+        <where>  
+            <if test="appId != null "> and app_id = #{appId}</if>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="repository != null  and repository != ''"> and repository = #{repository}</if>
+            <if test="vmObjects != null  and vmObjects != ''"> and vm_objects = #{vmObjects}</if>
+            <if test="afterJob != null  and afterJob != ''"> and after_job = #{afterJob}</if>
+            <if test="description != null  and description != ''"> and description = #{description}</if>
+            <if test="deleted != null "> and deleted = #{deleted}</if>
+        </where>
+    </select>
+    
+    <select id="selectBakssApplyBackupById" parameterType="Long" resultMap="BakssApplyBackupResult">
+        <include refid="selectBakssApplyBackupVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertBakssApplyBackup" parameterType="BakssApplyBackup" useGeneratedKeys="true" keyProperty="id">
+        insert into bakss_apply_backup
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="appId != null">app_id,</if>
+            <if test="name != null">name,</if>
+            <if test="repository != null">repository,</if>
+            <if test="vmObjects != null">vm_objects,</if>
+            <if test="afterJob != null">after_job,</if>
+            <if test="description != null">description,</if>
+            <if test="deleted != null">deleted,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="appId != null">#{appId},</if>
+            <if test="name != null">#{name},</if>
+            <if test="repository != null">#{repository},</if>
+            <if test="vmObjects != null">#{vmObjects},</if>
+            <if test="afterJob != null">#{afterJob},</if>
+            <if test="description != null">#{description},</if>
+            <if test="deleted != null">#{deleted},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBakssApplyBackup" parameterType="BakssApplyBackup">
+        update bakss_apply_backup
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="appId != null">app_id = #{appId},</if>
+            <if test="name != null">name = #{name},</if>
+            <if test="repository != null">repository = #{repository},</if>
+            <if test="vmObjects != null">vm_objects = #{vmObjects},</if>
+            <if test="afterJob != null">after_job = #{afterJob},</if>
+            <if test="description != null">description = #{description},</if>
+            <if test="deleted != null">deleted = #{deleted},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBakssApplyBackupById" parameterType="Long">
+        delete from bakss_apply_backup where id = #{id}
+    </delete>
+
+    <delete id="deleteBakssApplyBackupByIds" parameterType="String">
+        delete from bakss_apply_backup where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
