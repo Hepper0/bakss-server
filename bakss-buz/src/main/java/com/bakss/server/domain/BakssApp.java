@@ -56,4 +56,6 @@ public class BakssApp extends BaseEntity
     private Long deleted;
 
     private Long status;
+
+    private Boolean isDb;
 }

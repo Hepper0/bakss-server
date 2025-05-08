@@ -1,5 +1,6 @@
 package com.bakss.server.domain;
 
+import com.alibaba.fastjson2.JSONObject;
 import com.bakss.common.annotation.Excel;
 import com.bakss.common.core.domain.BaseEntity;
 import lombok.Data;
@@ -28,22 +29,28 @@ public class BakssApplyBackup extends BaseEntity
 
     /** $column.columnComment */
     @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
-    private String repository;
-
-    /** $column.columnComment */
-    @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
-    private String vmObjects;
-
-    /** $column.columnComment */
-    @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
-    private String afterJob;
-
-    /** $column.columnComment */
-    @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
     private String description;
 
     /** $column.columnComment */
     @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
     private Long deleted;
+
+    private String backupContent;
+
+    private String machineType;
+
+    private String dataCenter;
+
+    private String env;
+
+    private String platform;
+
+    private String backupSoftware;
+
+    private JSONObject backupInfo;
+
+    private String costType;
+
+    private String costNumber;
 
 }

@@ -151,11 +151,16 @@ public class BakssAppServiceImpl implements IBakssAppService
         // todo 审核不通过的处理
     }
 
-    public void createFlows(BakssApp App) {
-        String backupId = App.getBackupId().split(",")[0];
-        BakssBackup backup = bakssBackupService.selectBakssBackupById(Long.valueOf(backupId));
-        boolean isDB = DB_TYPES.contains(backup.getBackupContent());
-        BakssAppStep bakssAppStep = bakssAppStepMapper.getBakssAppStepByAppType((long)App.getAppType(), isDB);
+    public void createFlows(BakssApp app) {
+        boolean isDB;
+        if (app.getIsDb() != null) {
+            isDB = app.getIsDb();
+        } else {
+            String backupId = app.getBackupId().split(",")[0];
+            BakssBackup backup = bakssBackupService.selectBakssBackupById(Long.valueOf(backupId));
+            isDB = DB_TYPES.contains(backup.getBackupContent());
+        }
+        BakssAppStep bakssAppStep = bakssAppStepMapper.getBakssAppStepByAppType((long)app.getAppType(), isDB);
         String steps = bakssAppStep.getAppSteps();
         String[] stepArr = steps.split(",");
 
@@ -171,7 +176,7 @@ public class BakssAppServiceImpl implements IBakssAppService
 //            }
 
             BakssAppFlow flow = new BakssAppFlow();
-            flow.setAppId(App.getId());
+            flow.setAppId(app.getId());
             flow.setFlowStep(step);
             flow.setFlowOrder(i);
             flow.setReviewStatus(0L);
@@ -179,8 +184,8 @@ public class BakssAppServiceImpl implements IBakssAppService
             // 默认索引到第一个流程
             if (flowId == -1) {
                 flowId = flow.getId();
-                App.setFlowId(flowId);
-                bakssAppMapper.updateBakssApp(App);
+                app.setFlowId(flowId);
+                bakssAppMapper.updateBakssApp(app);
             }
         }
 

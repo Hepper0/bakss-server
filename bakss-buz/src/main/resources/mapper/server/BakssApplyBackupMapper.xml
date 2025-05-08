@@ -2,16 +2,17 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.bakss.system.mapper.BakssApplyBackupMapper">
+<mapper namespace="com.bakss.server.mapper.BakssApplyBackupMapper">
     
     <resultMap type="BakssApplyBackup" id="BakssApplyBackupResult">
         <result property="id"    column="id"    />
         <result property="appId"    column="app_id"    />
-        <result property="name"    column="name"    />
-        <result property="repository"    column="repository"    />
-        <result property="vmObjects"    column="vm_objects"    />
-        <result property="afterJob"    column="after_job"    />
-        <result property="description"    column="description"    />
+        <result property="backupContent"    column="backup_content"    />
+        <result property="machineType"    column="machine_type"    />
+        <result property="dataCenter"    column="data_center"    />
+        <result property="env"    column="env"    />
+        <result property="platform"    column="platform"    />
+        <result property="backupSoftware"    column="backup_software"    />
         <result property="deleted"    column="deleted"    />
         <result property="createTime"    column="create_time"    />
         <result property="createBy"    column="create_by"    />
@@ -19,18 +20,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectBakssApplyBackupVo">
-        select id, app_id, name, repository, vm_objects, after_job, description, deleted, create_time, create_by, update_time from bakss_apply_backup
+        select id, app_id, backup_content, machine_type, data_center, env, platform, backup_software, deleted, create_time, create_by, update_time from bakss_apply_backup
     </sql>
 
     <select id="selectBakssApplyBackupList" parameterType="BakssApplyBackup" resultMap="BakssApplyBackupResult">
         <include refid="selectBakssApplyBackupVo"/>
         <where>  
-            <if test="appId != null "> and app_id = #{appId}</if>
-            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
-            <if test="repository != null  and repository != ''"> and repository = #{repository}</if>
-            <if test="vmObjects != null  and vmObjects != ''"> and vm_objects = #{vmObjects}</if>
-            <if test="afterJob != null  and afterJob != ''"> and after_job = #{afterJob}</if>
-            <if test="description != null  and description != ''"> and description = #{description}</if>
+            <if test="appId != null  and appId != ''"> and app_id = #{appId}</if>
+            <if test="backupContent != null  and backupContent != ''"> and backup_content = #{backupContent}</if>
+            <if test="machineType != null  and machineType != ''"> and machine_type = #{machineType}</if>
+            <if test="dataCenter != null  and dataCenter != ''"> and data_center = #{dataCenter}</if>
+            <if test="env != null  and env != ''"> and env = #{env}</if>
+            <if test="platform != null  and platform != ''"> and platform = #{platform}</if>
+            <if test="backupSoftware != null  and backupSoftware != ''"> and backup_software = #{backupSoftware}</if>
             <if test="deleted != null "> and deleted = #{deleted}</if>
         </where>
     </select>
@@ -44,11 +46,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         insert into bakss_apply_backup
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="appId != null">app_id,</if>
-            <if test="name != null">name,</if>
-            <if test="repository != null">repository,</if>
-            <if test="vmObjects != null">vm_objects,</if>
-            <if test="afterJob != null">after_job,</if>
-            <if test="description != null">description,</if>
+            <if test="backupContent != null">backup_content,</if>
+            <if test="machineType != null">machine_type,</if>
+            <if test="dataCenter != null">data_center,</if>
+            <if test="env != null">env,</if>
+            <if test="platform != null">platform,</if>
+            <if test="backupSoftware != null">backup_software,</if>
             <if test="deleted != null">deleted,</if>
             <if test="createTime != null">create_time,</if>
             <if test="createBy != null">create_by,</if>
@@ -56,11 +59,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="appId != null">#{appId},</if>
-            <if test="name != null">#{name},</if>
-            <if test="repository != null">#{repository},</if>
-            <if test="vmObjects != null">#{vmObjects},</if>
-            <if test="afterJob != null">#{afterJob},</if>
-            <if test="description != null">#{description},</if>
+            <if test="backupContent != null">#{backupContent},</if>
+            <if test="machineType != null">#{machineType},</if>
+            <if test="dataCenter != null">#{dataCenter},</if>
+            <if test="env != null">#{env},</if>
+            <if test="platform != null">#{platform},</if>
+            <if test="backupSoftware != null">#{backupSoftware},</if>
             <if test="deleted != null">#{deleted},</if>
             <if test="createTime != null">#{createTime},</if>
             <if test="createBy != null">#{createBy},</if>
@@ -72,11 +76,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         update bakss_apply_backup
         <trim prefix="SET" suffixOverrides=",">
             <if test="appId != null">app_id = #{appId},</if>
-            <if test="name != null">name = #{name},</if>
-            <if test="repository != null">repository = #{repository},</if>
-            <if test="vmObjects != null">vm_objects = #{vmObjects},</if>
-            <if test="afterJob != null">after_job = #{afterJob},</if>
-            <if test="description != null">description = #{description},</if>
+            <if test="backupContent != null">backup_content = #{backupContent},</if>
+            <if test="machineType != null">machine_type = #{machineType},</if>
+            <if test="dataCenter != null">data_center = #{dataCenter},</if>
+            <if test="env != null">env = #{env},</if>
+            <if test="platform != null">platform = #{platform},</if>
+            <if test="backupSoftware != null">backup_software = #{backupSoftware},</if>
             <if test="deleted != null">deleted = #{deleted},</if>
             <if test="createTime != null">create_time = #{createTime},</if>
             <if test="createBy != null">create_by = #{createBy},</if>
