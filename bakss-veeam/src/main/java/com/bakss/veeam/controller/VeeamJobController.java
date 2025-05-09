@@ -62,4 +62,10 @@ public class VeeamJobController extends BaseController {
         jobService.updateJob(job);
         return success();
     }
+
+    @DeleteMapping
+    public AjaxResult deleteJob(@RequestBody String name) {
+        jobService.deleteJob(name);
+        return success();
+    }
 }

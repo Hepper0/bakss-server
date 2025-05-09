@@ -4,6 +4,7 @@ import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import com.bakss.veeam.config.VeeamConfig;
 import com.bakss.veeam.domain.Response;
+import com.bakss.veeam.domain.VeeamToken;
 import com.bakss.veeam.domain.proxy.BackupProxy;
 import com.bakss.veeam.domain.proxy.BackupProxyDetail;
 import com.bakss.veeam.utils.BeanUtils;
@@ -22,19 +23,19 @@ public class VeeamProxyService {
     @Resource
     VeeamBasicService basicService;
 
-    private final String openApiUrl = VeeamConfig.openApiUrl;
+//    private final String openApiUrl = VeeamConfig.openApiUrl;
 
-    private String token;
+//    private String token;
 
     public List<BackupProxy> getBackupProxyList(int page, int pageSize) {
-        token = basicService.validate();
+        VeeamToken token = basicService.validate();
         String path = "/backupproxy/getBackupProxyList";
         Map<String, String> header = new HashMap<>();
-        header.put("x-token", token);
+        header.put("x-token", token.getToken());
         Map<String, Object> query = new HashMap<>();
         query.put("page", page);
         query.put("pageSize", pageSize);
-        Response response = HttpUtils.get(openApiUrl + path, header, query);
+        Response response = HttpUtils.get(token.getServer() + path, header, query);
         assert response != null : "请求返回为空";
         JSONObject data = (JSONObject)response.getData();
         JSONArray proxyList = data.getJSONArray("list");
@@ -49,25 +50,25 @@ public class VeeamProxyService {
     }
 
     public BackupProxyDetail getBackupProxyDetail(String ID) {
-        token = basicService.validate();
+        VeeamToken token = basicService.validate();
         String path = "/backupproxy/findBackupProxy";
         Map<String, String> header = new HashMap<>();
-        header.put("x-token", token);
+        header.put("x-token", token.getToken());
         Map<String, Object> query = new HashMap<>();
         query.put("ID", ID);
-        Response response = HttpUtils.get(openApiUrl + path, header, query);
+        Response response = HttpUtils.get(token.getServer() + path, header, query);
         JSONObject data = (JSONObject)response.getData();
         return BeanUtils.mapToBean(data, BackupProxyDetail.class);
     }
 
     public void deleteBackupProxy(String name) {
-        token = basicService.validate();
+        VeeamToken token = basicService.validate();
         String path = "/backupproxy/deleteBackupProxy";
         Map<String, String> header = new HashMap<>();
-        header.put("x-token", token);
+        header.put("x-token", token.getToken());
         Map<String, Object> query = new HashMap<>();
         query.put("name", name);
-        HttpUtils.delete(openApiUrl + path, header, query);
+        HttpUtils.delete(token.getServer() + path, header, query);
     }
 
 }

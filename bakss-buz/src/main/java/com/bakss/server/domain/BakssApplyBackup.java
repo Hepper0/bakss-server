@@ -45,6 +45,8 @@ public class BakssApplyBackup extends BaseEntity
 
     private String platform;
 
+    private String appName;
+
     private String backupSoftware;
 
     private JSONObject backupInfo;

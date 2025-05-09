@@ -5,6 +5,7 @@ import com.alibaba.fastjson2.JSONObject;
 import com.bakss.veeam.config.VeeamConfig;
 import com.bakss.veeam.domain.Response;
 import com.bakss.veeam.domain.ResponseList;
+import com.bakss.veeam.domain.VeeamToken;
 import com.bakss.veeam.domain.backup.*;
 import com.bakss.veeam.domain.repository.VeeamRepositoryDetail;
 import com.bakss.veeam.utils.BeanUtils;
@@ -23,19 +24,19 @@ public class VeeamBackupService {
     @Resource
     VeeamBasicService basicService;
 
-    private final String openApiUrl = VeeamConfig.openApiUrl;
+//    private String openApiUrl = VeeamConfig.openApiUrl;
 
-    private String token;
+//    private String token;
 
     public List<Backup> getBackupList(int page, int pageSize) {
-        token = basicService.validate();
+        VeeamToken token = basicService.validate();
         String path = "/backup/getBackupList";
         Map<String, String> header = new HashMap<>();
-        header.put("x-token", token);
+        header.put("x-token", token.getToken());
         Map<String, Object> query = new HashMap<>();
         query.put("page", page);
         query.put("pageSize", pageSize);
-        Response response = HttpUtils.get(openApiUrl + path, header, query);
+        Response response = HttpUtils.get(token.getServer() + path, header, query);
         JSONObject data = (JSONObject)response.getData();
         JSONArray backups = data.getJSONArray("list");
         List<Backup> backupList = new ArrayList<>();
@@ -48,13 +49,13 @@ public class VeeamBackupService {
     }
 
     public List<ChildBackup> getChildBackupList(int parentId) {
-        token = basicService.validate();
+        VeeamToken token = basicService.validate();
         String path = "/backup/getChildBackupList";
         Map<String, String> header = new HashMap<>();
-        header.put("x-token", token);
+        header.put("x-token", token.getToken());
         Map<String, Object> query = new HashMap<>();
         query.put("id", parentId);
-        Response response = HttpUtils.get(openApiUrl + path, header, query);
+        Response response = HttpUtils.get(token.getServer() + path, header, query);
         JSONObject data = (JSONObject)response.getData();
         JSONArray backups = data.getJSONArray("list");
         List<ChildBackup> childBackupList = new ArrayList<>();
@@ -67,13 +68,13 @@ public class VeeamBackupService {
     }
 
     public List<Application> getApplicationByName(String[] names) {
-        token = basicService.validate();
+        VeeamToken token = basicService.validate();
         String path = "/backup/getApplicationByNames";
         Map<String, String> header = new HashMap<>();
-        header.put("x-token", token);
+        header.put("x-token", token.getToken());
         Map<String, Object> query = new HashMap<>();
         query.put("Names", names);
-        ResponseList response = (ResponseList)HttpUtils.get(openApiUrl + path, header, query, true);
+        ResponseList response = (ResponseList)HttpUtils.get(token.getServer() + path, header, query, true);
         JSONArray data = response.getData();
         List<Application> applications = new ArrayList<>();
         for(Object app : data) {
@@ -83,37 +84,37 @@ public class VeeamBackupService {
     }
 
     public Backup getBackupDetail(String ID) {
-        token = basicService.validate();
+        VeeamToken token = basicService.validate();
         String path = "/backup/findBackup";
         Map<String, String> header = new HashMap<>();
-        header.put("x-token", token);
+        header.put("x-token", token.getToken());
         Map<String, Object> query = new HashMap<>();
         query.put("ID", ID);
-        Response response = HttpUtils.get(openApiUrl + path, header, query);
+        Response response = HttpUtils.get(token.getServer() + path, header, query);
         return BeanUtils.mapToBean(response.getData(), Backup.class);
     }
 
     public VMPointDetail getVMPointDetail(String ID, String backupId) {
-        token = basicService.validate();
+        VeeamToken token = basicService.validate();
         String path = "/backup/getVMPointDetail";
         Map<String, String> header = new HashMap<>();
-        header.put("x-token", token);
+        header.put("x-token", token.getToken());
         Map<String, Object> query = new HashMap<>();
         query.put("id", ID);
         query.put("backupId", backupId);
-        Response response = HttpUtils.get(openApiUrl + path, header, query);
+        Response response = HttpUtils.get(token.getServer() + path, header, query);
         return BeanUtils.mapToBean(response.getData(), VMPointDetail.class);
     }
 
     public List<VMPoint> getVMPoints(String backupId, String vmName) {
-        token = basicService.validate();
+        VeeamToken token = basicService.validate();
         String path = "/backup/getVMPoints";
         Map<String, String> header = new HashMap<>();
-        header.put("x-token", token);
+        header.put("x-token", token.getToken());
         Map<String, Object> query = new HashMap<>();
         query.put("backupId", backupId);
         query.put("vmName", vmName);
-        Response response = HttpUtils.get(openApiUrl + path, header, query);
+        Response response = HttpUtils.get(token.getServer() + path, header, query);
         JSONObject data = (JSONObject)response.getData();
         JSONArray points = data.getJSONArray("list");
         List<VMPoint> vmPointList = new ArrayList<>();
