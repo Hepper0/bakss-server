@@ -1,19 +1,26 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.bakss.server.mapper.BakssBackupMapper">
-
+    
     <resultMap type="BakssBackup" id="BakssBackupResult">
         <result property="id"    column="id"    />
-        <result property="backupSoftware"    column="backupSoftware"    />
-        <result property="softwareVersion"    column="softwareVersion"    />
-        <result property="clientName"    column="clientName"    />
-        <result property="backupContent"    column="backupContent"    />
-        <result property="backupIP"    column="backupIP"    />
-        <result property="appName"    column="appName"    />
+        <result property="backupServer"    column="backup_server"    />
+        <result property="backupSoftware"    column="backup_software"    />
+        <result property="softwareVersion"    column="software_version"    />
+        <result property="clientName"    column="client_name"    />
+        <result property="appName"    column="app_name"    />
+        <result property="backupContent"    column="backup_content"    />
+        <result property="backupJobKey"    column="backup_job_key"    />
+        <result property="machineType"    column="machine_type"    />
+        <result property="dataCenter"    column="data_center"    />
         <result property="env"    column="env"    />
+        <result property="backupIP"    column="backup_ip"    />
+        <result property="backupPort"    column="backupPort"    />
         <result property="platform"    column="platform"    />
+        <result property="costType"    column="cost_type"    />
+        <result property="costNumber"    column="cost_number"    />
         <result property="owner"    column="owner"    />
         <result property="manager"    column="manager"    />
         <result property="deleted"    column="deleted"    />
@@ -23,27 +30,34 @@
     </resultMap>
 
     <sql id="selectBakssBackupVo">
-        select a.id, backupSoftware, softwareVersion, clientName, backupContent, backupIP, appName, env, platform, owner, manager, a.deleted, a.create_time, a.create_by, a.update_time
+        select a.id, backup_server, backup_software, software_version, client_name, app_name, backup_content, backup_job_key, machine_type, data_center, env, platform, cost_type, cost_number, owner, manager, a.deleted, a.create_time, a.create_by, a.update_time
         from bakss_backup a
     </sql>
 
     <select id="selectBakssBackupList" parameterType="BakssBackup" resultMap="BakssBackupResult">
         <include refid="selectBakssBackupVo"/>
-        <where>
-            <if test="backupSoftware != null  and backupSoftware != ''"> and backupSoftware = #{backupSoftware}</if>
-            <if test="softwareVersion != null  and softwareVersion != ''"> and softwareVersion = #{softwareVersion}</if>
-            <if test="clientName != null  and clientName != ''"> and clientName like concat('%', #{clientName}, '%')</if>
-            <if test="backupContent != null  and backupContent != ''"> and backupContent = #{backupContent}</if>
-            <if test="backupIP != null  and backupIP != ''"> and backupIP = #{backupIP}</if>
-            <if test="appName != null  and appName != ''"> and appName like concat('%', #{appName}, '%')</if>
-            <if test="env != null  and env != ''"> and env = #{env} </if>
+        <where>  
+            <if test="backupServer != null  and backupServer != ''"> and backup_server = #{backupServer}</if>
+            <if test="backupSoftware != null  and backupSoftware != ''"> and backup_software = #{backupSoftware}</if>
+            <if test="softwareVersion != null  and softwareVersion != ''"> and software_version = #{softwareVersion}</if>
+            <if test="clientName != null  and clientName != ''"> and client_name like concat('%', #{clientName}, '%')</if>
+            <if test="appName != null  and appName != ''"> and app_name like concat('%', #{appName}, '%')</if>
+            <if test="backupContent != null  and backupContent != ''"> and backup_content = #{backupContent}</if>
+            <if test="backupJobKey != null  and backupJobKey != ''"> and backup_job_key = #{backupJobKey}</if>
+            <if test="machineType != null  and machineType != ''"> and machine_type = #{machineType}</if>
+            <if test="dataCenter != null  and dataCenter != ''"> and data_center = #{dataCenter}</if>
+            <if test="env != null  and env != ''"> and env = #{env}</if>
+            <if test="backupIP != null  and backupIP != ''"> and backup_ip = #{backupIP}</if>
+            <if test="backupPort != null  and backupPort != ''"> and backup_port = #{backupPort}</if>
             <if test="platform != null  and platform != ''"> and platform = #{platform}</if>
+            <if test="costType != null  and costType != ''"> and cost_type = #{costType}</if>
+            <if test="costNumber != null  and costNumber != ''"> and cost_number = #{costNumber}</if>
             <if test="owner != null  and owner != ''"> and owner = #{owner}</if>
             <if test="manager != null  and manager != ''"> and manager = #{manager}</if>
             <if test="deleted != null "> and deleted = #{deleted}</if>
         </where>
     </select>
-
+    
     <select id="selectBakssBackupById" parameterType="Long" resultMap="BakssBackupResult">
         <include refid="selectBakssBackupVo"/>
         where id = #{id}
@@ -60,50 +74,71 @@
     <insert id="insertBakssBackup" parameterType="BakssBackup" useGeneratedKeys="true" keyProperty="id">
         insert into bakss_backup
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="backupSoftware != null">backupSoftware,</if>
-            <if test="softwareVersion != null">softwareVersion,</if>
-            <if test="clientName != null">clientName,</if>
-            <if test="backupContent != null">backupContent,</if>
-            <if test="backupIP != null">backupIP,</if>
-            <if test="appName != null">appName,</if>
+            <if test="backupServer != null">backup_server,</if>
+            <if test="backupSoftware != null">backup_software,</if>
+            <if test="softwareVersion != null">software_version,</if>
+            <if test="clientName != null">client_name,</if>
+            <if test="appName != null">app_name,</if>
+            <if test="backupContent != null">backup_content,</if>
+            <if test="backupJobKey != null">backup_job_key,</if>
+            <if test="machineType != null">machine_type,</if>
+            <if test="dataCenter != null">data_center,</if>
             <if test="env != null">env,</if>
+            <if test="backupIP != null">backup_ip,</if>
+            <if test="backupPort != null">backup_port,</if>
             <if test="platform != null">platform,</if>
+            <if test="costType != null">cost_type,</if>
+            <if test="costNumber != null">cost_number,</if>
             <if test="owner != null">owner,</if>
             <if test="manager != null">manager,</if>
             <if test="deleted != null">deleted,</if>
             <if test="createTime != null">create_time,</if>
             <if test="createBy != null">create_by,</if>
             <if test="updateTime != null">update_time,</if>
-        </trim>
+         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="backupServer != null">#{backupServer},</if>
             <if test="backupSoftware != null">#{backupSoftware},</if>
             <if test="softwareVersion != null">#{softwareVersion},</if>
             <if test="clientName != null">#{clientName},</if>
-            <if test="backupContent != null">#{backupContent},</if>
-            <if test="backupIP != null">#{backupIP},</if>
             <if test="appName != null">#{appName},</if>
+            <if test="backupContent != null">#{backupContent},</if>
+            <if test="backupJobKey != null">#{backupJobKey},</if>
+            <if test="machineType != null">#{machineType},</if>
+            <if test="dataCenter != null">#{dataCenter},</if>
             <if test="env != null">#{env},</if>
+            <if test="backupIP != null">#{backupIP},</if>
+            <if test="backupPort != null">#{backupPort},</if>
             <if test="platform != null">#{platform},</if>
+            <if test="costType != null">#{costType},</if>
+            <if test="costNumber != null">#{costNumber},</if>
             <if test="owner != null">#{owner},</if>
             <if test="manager != null">#{manager},</if>
             <if test="deleted != null">#{deleted},</if>
             <if test="createTime != null">#{createTime},</if>
             <if test="createBy != null">#{createBy},</if>
             <if test="updateTime != null">#{updateTime},</if>
-        </trim>
+         </trim>
     </insert>
 
     <update id="updateBakssBackup" parameterType="BakssBackup">
         update bakss_backup
         <trim prefix="SET" suffixOverrides=",">
-            <if test="backupSoftware != null">backupSoftware = #{backupSoftware},</if>
-            <if test="softwareVersion != null">softwareVersion = #{softwareVersion},</if>
-            <if test="clientName != null">clientName = #{clientName},</if>
-            <if test="backupContent != null">backupContent = #{backupContent},</if>
-            <if test="backupIP != null">backupIP = #{backupIP},</if>
-            <if test="appName != null">appName = #{appName},</if>
+            <if test="backupServer != null">backup_server = #{backupServer},</if>
+            <if test="backupSoftware != null">backup_software = #{backupSoftware},</if>
+            <if test="softwareVersion != null">software_version = #{softwareVersion},</if>
+            <if test="clientName != null">client_name = #{clientName},</if>
+            <if test="appName != null">app_name = #{appName},</if>
+            <if test="backupContent != null">backup_content = #{backupContent},</if>
+            <if test="backupJobKey != null">backup_job_key = #{backupJobKey},</if>
+            <if test="machineType != null">machine_type = #{machineType},</if>
+            <if test="dataCenter != null">data_center = #{dataCenter},</if>
             <if test="env != null">env = #{env},</if>
+            <if test="backupPort != null">backup_port = #{backupPort},</if>
+            <if test="backupIP != null">backup_ip = #{backupIP},</if>
             <if test="platform != null">platform = #{platform},</if>
+            <if test="costType != null">cost_type = #{costType},</if>
+            <if test="costNumber != null">cost_number = #{costNumber},</if>
             <if test="owner != null">owner = #{owner},</if>
             <if test="manager != null">manager = #{manager},</if>
             <if test="deleted != null">deleted = #{deleted},</if>
@@ -119,7 +154,7 @@
     </delete>
 
     <delete id="deleteBakssBackupByIds" parameterType="String">
-        delete from bakss_backup where id in
+        delete from bakss_backup where id in 
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
         </foreach>

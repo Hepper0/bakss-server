@@ -8,5 +8,5 @@ public class ApplyBase {
     private Integer appType;
     private String appUser;
     private String remark;
-
+    private Boolean isDB;
 }

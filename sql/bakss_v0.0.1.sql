@@ -1,13 +1,21 @@
 -- 备份配置
 create table bakss_backup (
-    id int primary auto_increment,
-    backupSoftware varchar(50),
-    softwareVersion varchar(10),
-    clientName varchar(50),
-    backupContent varchar(50),
-    backupIP varchar(50),
-    appName varchar(50),
-    platform varchar(50),
+    id int primary key auto_increment,
+    backup_server varchar(100),
+    backup_software varchar(50),
+    software_version varchar(10),
+    client_name varchar(50),
+    app_name varchar(50),
+    backup_content varchar(50),
+    backup_ip varchar(50),
+    backup_port varchar(10),
+    backup_job_key varchar(50) comment '关联备份系统的key',
+    machine_type varchar(100),
+    data_center varchar(100),
+    env varchar(100),
+    platform varchar(100),
+    cost_type varchar(30),
+    cost_number varchar(50),
     owner varchar(100),
     manager varchar(100),
     deleted int default 0,
@@ -15,6 +23,19 @@ create table bakss_backup (
     create_by varchar(100),
     update_time datetime
 );
+
+create table bakss_backup_vmware (
+   id int primary key auto_increment,
+   backup_id varchar(50),
+   v_center varchar(100),
+   vm_objects varchar(500),
+   repository varchar(100),
+   after_job varchar(100),
+   deleted int default 0,
+   create_time datetime default now(),
+   create_by varchar(100),
+   update_time datetime
+)
 
 create table bakss_backup_strategy (
     id int primary key auto_increment,
@@ -83,17 +104,39 @@ create table bakss_apply_backup(
     app_name varchar(100),
     backup_ip varchar(50),
     backup_port varchar(10),
+    backup_server varchar(50),
     backup_content varchar(100),
     machine_type varchar(100),
     data_center varchar(100),
     env varchar(100),
     platform varchar(100),,
     backup_software varchar(100),
+    cost_type varchar(30),
+    cost_number varchar(50),
     deleted int default 0,
     create_time datetime default now(),
     create_by varchar(100),
     update_time datetime
 )
+
+create table bakss_apply_backup_vmware (
+    id int primary key auto_increment,
+    app_id varchar(50),
+    v_center varchar(100),
+    vm_objects varchar(500),
+    repository varchar(100),
+    after_job varchar(100),
+    deleted int default 0,
+    create_time datetime default now(),
+    create_by varchar(100),
+    update_time datetime
+)
+
+create tbale bakss_apply_backup_mysql ()
+create tbale bakss_apply_backup_sqlserver ()
+create tbale bakss_apply_backup_postgresql ()
+create tbale bakss_apply_backup_oracle ()
+create tbale bakss_apply_backup_filesystem ()
 
 -- 备份目录：修改目录
 create table bakss_apply_directory(

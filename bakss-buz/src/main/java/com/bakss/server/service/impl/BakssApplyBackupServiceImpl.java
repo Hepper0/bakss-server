@@ -8,6 +8,8 @@ import com.bakss.server.mapper.BakssApplyBackupMapper;
 import com.bakss.server.domain.BakssApplyBackup;
 import com.bakss.server.service.IBakssApplyBackupService;
 
+import javax.annotation.Resource;
+
 /**
  *  申请创建备份Service业务层处理
  *
@@ -17,7 +19,7 @@ import com.bakss.server.service.IBakssApplyBackupService;
 @Service
 public class BakssApplyBackupServiceImpl implements IBakssApplyBackupService
 {
-    @Autowired
+    @Resource
     private BakssApplyBackupMapper bakssApplyBackupMapper;
 
     /**
@@ -30,6 +32,12 @@ public class BakssApplyBackupServiceImpl implements IBakssApplyBackupService
     public BakssApplyBackup selectBakssApplyBackupById(Long id)
     {
         return bakssApplyBackupMapper.selectBakssApplyBackupById(id);
+    }
+
+    @Override
+    public BakssApplyBackup selectBakssApplyBackupByAppId(String appId)
+    {
+        return bakssApplyBackupMapper.selectBakssApplyBackupByAppId(appId);
     }
 
     /**

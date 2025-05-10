@@ -61,4 +61,18 @@ public class BakssBackup extends BaseEntity
     @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
     private Long deleted;
 
+    private String backupPort;
+
+    private String backupServer;
+
+    private String costType;
+
+    private String costNumber;
+
+    private String machineType;
+
+    private String dataCenter;
+
+    private String backupJobKey;
+
 }

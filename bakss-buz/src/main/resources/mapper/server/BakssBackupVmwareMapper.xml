@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bakss.server.mapper.BakssBackupVmwareMapper">
+    
+    <resultMap type="BakssBackupVmware" id="BakssBackupVmwareResult">
+        <result property="id"    column="id"    />
+        <result property="backupId"    column="backup_id"    />
+        <result property="vCenter"    column="v_center"    />
+        <result property="vmObjects"    column="vm_objects"    />
+        <result property="repository"    column="repository"    />
+        <result property="afterJob"    column="after_job"    />
+        <result property="deleted"    column="deleted"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectBakssBackupVmwareVo">
+        select id, backup_id, v_center, vm_objects, repository, after_job, deleted, create_time, create_by, update_time from bakss_backup_vmware
+    </sql>
+
+    <select id="selectBakssBackupVmwareList" parameterType="BakssBackupVmware" resultMap="BakssBackupVmwareResult">
+        <include refid="selectBakssBackupVmwareVo"/>
+        <where>  
+            <if test="backupId != null  and backupId != ''"> and backup_id = #{backupId}</if>
+            <if test="vCenter != null  and vCenter != ''"> and v_center = #{vCenter}</if>
+            <if test="vmObjects != null  and vmObjects != ''"> and vm_objects = #{vmObjects}</if>
+            <if test="repository != null  and repository != ''"> and repository = #{repository}</if>
+            <if test="afterJob != null  and afterJob != ''"> and after_job = #{afterJob}</if>
+            <if test="deleted != null "> and deleted = #{deleted}</if>
+        </where>
+    </select>
+    
+    <select id="selectBakssBackupVmwareById" parameterType="Long" resultMap="BakssBackupVmwareResult">
+        <include refid="selectBakssBackupVmwareVo"/>
+        where id = #{id}
+    </select>
+
+    <select id="selectBakssBackupVmwareByAppId" parameterType="String" resultMap="BakssBackupVmwareResult">
+        <include refid="selectBakssBackupVmwareVo"/>
+        where app_id = #{appId} and deleted = 0
+        limit 1
+    </select>
+
+    <insert id="insertBakssBackupVmware" parameterType="BakssBackupVmware" useGeneratedKeys="true" keyProperty="id">
+        insert into bakss_backup_vmware
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="backupId != null">backup_id,</if>
+            <if test="vCenter != null">v_center,</if>
+            <if test="vmObjects != null">vm_objects,</if>
+            <if test="repository != null">repository,</if>
+            <if test="afterJob != null">after_job,</if>
+            <if test="deleted != null">deleted,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="backupId != null">#{backupId},</if>
+            <if test="vCenter != null">#{vCenter},</if>
+            <if test="vmObjects != null">#{vmObjects},</if>
+            <if test="repository != null">#{repository},</if>
+            <if test="afterJob != null">#{afterJob},</if>
+            <if test="deleted != null">#{deleted},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBakssBackupVmware" parameterType="BakssBackupVmware">
+        update bakss_backup_vmware
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="backupId != null">backup_id = #{backupId},</if>
+            <if test="vCenter != null">v_center = #{vCenter},</if>
+            <if test="vmObjects != null">vm_objects = #{vmObjects},</if>
+            <if test="repository != null">repository = #{repository},</if>
+            <if test="afterJob != null">after_job = #{afterJob},</if>
+            <if test="deleted != null">deleted = #{deleted},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBakssBackupVmwareById" parameterType="Long">
+        delete from bakss_backup_vmware where id = #{id}
+    </delete>
+
+    <delete id="deleteBakssBackupVmwareByIds" parameterType="String">
+        delete from bakss_backup_vmware where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

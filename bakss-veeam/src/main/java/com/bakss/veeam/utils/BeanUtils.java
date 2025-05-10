@@ -42,6 +42,10 @@ public class BeanUtils extends BeanUtil {
         return mapToBean((JSONObject)obj, beanClass, true, CopyOptions.create());
     }
 
+    public static <T> T conventTo(Object source, Class<T> beanClass) {
+        return mapToBean(beanToMap(source), beanClass);
+    }
+
     /**
      * 判断source与target的所有公共字段的值是否相同
      *

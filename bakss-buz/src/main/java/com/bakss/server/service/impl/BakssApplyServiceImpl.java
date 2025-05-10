@@ -7,9 +7,12 @@ import com.bakss.common.utils.uuid.IdUtils;
 import com.bakss.server.domain.BakssApp;
 import com.bakss.server.domain.BakssApplyBackup;
 import com.bakss.server.domain.BakssApplyBackupPermis;
+import com.bakss.server.domain.BakssBackupVmware;
 import com.bakss.server.domain.applyRO.*;
 import com.bakss.server.domain.backup.*;
+import com.bakss.server.service.IBakssApplyBackupVmwareService;
 import com.bakss.server.service.IBakssApplyService;
+import com.bakss.server.service.IBakssBackupVmwareService;
 import com.bakss.veeam.service.VeeamJobService;
 import com.bakss.veeam.utils.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -36,6 +39,9 @@ public class BakssApplyServiceImpl implements IBakssApplyService {
 
     @Resource
     private BakssApplyBackupServiceImpl applyBackupService;
+
+    @Resource
+    private IBakssApplyBackupVmwareService applyBackupVmwareService;
 
 //    @PostConstruct
 //    void init() {
@@ -100,16 +106,18 @@ public class BakssApplyServiceImpl implements IBakssApplyService {
     }
 
     public void applyBackup(ApplyBackup applyBackup) {
+        applyBackup.setIsDB(DB_TYPES.contains(applyBackup.getBackupContent()));
         String appId = addApplication(applyBackup, null);
 
         Map<String, Object> applyBackupJson = BeanUtils.beanToMap(applyBackup);
         BakssApplyBackup createBackup = BeanUtils.mapToBean(applyBackupJson, BakssApplyBackup.class);
-
+        createBackup.setAppId(appId);
         applyBackupService.insertBakssApplyBackup(createBackup);
         switch (applyBackup.getBackupContent()) {
             case "vm":
-                VMware vm = BeanUtils.mapToBean(createBackup.getBackupInfo(), VMware.class);
+                BakssApplyBackupVmware vm = BeanUtils.mapToBean(createBackup.getBackupInfo(), BakssApplyBackupVmware.class);
                 vm.setAppId(appId);
+                applyBackupVmwareService.insertBakssApplyBackupVmware(vm);
                 break;
             case "mysql":
                 MySQL mySQL = BeanUtils.mapToBean(createBackup.getBackupInfo(), MySQL.class);
@@ -157,6 +165,7 @@ public class BakssApplyServiceImpl implements IBakssApplyService {
         app.setAppType(apply.getAppType());
         app.setAppUser(user.getUsername());
         app.setRemark(apply.getRemark());
+        app.setIsDb(apply.getIsDB());
         if (backupId != null) app.setBackupId(backupId);
         // 创建申请单
         appService.insertBakssApp(app);

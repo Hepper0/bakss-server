@@ -19,6 +19,8 @@ public interface IBakssApplyBackupService
      */
     public BakssApplyBackup selectBakssApplyBackupById(Long id);
 
+    public BakssApplyBackup selectBakssApplyBackupByAppId(String appId);
+
     /**
      * 查询 申请创建备份列表
      * 

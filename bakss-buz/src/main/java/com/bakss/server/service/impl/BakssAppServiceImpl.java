@@ -1,19 +1,24 @@
 package com.bakss.server.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.bakss.common.core.domain.model.LoginUser;
 import com.bakss.common.utils.DateUtils;
 import com.bakss.common.utils.SecurityUtils;
 import com.bakss.server.domain.*;
+import com.bakss.server.domain.backup.BakssApplyBackupVmware;
 import com.bakss.server.mapper.BakssAppFlowMapper;
 import com.bakss.server.mapper.BakssAppStepMapper;
-import com.bakss.server.service.IBakssBackupService;
+import com.bakss.server.service.*;
+import com.bakss.veeam.domain.host.ViEntity;
+import com.bakss.veeam.service.VeeamHostService;
+import com.bakss.veeam.service.VeeamJobService;
+import com.bakss.veeam.utils.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import com.bakss.server.mapper.BakssAppMapper;
-import com.bakss.server.service.IBakssAppService;
 
 import javax.annotation.Resource;
 
@@ -42,6 +47,21 @@ public class BakssAppServiceImpl implements IBakssAppService
 
     @Resource
     private IBakssBackupService bakssBackupService;
+
+    @Resource
+    private IBakssBackupVmwareService bakssBackupVmwareService;
+
+    @Resource
+    private IBakssApplyBackupService applyBackupService;
+
+    @Resource
+    private IBakssApplyBackupVmwareService applyBackupVmwareService;
+
+    @Resource
+    private VeeamJobService veeamJobService;
+
+    @Resource
+    private VeeamHostService veeamHostService;
 
     /**
      * 查询申请
@@ -123,23 +143,72 @@ public class BakssAppServiceImpl implements IBakssAppService
     }
 
 
-    public void approved(BakssApp App){
+    public void approved(BakssApp app){
+        // 更新审核人及审核时间
         LoginUser user = SecurityUtils.getLoginUser();
-        BakssAppFlow flow = bakssAppFlowMapper.selectBakssAppFlowById(App.getFlowId());
+        BakssAppFlow flow = bakssAppFlowMapper.selectBakssAppFlowById(app.getFlowId());
         flow.setReviewUser(user.getUsername());
         flow.setReviewStatus(APPROVAL_APPROVED);
         flow.setReviewTime(DateUtils.getNowDate());
         bakssAppFlowMapper.updateBakssAppFlow(flow);
-        // 索引到下一步骤
+
         BakssAppFlow nextFlow = bakssAppFlowMapper.getBakssAppNextFlow(flow);
         if (nextFlow != null) {
-            App.setFlowId(nextFlow.getId());
-            bakssAppMapper.updateBakssApp(App);
+            // 更新当前步骤的创建时间
+            nextFlow.setCreateTime(DateUtils.getNowDate());
+            bakssAppFlowMapper.updateBakssAppFlow(nextFlow);
+            // 索引到下一步骤
+            app.setFlowId(nextFlow.getId());
+            bakssAppMapper.updateBakssApp(app);
         } else {
-            log.warn("申请单[" + App.getId() + "]当前流程" + flow.getFlowStep() +  ", 找不到下一个流程.");
+            log.info("申请单[" + app.getId() + "]当前流程" + flow.getFlowStep() +  ", 找不到下一个流程. 审核完成");
 //            throw new RuntimeException("申请单[" + App.getId() + "]当前流程" + flow.getFlowStep() +  ", 找不到下一个流程.");
         }
 
+    }
+
+    public void handleApprovedApplication(BakssApp app) {
+        Integer appType = app.getAppType();
+        if (appType.equals(APPLY_BACKUP_PERMISSION)) {
+
+        } else if(appType.equals(GRANT_BACKUP_PERMISSION)) {
+
+        } else if(appType.equals(CREATE_RESTORE)) {
+
+        } else if(appType.equals(CREATE_BACKUP)) {
+            BakssApplyBackup applyBackup = applyBackupService.selectBakssApplyBackupByAppId(app.getId());
+            BakssApplyBackupVmware applyBackupVmware = applyBackupVmwareService.selectBakssApplyBackupVmwareByAppId(app.getId());
+            String vmObjects = applyBackupVmware.getVmObjects();
+            List<ViEntity> vmEntities = new ArrayList<>();
+            // 查询实时的vm信息
+            for (String vm : vmObjects.split(",")) {
+                ViEntity entity = veeamHostService.getViEntity(vm, "HostAndVms", applyBackup.getBackupServer());
+                vmEntities.add(entity);
+            }
+            // 创建备份
+            veeamJobService.createJob(applyBackup.getName(), applyBackup.getDescription(), vmEntities, applyBackupVmware.getRepository(), applyBackupVmware.getAfterJob(), applyBackup.getBackupServer());
+
+            BakssBackup bakssBackup = BeanUtils.conventTo(applyBackup, BakssBackup.class);
+            BakssBackupVmware bakssBackupVmware = BeanUtils.conventTo(applyBackupVmware, BakssBackupVmware.class);
+            bakssBackupService.insertBakssBackup(bakssBackup);
+            bakssBackupVmwareService.insertBakssBackupVmware(bakssBackupVmware);
+        } else if(appType.equals(BACKUP_RIGHT_NOW)) {
+
+        } else if(appType.equals(BACKUP_AT_TIME)) {
+
+        } else if(appType.equals(MODIFY_DIRECTORY)) {
+
+        } else if(appType.equals(ENABLE_STRATEGY)) {
+
+        } else if(appType.equals(DISABLE_STRATEGY)) {
+
+        } else if(appType.equals(DELETE_STRATEGY)) {
+
+        } else if(appType.equals(MODIFY_OWNER)) {
+
+        } else if(appType.equals(MODIFY_MANAGER)) {
+
+        }
     }
 
     public void rejected(BakssApp App) {
@@ -188,6 +257,5 @@ public class BakssAppServiceImpl implements IBakssAppService
                 bakssAppMapper.updateBakssApp(app);
             }
         }
-
     }
 }

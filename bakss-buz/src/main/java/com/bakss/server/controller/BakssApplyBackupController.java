@@ -29,7 +29,7 @@ import com.bakss.common.core.page.TableDataInfo;
  * @date 2025-05-06
  */
 @RestController
-@RequestMapping("/service/createBackup")
+@RequestMapping("/apply/createBackup")
 public class BakssApplyBackupController extends BaseController
 {
     @Resource

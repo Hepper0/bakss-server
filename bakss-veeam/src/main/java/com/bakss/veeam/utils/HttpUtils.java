@@ -72,17 +72,14 @@ public class HttpUtils {
             log.info("post请求成功,url: {}, response: {}", URL,  result);
             Response response = BeanUtils.mapToBean(JSONObject.parseObject(result), Response.class);
             if (!response.getCode().equals(0)) {
-                throw new VeeanExecError("return code: " + response.getCode() + ", msg: " + response.getMsg());
+                throw new RuntimeException("return code: " + response.getCode() + ", msg: " + response.getMsg());
             }
             return response;
         } catch (Exception e) {
             log.error("发送post请求失败", e);
             // 远程端执行的错误要抛出去
-            if (e.getClass() == VeeanExecError.class) {
-                throw new RuntimeException(e);
-            }
+            throw e;
         }
-        return null;
     }
 
     public static Response put(String URL, Map<String, String> headers, Map<String, Object> data) {
@@ -93,16 +90,16 @@ public class HttpUtils {
             log.info("put请求成功,url: {}, response: {}", URL, result);
             Response response = BeanUtils.mapToBean(JSONObject.parseObject(result), Response.class);
             if (!response.getCode().equals(0)) {
-                throw new VeeanExecError("return code: " + response.getCode() + ", msg: " + response.getMsg());
+                throw new RuntimeException("return code: " + response.getCode() + ", msg: " + response.getMsg());
             }
             return response;
         } catch (Exception e) {
             log.error("发送put请求失败", e);
+            throw e;
             // 远程端执行的错误要抛出去
-            if (e.getClass() == VeeanExecError.class) {
-                throw new RuntimeException(e);
-            }
+//            if (e.getClass() == VeeanExecError.class) {
+//                throw new RuntimeException(e);
+//            }
         }
-        return null;
     }
 }

@@ -7,8 +7,6 @@ public class VMware {
 
     private String appId;
 
-    private String veeamServer;
-
     private String vCenter;
 
     private String vmObjects;

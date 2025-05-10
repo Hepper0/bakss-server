@@ -29,7 +29,7 @@ import com.bakss.common.core.page.TableDataInfo;
  * @date 2025-04-08
  */
 @RestController
-@RequestMapping("/service/strategy")
+@RequestMapping("/apply/strategy")
 public class BakssApplyStrategyController extends BaseController
 {
     @Resource

@@ -24,6 +24,12 @@ public class ApplyBackup extends ApplyBase {
 
     private String backupSoftware;
 
+    private String backupIP;
+
+    private String backupPort;
+
+    private String backupServer;
+
     private JSONObject backupInfo;
 
     private String costType;
