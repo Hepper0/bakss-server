@@ -28,17 +28,17 @@ public class VeeamJobService {
 
 //    private final String openApiUrl = VeeamConfig.openApiUrl;
 
-//    private VeeamToken token;
+//    private String token;
 
-    public List<BackupJob> getBackupJobList(Integer page, Integer pageSize) {
-        VeeamToken token = basicService.validate();
+    public List<BackupJob> getBackupJobList(Integer page, Integer pageSize, String server) {
+        String token = basicService.validate(server);
         String path = "/job/getJobList";
         Map<String, String> header = new HashMap<>();
-        header.put("x-token", token.getToken());
+        header.put("x-token", token);
         Map<String, Object> query = new HashMap<>();
         query.put("page", page);
         query.put("pageSize", pageSize);
-        Response response = HttpUtils.get(token.getServer() + path, header, query);
+        Response response = HttpUtils.get(server + path, header, query);
         JSONObject data = (JSONObject)response.getData();
         JSONArray jobList = data.getJSONArray("list");
         List<BackupJob> backupJobs = new ArrayList<>();
@@ -51,63 +51,63 @@ public class VeeamJobService {
         return backupJobs;
     }
 
-    public Response operateJob(String type, String path, String name) {
-        VeeamToken token = basicService.validate();
+    public Response operateJob(String type, String path, String name, String server) {
+        String token = basicService.validate(server);
         Map<String, String> header = new HashMap<>();
-        header.put("x-token", token.getToken());
+        header.put("x-token", token);
         Map<String, Object> data = new HashMap<>();
         data.put("name", name);
         Response response = null;
         switch (type) {
             case "get":
-                response = HttpUtils.get(token.getServer() + path, header, data);
+                response = HttpUtils.get(server + path, header, data);
                 break;
             case "post":
-                response = HttpUtils.post(token.getServer() + path, header, data);
+                response = HttpUtils.post(server + path, header, data);
                 break;
             case "put":
-                response = HttpUtils.put(token.getServer() + path, header, data);
+                response = HttpUtils.put(server + path, header, data);
                 break;
             case "delete":
-                response = HttpUtils.delete(token.getServer() + path, header, data);
+                response = HttpUtils.delete(server + path, header, data);
                 break;
         }
         return response;
     }
 
-    public BackupJobDetail getJobDetail(String name) {
+    public BackupJobDetail getJobDetail(String name, String server) {
         String path = "/job/findJob";
-        Response response = operateJob("get", path, name);
+        Response response = operateJob("get", path, name, server);
         return BeanUtils.mapToBean(response.getData(), BackupJobDetail.class);
     }
 
-    public void startJob(String name) {
+    public void startJob(String name, String server) {
         String path = "/job/startJob";
-        operateJob("put", path, name);
+        operateJob("put", path, name, server);
     }
 
-    public void stopJob(String name) {
+    public void stopJob(String name, String server) {
         String path = "/job/stopJob";
-        operateJob("put", path, name);
+        operateJob("put", path, name, server);
     }
 
-    public void enableJob(String name) {
+    public void enableJob(String name, String server) {
         String path = "/job/enableJob";
-        operateJob("put", path, name);
+        operateJob("put", path, name, server);
     }
 
-    public void disableJob(String name) {
+    public void disableJob(String name, String server) {
         String path = "/job/disableJob";
-        operateJob("put", path, name);
+        operateJob("put", path, name, server);
     }
 
-    public void deleteJob(String name) {
+    public void deleteJob(String name, String server) {
         String path = "/job/deleteJob";
-        operateJob("delete", path, name);
+        operateJob("delete", path, name, server);
     }
 
-    public void createJob(String name, String description, List<ViEntity> vmObjects, String repository, String afterJobName) {
-        VeeamToken token = basicService.validate();
+    public void createJob(String name, String description, List<ViEntity> vmObjects, String repository, String afterJobName, String server) {
+        String token = basicService.validate(server);
         String path = "/job/createJob";
         BackupJobDetail jobDetail = new BackupJobDetail();
         jobDetail.setName(name);
@@ -194,15 +194,15 @@ public class VeeamJobService {
         jobDetail.setTerminateOutWindowEnabled(false);
 
         Map<String, String> header = new HashMap<>();
-        header.put("x-token", token.getToken());
-        HttpUtils.post(token.getServer() + path, header, BeanUtils.beanToMap(jobDetail));
+        header.put("x-token", token);
+        HttpUtils.post(server + path, header, BeanUtils.beanToMap(jobDetail));
     }
 
-    public void updateJob(BackupJobDetail jobDetail) {
-        VeeamToken token = basicService.validate();
+    public void updateJob(BackupJobDetail jobDetail, String server) {
+        String token = basicService.validate(server);
         String path = "/job/updateJob";
         Map<String, String> header = new HashMap<>();
-        header.put("x-token", token.getToken());
-        HttpUtils.put(token.getServer() + path, header, BeanUtils.beanToMap(jobDetail));
+        header.put("x-token", token);
+        HttpUtils.put(server + path, header, BeanUtils.beanToMap(jobDetail));
     }
 }

@@ -38,26 +38,31 @@ public class VeeamBasicService {
         expireAt.put(server, loginResponse.getExpireAt());
     }
 
-    public VeeamToken validate() {
-        String server;
-        ServletRequestAttributes requestAttributes = (ServletRequestAttributes)RequestContextHolder.getRequestAttributes();
-        if (requestAttributes != null) {
-            HttpServletRequest request = requestAttributes.getRequest();
-            server = request.getHeader("server");
-        } else {
-            throw new RuntimeException("The header is missing the server field");
-        }
+    public String validate(String server) {
         // todo 确认返回expireAt单位
         if (expireAt.get(server) < System.currentTimeMillis()) {
             login(server);
         }
-        VeeamToken veeamToken = new VeeamToken();
-        if (!server.startsWith("http://")) {
-            server = "http://" + server;
-        }
-        veeamToken.setToken(token.get(server));
-        veeamToken.setServer(server);
-        return veeamToken;
+//        VeeamToken veeamToken = new VeeamToken();
+//        if (!server.startsWith("http://")) {
+//            server = "http://" + server;
+//        }
+//        veeamToken.setToken(token.get(server));
+//        veeamToken.setServer(server);
+        return token.get(server);
     }
+
+//    public VeeamToken validate() {
+//        String server;
+//        ServletRequestAttributes requestAttributes = (ServletRequestAttributes)RequestContextHolder.getRequestAttributes();
+//        if (requestAttributes != null) {
+//            HttpServletRequest request = requestAttributes.getRequest();
+//            server = request.getHeader("server");
+//        } else {
+//            throw new RuntimeException("The header is missing the server field");
+//        }
+//
+//        return validate(server);
+//    }
 
 }

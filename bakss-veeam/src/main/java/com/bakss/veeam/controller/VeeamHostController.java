@@ -22,36 +22,36 @@ public class VeeamHostController extends BaseController {
 
     @GetMapping("list")
     public AjaxResult getVeeamHostList(@RequestParam int page, @RequestParam int pageSize) {
-        return success(hostService.getVeeamHostList(page, pageSize));
+        return success(hostService.getVeeamHostList(page, pageSize, getBackupServerHost()));
     }
 
     @GetMapping("entity")
     public AjaxResult getViEntity(@RequestParam String serverName, @RequestParam String viewMode) {
-        return success(hostService.getViEntity(serverName, viewMode));
+        return success(hostService.getViEntity(serverName, viewMode, getBackupServerHost()));
     }
 
     @GetMapping("datastore")
     public AjaxResult getViDatastore(@RequestParam String serverName) {
-        return success(hostService.getViDatastore(serverName));
+        return success(hostService.getViDatastore(serverName, getBackupServerHost()));
     }
 
     @GetMapping("resourcePool")
     public AjaxResult getViResourcePool(@RequestParam String serverName) {
-        return success(hostService.getViResourcePool(serverName));
+        return success(hostService.getViResourcePool(serverName, getBackupServerHost()));
     }
 
     @GetMapping("switch")
     public AjaxResult getViSwitch(@RequestParam String serverName) {
-        return success(hostService.getViSwitch(serverName));
+        return success(hostService.getViSwitch(serverName, getBackupServerHost()));
     }
 
     @GetMapping("network")
     public AjaxResult getViNetwork(@RequestParam String serverName) {
-        return success(hostService.getViNetwork(serverName));
+        return success(hostService.getViNetwork(serverName, getBackupServerHost()));
     }
 
     @GetMapping("folder")
     public AjaxResult getViFolder(@RequestParam String serverName) {
-        return success(hostService.getViFolder(serverName));
+        return success(hostService.getViFolder(serverName, getBackupServerHost()));
     }
 }

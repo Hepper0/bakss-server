@@ -27,15 +27,15 @@ public class VeeamProxyService {
 
 //    private String token;
 
-    public List<BackupProxy> getBackupProxyList(int page, int pageSize) {
-        VeeamToken token = basicService.validate();
+    public List<BackupProxy> getBackupProxyList(int page, int pageSize, String server) {
+        String token = basicService.validate(server);
         String path = "/backupproxy/getBackupProxyList";
         Map<String, String> header = new HashMap<>();
-        header.put("x-token", token.getToken());
+        header.put("x-token", token);
         Map<String, Object> query = new HashMap<>();
         query.put("page", page);
         query.put("pageSize", pageSize);
-        Response response = HttpUtils.get(token.getServer() + path, header, query);
+        Response response = HttpUtils.get(server + path, header, query);
         assert response != null : "请求返回为空";
         JSONObject data = (JSONObject)response.getData();
         JSONArray proxyList = data.getJSONArray("list");
@@ -49,26 +49,26 @@ public class VeeamProxyService {
         return backupProxyList;
     }
 
-    public BackupProxyDetail getBackupProxyDetail(String ID) {
-        VeeamToken token = basicService.validate();
+    public BackupProxyDetail getBackupProxyDetail(String ID, String server) {
+        String token = basicService.validate(server);
         String path = "/backupproxy/findBackupProxy";
         Map<String, String> header = new HashMap<>();
-        header.put("x-token", token.getToken());
+        header.put("x-token", token);
         Map<String, Object> query = new HashMap<>();
         query.put("ID", ID);
-        Response response = HttpUtils.get(token.getServer() + path, header, query);
+        Response response = HttpUtils.get(server + path, header, query);
         JSONObject data = (JSONObject)response.getData();
         return BeanUtils.mapToBean(data, BackupProxyDetail.class);
     }
 
-    public void deleteBackupProxy(String name) {
-        VeeamToken token = basicService.validate();
+    public void deleteBackupProxy(String name, String server) {
+        String token = basicService.validate(server);
         String path = "/backupproxy/deleteBackupProxy";
         Map<String, String> header = new HashMap<>();
-        header.put("x-token", token.getToken());
+        header.put("x-token", token);
         Map<String, Object> query = new HashMap<>();
         query.put("name", name);
-        HttpUtils.delete(token.getServer() + path, header, query);
+        HttpUtils.delete(server + path, header, query);
     }
 
 }

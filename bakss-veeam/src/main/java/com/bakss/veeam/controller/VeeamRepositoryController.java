@@ -18,17 +18,17 @@ public class VeeamRepositoryController extends BaseController {
 
     @GetMapping("list")
     public AjaxResult getVeeamRepositoryList(@RequestParam int page, @RequestParam int pageSize) {
-        return success(repositoryService.getVeeamRepositoryList(page, pageSize));
+        return success(repositoryService.getVeeamRepositoryList(page, pageSize, getBackupServerHost()));
     }
 
     @GetMapping("detail")
     public AjaxResult getVeeamRepositoryDetail(@RequestParam String ID) {
-        return success(repositoryService.getVeeamRepositoryDetail(ID));
+        return success(repositoryService.getVeeamRepositoryDetail(ID, getBackupServerHost()));
     }
 
     @DeleteMapping
     public AjaxResult deleteVeeamRepository(@RequestParam String name) {
-        repositoryService.deleteVeeamRepository(name);
+        repositoryService.deleteVeeamRepository(name, getBackupServerHost());
         return success();
     }
 }

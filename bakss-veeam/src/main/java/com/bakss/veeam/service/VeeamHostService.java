@@ -27,15 +27,15 @@ public class VeeamHostService {
 
 //    private String token;
 
-    public List<VeeamHost> getVeeamHostList(int page, int pageSize) {
-        VeeamToken token = basicService.validate();
+    public List<VeeamHost> getVeeamHostList(int page, int pageSize, String server) {
+        String token = basicService.validate(server);
         String path = "/veeamHost/getVeeamHostList";
         Map<String, String> header = new HashMap<>();
-        header.put("x-token", token.getToken());
+        header.put("x-token", token);
         Map<String, Object> query = new HashMap<>();
         query.put("page", page);
         query.put("pageSize", pageSize);
-        Response response = HttpUtils.get(token.getServer() + path, header, query);
+        Response response = HttpUtils.get(server + path, header, query);
         JSONObject data = (JSONObject)response.getData();
         JSONArray hostList = data.getJSONArray("list");
         List<VeeamHost> veeamHostList = new ArrayList<>();
@@ -48,77 +48,77 @@ public class VeeamHostService {
         return veeamHostList;
     }
 
-    public ViEntity getViEntity(String serverName, String viewMode) {
-        VeeamToken token = basicService.validate();
+    public ViEntity getViEntity(String serverName, String viewMode, String server) {
+        String token = basicService.validate(server);
         String path = "/veeamHost/findViEntity";
         Map<String, String> header = new HashMap<>();
-        header.put("x-token", token.getToken());
+        header.put("x-token", token);
         Map<String, Object> query = new HashMap<>();
         query.put("serverName", serverName);
         query.put("viewMode", viewMode);
-        Response response = HttpUtils.get(token.getServer() + path, header, query);
+        Response response = HttpUtils.get(server + path, header, query);
         JSONObject data = (JSONObject)response.getData();
         return BeanUtils.mapToBean(data, ViEntity.class);
     }
 
-    public ViDataStore getViDatastore(String serverName) {
-        VeeamToken token = basicService.validate();
+    public ViDataStore getViDatastore(String serverName, String server) {
+        String token = basicService.validate(server);
         String path = "/veeamHost/findViDatastore";
         Map<String, String> header = new HashMap<>();
-        header.put("x-token", token.getToken());
+        header.put("x-token", token);
         Map<String, Object> query = new HashMap<>();
         query.put("serverName", serverName);
-        Response response = HttpUtils.get(token.getServer() + path, header, query);
+        Response response = HttpUtils.get(server + path, header, query);
         JSONObject data = (JSONObject)response.getData();
         return BeanUtils.mapToBean(data, ViDataStore.class);
     }
 
-    public ViResourcePool getViResourcePool(String serverName) {
-        VeeamToken token = basicService.validate();
+    public ViResourcePool getViResourcePool(String serverName, String server) {
+        String token = basicService.validate(server);
         String path = "/veeamHost/findViResourcePool";
         Map<String, String> header = new HashMap<>();
-        header.put("x-token", token.getToken());
+        header.put("x-token", token);
         Map<String, Object> query = new HashMap<>();
         query.put("serverName", serverName);
-        Response response = HttpUtils.get(token.getServer() + path, header, query);
+        Response response = HttpUtils.get(server + path, header, query);
         JSONObject data = (JSONObject)response.getData();
         return BeanUtils.mapToBean(data, ViResourcePool.class);
     }
 
-    public ViSwitch getViSwitch(String serverName) {
-        VeeamToken token = basicService.validate();
+    public ViSwitch getViSwitch(String serverName, String server) {
+        String token = basicService.validate(server);
         String path = "/veeamHost/findViSwitch";
         Map<String, String> header = new HashMap<>();
-        header.put("x-token", token.getToken());
+        header.put("x-token", token);
         Map<String, Object> query = new HashMap<>();
         query.put("serverName", serverName);
-        Response response = HttpUtils.get(token.getServer() + path, header, query);
+        Response response = HttpUtils.get(server + path, header, query);
         JSONObject data = (JSONObject)response.getData();
         return BeanUtils.mapToBean(data, ViSwitch.class);
     }
 
-    public ViNetwork getViNetwork(String serverName) {
-        VeeamToken token = basicService.validate();
+    public ViNetwork getViNetwork(String serverName, String server) {
+        String token = basicService.validate(server);
         String path = "/veeamHost/findViNetwork";
         Map<String, String> header = new HashMap<>();
-        header.put("x-token", token.getToken());
+        header.put("x-token", token);
         Map<String, Object> query = new HashMap<>();
         query.put("serverName", serverName);
-        Response response = HttpUtils.get(token.getServer() + path, header, query);
+        Response response = HttpUtils.get(server + path, header, query);
         JSONObject data = (JSONObject)response.getData();
         return BeanUtils.mapToBean(data, ViNetwork.class);
     }
 
-    public ViFolder getViFolder(String serverName) {
-        VeeamToken token = basicService.validate();
+    public ViFolder getViFolder(String serverName, String server) {
+        String token = basicService.validate(server);
         String path = "/veeamHost/findViFolder";
         Map<String, String> header = new HashMap<>();
-        header.put("x-token", token.getToken());
+        header.put("x-token", token);
         Map<String, Object> query = new HashMap<>();
         query.put("serverName", serverName);
-        Response response = HttpUtils.get(token.getServer() + path, header, query);
+        Response response = HttpUtils.get(server + path, header, query);
         JSONObject data = (JSONObject)response.getData();
         return BeanUtils.mapToBean(data, ViFolder.class);
     }
-
+    
 }

@@ -20,6 +20,10 @@ import com.bakss.common.utils.PageUtils;
 import com.bakss.common.utils.SecurityUtils;
 import com.bakss.common.utils.StringUtils;
 import com.bakss.common.utils.sql.SqlUtil;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * web层通用数据处理
@@ -198,5 +202,17 @@ public class BaseController
     public String getUsername()
     {
         return getLoginUser().getUsername();
+    }
+
+    public String getBackupServerHost() {
+        String server;
+        ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        if (requestAttributes != null) {
+            HttpServletRequest request = requestAttributes.getRequest();
+            server = request.getHeader("server");
+        } else {
+            throw new RuntimeException("The header is missing the server field");
+        }
+        return server;
     }
 }

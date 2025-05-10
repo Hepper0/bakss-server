@@ -26,15 +26,15 @@ public class VeeamRepositoryService {
 
 //    private String token;
 
-    public List<VeeamRepository> getVeeamRepositoryList(int page, int pageSize) {
-        VeeamToken token = basicService.validate();
+    public List<VeeamRepository> getVeeamRepositoryList(int page, int pageSize, String server) {
+        String token = basicService.validate(server);
         String path = "/veeamrepository/getVeeamRepositoryList";
         Map<String, String> header = new HashMap<>();
-        header.put("x-token", token.getToken());
+        header.put("x-token", token);
         Map<String, Object> query = new HashMap<>();
         query.put("page", page);
         query.put("pageSize", pageSize);
-        Response response = HttpUtils.get(token.getServer() + path, header, query);
+        Response response = HttpUtils.get(server + path, header, query);
         JSONObject data = (JSONObject)response.getData();
         JSONArray repositoryList = data.getJSONArray("list");
         List<VeeamRepository> VeeamRepositoryList = new ArrayList<>();
@@ -47,25 +47,25 @@ public class VeeamRepositoryService {
         return VeeamRepositoryList;
     }
 
-    public VeeamRepositoryDetail getVeeamRepositoryDetail(String ID) {
-        VeeamToken token = basicService.validate();
+    public VeeamRepositoryDetail getVeeamRepositoryDetail(String ID, String server) {
+        String token = basicService.validate(server);
         String path = "/veeamrepository/findVeeamRepository";
         Map<String, String> header = new HashMap<>();
-        header.put("x-token", token.getToken());
+        header.put("x-token", token);
         Map<String, Object> query = new HashMap<>();
         query.put("ID", ID);
-        Response response = HttpUtils.get(token.getServer() + path, header, query);
+        Response response = HttpUtils.get(server + path, header, query);
         JSONObject data = (JSONObject)response.getData();
         return BeanUtils.mapToBean(data, VeeamRepositoryDetail.class);
     }
 
-    public void deleteVeeamRepository(String name) {
-        VeeamToken token = basicService.validate();
+    public void deleteVeeamRepository(String name, String server) {
+        String token = basicService.validate(server);
         String path = "/veeamrepository/deleteVeeamRepository";
         Map<String, String> header = new HashMap<>();
-        header.put("x-token", token.getToken());
+        header.put("x-token", token);
         Map<String, Object> query = new HashMap<>();
         query.put("name", name);
-        HttpUtils.delete(token.getServer() + path, header, query);
+        HttpUtils.delete(server + path, header, query);
     }
 }
