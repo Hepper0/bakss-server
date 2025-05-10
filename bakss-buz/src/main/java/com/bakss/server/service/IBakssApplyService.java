@@ -1,7 +1,7 @@
 package com.bakss.server.service;
 
 import com.bakss.server.domain.BakssApp;
-import com.bakss.server.domain.apply.*;
+import com.bakss.server.domain.applyRO.*;
 
 public interface IBakssApplyService {
 

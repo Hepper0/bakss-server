@@ -12,7 +12,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="dataCenter"    column="data_center"    />
         <result property="env"    column="env"    />
         <result property="platform"    column="platform"    />
+        <result property="appName"    column="app_name"    />
         <result property="backupSoftware"    column="backup_software"    />
+        <result property="costType"    column="cost_type"    />
+        <result property="costNumber"    column="cost_number"    />
         <result property="deleted"    column="deleted"    />
         <result property="createTime"    column="create_time"    />
         <result property="createBy"    column="create_by"    />
@@ -20,7 +23,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectBakssApplyBackupVo">
-        select id, app_id, backup_content, machine_type, data_center, env, platform, backup_software, deleted, create_time, create_by, update_time from bakss_apply_backup
+        select id, app_id, backup_content, machine_type, data_center, env, platform, backup_software, app_name, cost_type, cost_number, deleted, create_time, create_by, update_time from bakss_apply_backup
     </sql>
 
     <select id="selectBakssApplyBackupList" parameterType="BakssApplyBackup" resultMap="BakssApplyBackupResult">
@@ -52,6 +55,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="env != null">env,</if>
             <if test="platform != null">platform,</if>
             <if test="backupSoftware != null">backup_software,</if>
+            <if test="appName != null">app_name,</if>
+            <if test="costType != null">cost_type,</if>
+            <if test="costNumber != null">costNumber,</if>
             <if test="deleted != null">deleted,</if>
             <if test="createTime != null">create_time,</if>
             <if test="createBy != null">create_by,</if>
@@ -65,6 +71,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="env != null">#{env},</if>
             <if test="platform != null">#{platform},</if>
             <if test="backupSoftware != null">#{backupSoftware},</if>
+            <if test="appName != null">#{appName},</if>
+            <if test="costType != null">#{costType},</if>
+            <if test="costNumber != null">#{costNumber},</if>
             <if test="deleted != null">#{deleted},</if>
             <if test="createTime != null">#{createTime},</if>
             <if test="createBy != null">#{createBy},</if>
@@ -82,6 +91,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="env != null">env = #{env},</if>
             <if test="platform != null">platform = #{platform},</if>
             <if test="backupSoftware != null">backup_software = #{backupSoftware},</if>
+            <if test="appName != null">app_name = #{appName},</if>
+            <if test="costType != null">cost_type = #{costType},</if>
+            <if test="costNumber != null">cost_number = #{costNumber},</if>
             <if test="deleted != null">deleted = #{deleted},</if>
             <if test="createTime != null">create_time = #{createTime},</if>
             <if test="createBy != null">create_by = #{createBy},</if>

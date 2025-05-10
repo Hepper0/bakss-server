@@ -3,20 +3,21 @@ package com.bakss.server.service.impl;
 import com.bakss.common.core.domain.model.LoginUser;
 import com.bakss.common.utils.DateUtils;
 import com.bakss.common.utils.SecurityUtils;
-import com.bakss.common.utils.StringUtils;
 import com.bakss.common.utils.uuid.IdUtils;
 import com.bakss.server.domain.BakssApp;
 import com.bakss.server.domain.BakssApplyBackup;
 import com.bakss.server.domain.BakssApplyBackupPermis;
-import com.bakss.server.domain.apply.*;
+import com.bakss.server.domain.applyRO.*;
+import com.bakss.server.domain.backup.*;
 import com.bakss.server.service.IBakssApplyService;
 import com.bakss.veeam.service.VeeamJobService;
+import com.bakss.veeam.utils.BeanUtils;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static com.bakss.server.config.Config.*;
@@ -100,13 +101,38 @@ public class BakssApplyServiceImpl implements IBakssApplyService {
 
     public void applyBackup(ApplyBackup applyBackup) {
         String appId = addApplication(applyBackup, null);
-        BakssApplyBackup createBackup = new BakssApplyBackup();
-        createBackup.setAppId(appId);
-        createBackup.setName(applyBackup.getName());
-        createBackup.setRepository(applyBackup.getRepository());
-        createBackup.setAfterJob(applyBackup.getAfterJobName());
-        createBackup.setVmObjects(StringUtils.join(applyBackup.getVmObjects(), ","));
+
+        Map<String, Object> applyBackupJson = BeanUtils.beanToMap(applyBackup);
+        BakssApplyBackup createBackup = BeanUtils.mapToBean(applyBackupJson, BakssApplyBackup.class);
+
         applyBackupService.insertBakssApplyBackup(createBackup);
+        switch (applyBackup.getBackupContent()) {
+            case "vm":
+                VMware vm = BeanUtils.mapToBean(createBackup.getBackupInfo(), VMware.class);
+                vm.setAppId(appId);
+                break;
+            case "mysql":
+                MySQL mySQL = BeanUtils.mapToBean(createBackup.getBackupInfo(), MySQL.class);
+                mySQL.setAppId(appId);
+                break;
+            case "postgresql":
+                PostgreSQL postgreSQL = BeanUtils.mapToBean(createBackup.getBackupInfo(), PostgreSQL.class);
+                postgreSQL.setAppId(appId);
+                break;
+            case "oracle":
+                Oracle oracle = BeanUtils.mapToBean(createBackup.getBackupInfo(), Oracle.class);
+                oracle.setAppId(appId);
+                break;
+            case "sqlserver":
+                SQLServer sqlServer = BeanUtils.mapToBean(createBackup.getBackupInfo(), SQLServer.class);
+                sqlServer.setAppId(appId);
+                break;
+            case "filesystem":
+                FileSystem fileSystem = BeanUtils.mapToBean(createBackup.getBackupInfo(), FileSystem.class);
+                fileSystem.setAppId(appId);
+                break;
+        }
+
     }
 
     public void applyRestore(ApplyRestore applyRestore) {

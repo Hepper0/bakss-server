@@ -1,30 +1,14 @@
-package com.bakss.server.domain;
+package com.bakss.server.domain.applyRO;
 
 import com.alibaba.fastjson2.JSONObject;
-import com.bakss.common.annotation.Excel;
-import com.bakss.common.core.domain.BaseEntity;
 import lombok.Data;
 
-/**
- *  申请创建备份对象 bakss_apply_backup
- *
- * @author author
- * @date 2025-05-06
- */
 @Data
-public class BakssApplyBackup extends BaseEntity
-{
-    private static final long serialVersionUID = 1L;
-
-    private Long id;
-
-    private String appId;
+public class ApplyBackup extends ApplyBase {
 
     private String name;
 
     private String description;
-
-    private Long deleted;
 
     private String backupContent;
 

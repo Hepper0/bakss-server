@@ -1,4 +1,4 @@
-package com.bakss.server.domain.apply;
+package com.bakss.server.domain.applyRO;
 
 import lombok.Data;
 
