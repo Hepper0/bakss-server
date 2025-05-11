@@ -4,5 +4,5 @@ import lombok.Data;
 
 @Data
 public class ApplyRestore extends ApplyBase {
-    Integer backupId;
+    String backupId;
 }

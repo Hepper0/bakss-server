@@ -6,6 +6,7 @@ import lombok.Data;
 public class ApplyBase {
     private String appId;
     private Integer appType;
+    private String backupSoftware;
     private String appUser;
     private String remark;
     private Boolean isDB;

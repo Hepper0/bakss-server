@@ -5,7 +5,8 @@ import java.util.List;
 
 public interface Config {
     // 申请单状态
-    public final  Long CANCEL_APPLICATION = 2L;
+    public final  Long APPLICATION_CANCELLED = 2L;
+    public final  Long APPLICATION_COMPLETED = 3L;
 
     // 审批步骤状态
     public final  Long APPROVAL_APPROVED = 1L;

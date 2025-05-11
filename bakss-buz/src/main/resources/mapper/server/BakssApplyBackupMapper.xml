@@ -51,6 +51,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectBakssApplyBackupByAppId" parameterType="String" resultMap="BakssApplyBackupResult">
         <include refid="selectBakssApplyBackupVo"/>
         where app_id = #{appId} and deleted = 0
+        order by create_time desc
         limit 1
     </select>
 

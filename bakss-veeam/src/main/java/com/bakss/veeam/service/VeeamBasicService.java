@@ -40,7 +40,7 @@ public class VeeamBasicService {
 
     public String validate(String server) {
         // todo 确认返回expireAt单位
-        if (expireAt.get(server) < System.currentTimeMillis()) {
+        if (expireAt.get(server) == null || expireAt.get(server) < System.currentTimeMillis()) {
             login(server);
         }
 //        VeeamToken veeamToken = new VeeamToken();

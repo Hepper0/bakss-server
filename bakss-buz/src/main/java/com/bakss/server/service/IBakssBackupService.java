@@ -30,6 +30,7 @@ public interface IBakssBackupService
     public List<BakssBackup> selectBakssBackupByIds(Integer[] ids);
 
     public List<BakssBackup> getBackupList(String user);
+    public List<BakssBackup> getAllBackupList();
 
 
     /**
@@ -38,7 +39,7 @@ public interface IBakssBackupService
      * @param bakssBackup 备份
      * @return 结果
      */
-    public int insertBakssBackup(BakssBackup bakssBackup);
+    public String insertBakssBackup(BakssBackup bakssBackup);
 
     /**
      * 修改备份

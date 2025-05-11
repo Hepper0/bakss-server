@@ -19,7 +19,7 @@ public class BakssBackup extends BaseEntity
     private static final long serialVersionUID = 1L;
 
     /** id */
-    private Long id;
+    private String id;
 
     /** 备份软件 */
     @Excel(name = "备份软件", readConverterExp = "$column.readConverterExp()")

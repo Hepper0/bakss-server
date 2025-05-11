@@ -41,7 +41,10 @@ public class BakssApp extends BaseEntity
     @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date backupTime;
+
     private Integer backupExecType;
+
+    private String backupSoftware;
 
     /** $column.columnComment */
     @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")

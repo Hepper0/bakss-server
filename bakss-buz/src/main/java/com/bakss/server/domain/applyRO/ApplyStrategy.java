@@ -5,6 +5,6 @@ import lombok.Data;
 @Data
 public class ApplyStrategy extends ApplyBase {
     private Integer strategyId;
-    private Integer backupId;
+    private String backupId;
     private Integer type;  // 1 enable 2 disable 3 delete
 }

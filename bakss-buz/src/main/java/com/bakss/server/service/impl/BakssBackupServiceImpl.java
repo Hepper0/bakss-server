@@ -2,6 +2,7 @@ package com.bakss.server.service.impl;
 
 import java.util.List;
 import com.bakss.common.utils.DateUtils;
+import com.bakss.common.utils.uuid.IdUtils;
 import org.springframework.stereotype.Service;
 import com.bakss.server.mapper.BakssBackupMapper;
 import com.bakss.server.domain.BakssBackup;
@@ -55,6 +56,10 @@ public class BakssBackupServiceImpl implements IBakssBackupService
         return bakssBackupMapper.getBackupList(user);
     }
 
+    public List<BakssBackup> getAllBackupList() {
+        return bakssBackupMapper.getAllBackupList();
+    }
+
     /**
      * 新增备份管理
      *
@@ -62,10 +67,13 @@ public class BakssBackupServiceImpl implements IBakssBackupService
      * @return 结果
      */
     @Override
-    public int insertBakssBackup(BakssBackup bakssBackup)
+    public String insertBakssBackup(BakssBackup bakssBackup)
     {
+        String backupId = IdUtils.simpleUUID();
+        bakssBackup.setId(backupId);
         bakssBackup.setCreateTime(DateUtils.getNowDate());
-        return bakssBackupMapper.insertBakssBackup(bakssBackup);
+        bakssBackupMapper.insertBakssBackup(bakssBackup);
+        return backupId;
     }
 
     /**

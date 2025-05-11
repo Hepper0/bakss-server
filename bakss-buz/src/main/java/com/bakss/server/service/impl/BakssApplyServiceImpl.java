@@ -43,6 +43,13 @@ public class BakssApplyServiceImpl implements IBakssApplyService {
     @Resource
     private IBakssApplyBackupVmwareService applyBackupVmwareService;
 
+    private final String TYPE_VM = "WMware";
+    private final String TYPE_MYSQL = "MySQL";
+    private final String TYPE_POSTGRESQL = "PostgreSQL";
+    private final String TYPE_SQLSERVER = "SQL SERVER";
+    private final String TYPE_ORACLE = "Oracle";
+    private final String TYPE_FILESYSTEM = "FileSystem";
+
 //    @PostConstruct
 //    void init() {
 //        veeamJobService.getJobDetail("123");
@@ -57,7 +64,7 @@ public class BakssApplyServiceImpl implements IBakssApplyService {
         List<BakssApplyBackupPermis> bakssApplyBackupPermis = new ArrayList<>();
         for(String backupId : backupIds) {
             BakssApplyBackupPermis backupPermis = new BakssApplyBackupPermis();
-            backupPermis.setBackupId(Long.getLong(backupId));
+            backupPermis.setBackupId(backupId);
             backupPermis.setAppId(appId);
             backupPermis.setGrantUser(applyPermission.getGrantUser());
             backupPermis.setExpiration(applyPermission.getExpiration());
@@ -94,7 +101,7 @@ public class BakssApplyServiceImpl implements IBakssApplyService {
 
     // 修改目录
     public void applyModifyBackupDirectory(ApplyModifyDirectory modifyDirectory) {
-        String appId = addApplication(modifyDirectory, Integer.toString(modifyDirectory.getBackupId()));
+        String appId = addApplication(modifyDirectory, modifyDirectory.getBackupId());
         // todo addChangeBackupUser
     }
 
@@ -114,28 +121,28 @@ public class BakssApplyServiceImpl implements IBakssApplyService {
         createBackup.setAppId(appId);
         applyBackupService.insertBakssApplyBackup(createBackup);
         switch (applyBackup.getBackupContent()) {
-            case "vm":
+            case "VMware":
                 BakssApplyBackupVmware vm = BeanUtils.mapToBean(createBackup.getBackupInfo(), BakssApplyBackupVmware.class);
                 vm.setAppId(appId);
                 applyBackupVmwareService.insertBakssApplyBackupVmware(vm);
                 break;
-            case "mysql":
+            case "MySQL":
                 MySQL mySQL = BeanUtils.mapToBean(createBackup.getBackupInfo(), MySQL.class);
                 mySQL.setAppId(appId);
                 break;
-            case "postgresql":
+            case "PostgreSQL":
                 PostgreSQL postgreSQL = BeanUtils.mapToBean(createBackup.getBackupInfo(), PostgreSQL.class);
                 postgreSQL.setAppId(appId);
                 break;
-            case "oracle":
+            case "Oracle":
                 Oracle oracle = BeanUtils.mapToBean(createBackup.getBackupInfo(), Oracle.class);
                 oracle.setAppId(appId);
                 break;
-            case "sqlserver":
+            case "SQL server":
                 SQLServer sqlServer = BeanUtils.mapToBean(createBackup.getBackupInfo(), SQLServer.class);
                 sqlServer.setAppId(appId);
                 break;
-            case "filesystem":
+            case "FileSystem":
                 FileSystem fileSystem = BeanUtils.mapToBean(createBackup.getBackupInfo(), FileSystem.class);
                 fileSystem.setAppId(appId);
                 break;
@@ -152,7 +159,7 @@ public class BakssApplyServiceImpl implements IBakssApplyService {
     public void cancelApplication(String appId) {
         BakssApp app = new BakssApp();
         app.setId(appId);
-        app.setStatus(CANCEL_APPLICATION);
+        app.setStatus(APPLICATION_CANCELLED);
         appService.updateBakssApp(app);
     }
 
@@ -165,6 +172,7 @@ public class BakssApplyServiceImpl implements IBakssApplyService {
         app.setAppType(apply.getAppType());
         app.setAppUser(user.getUsername());
         app.setRemark(apply.getRemark());
+        app.setBackupSoftware(apply.getBackupSoftware());
         app.setIsDb(apply.getIsDB());
         if (backupId != null) app.setBackupId(backupId);
         // 创建申请单

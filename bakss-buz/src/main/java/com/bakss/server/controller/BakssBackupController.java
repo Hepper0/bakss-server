@@ -67,7 +67,13 @@ public class BakssBackupController extends BaseController
     {
         LoginUser user = SecurityUtils.getLoginUser();
         startPage();
-        List<BakssBackup> list = bakssBackupService.getBackupList(user.getUsername());
+        List<BakssBackup> list;
+        if (SecurityUtils.isAdmin(user.getUserId())) {
+            list = bakssBackupService.getAllBackupList();
+        } else {
+            list = bakssBackupService.getBackupList(user.getUsername());
+        }
+
         return getDataTable(list);
     }
 
@@ -102,7 +108,8 @@ public class BakssBackupController extends BaseController
     @PostMapping
     public AjaxResult add(@RequestBody BakssBackup bakssBackup)
     {
-        return toAjax(bakssBackupService.insertBakssBackup(bakssBackup));
+        bakssBackupService.insertBakssBackup(bakssBackup);
+        return success();
     }
 
     /**

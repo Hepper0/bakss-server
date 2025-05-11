@@ -1,6 +1,6 @@
 -- 备份配置
 create table bakss_backup (
-    id int primary key auto_increment,
+    id varchar(50) primary key,
     backup_server varchar(100),
     backup_software varchar(50),
     software_version varchar(10),
@@ -39,7 +39,7 @@ create table bakss_backup_vmware (
 
 create table bakss_backup_strategy (
     id int primary key auto_increment,
-    backup_id int,
+    backup_id varchar(50),
     deleted int default 0,
     create_time datetime default now(),
     create_by varchar(100),
@@ -49,7 +49,7 @@ create table bakss_backup_strategy (
 -- 控制被授权人员的有效期
 create table bakss_backup_validate (
     id int primary key auto_increment,
-    backup_id int,
+    backup_id varchar(50),
     username varchar(100),
     exp_type int,
     start_date date,
@@ -70,13 +70,14 @@ create table bakss_app(
     app_type int,
     app_user varchar(100),
     app_time datetime,
-    backup_id varchar(200),
+    backup_id varchar(1000),
     backup_time datetime,
     backup_exec_type int,
+    backup_software varchar(50),
     backup_status int,
     flow_id int,
     remark varchar(1000),
-    status int default 1,
+    status int default 1 comment '1 初始 2 取消 3 完成',
     deleted int default 0,
     create_time datetime default now(),
     create_by varchar(100),
@@ -198,7 +199,7 @@ create table bakss_apply_restore(
 create table bakss_apply_backup_permis(
       id int primary key auto_increment,
       app_id varchar(50),
-      backup_id int,
+      backup_id varchar(50),
       grant_user varchar(100),
       expiration int,
       start_time datetime,
@@ -213,7 +214,7 @@ create table bakss_apply_backup_permis(
 create table bakss_apply_change_backup_user(
       id int primary key auto_increment,
       app_id varchar(50),
-      backup_id int,
+      backup_id varchar(50),
       old_user varchar(100),
       new_user varchar(100),
       deleted int default 0,

@@ -108,7 +108,7 @@ public class BakssAppController extends BaseController
      * 审批申请
      */
     @Log(title = "申请", businessType = BusinessType.UPDATE)
-    @PutMapping("/approve")
+    @PostMapping("/approve")
     public AjaxResult approve(@RequestBody BakssApp bakssApp)
     {
         bakssAppService.approved(bakssApp);
@@ -119,7 +119,7 @@ public class BakssAppController extends BaseController
      * 审批申请
      */
     @Log(title = "申请", businessType = BusinessType.UPDATE)
-    @PutMapping("/reject")
+    @PostMapping("/reject")
     public AjaxResult reject(@RequestBody BakssApp bakssApp)
     {
         bakssAppService.rejected(bakssApp);

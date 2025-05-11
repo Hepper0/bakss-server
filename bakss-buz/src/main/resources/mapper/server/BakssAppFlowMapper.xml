@@ -43,7 +43,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="getBakssAppNextFlow" parameterType="BakssAppFlow" resultMap="BakssAppFlowResult">
         <include refid="selectBakssAppFlowVo"/>
-        where app_id = #{appId} and app_order = #{appOrder} + 1
+        where app_id = #{appId} and flow_order = #{flowOrder} + 1
     </select>
 
     <insert id="insertBakssAppFlow" parameterType="BakssAppFlow" useGeneratedKeys="true" keyProperty="id">

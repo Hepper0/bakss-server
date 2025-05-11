@@ -38,6 +38,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where id = #{id}
     </select>
 
+    <select id="selectBakssApplyBackupVmwareByAppId" parameterType="String" resultMap="BakssApplyBackupVmwareResult">
+        <include refid="selectBakssApplyBackupVmwareVo"/>
+        where app_id = #{appId} and deleted = 0
+        order by create_time desc
+        limit 1
+    </select>
+
     <insert id="insertBakssApplyBackupVmware" parameterType="BakssApplyBackupVmware" useGeneratedKeys="true" keyProperty="id">
         insert into bakss_apply_backup_vmware
         <trim prefix="(" suffix=")" suffixOverrides=",">

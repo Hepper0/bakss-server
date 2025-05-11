@@ -30,7 +30,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectBakssBackupVo">
-        select a.id, backup_server, backup_software, software_version, client_name, app_name, backup_content, backup_job_key, machine_type, data_center, env, platform, cost_type, cost_number, owner, manager, a.deleted, a.create_time, a.create_by, a.update_time
+        select a.id, backup_server, backup_software, software_version, client_name, app_name, backup_content, backup_job_key, backup_ip, backup_port, machine_type, data_center, env, platform, cost_type, cost_number, owner, manager, a.deleted, a.create_time, a.create_by, a.update_time
         from bakss_backup a
     </sql>
 
@@ -74,6 +74,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <insert id="insertBakssBackup" parameterType="BakssBackup" useGeneratedKeys="true" keyProperty="id">
         insert into bakss_backup
         <trim prefix="(" suffix=")" suffixOverrides=",">
+            id,
             <if test="backupServer != null">backup_server,</if>
             <if test="backupSoftware != null">backup_software,</if>
             <if test="softwareVersion != null">software_version,</if>
@@ -97,6 +98,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateTime != null">update_time,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
+            #{id},
             <if test="backupServer != null">#{backupServer},</if>
             <if test="backupSoftware != null">#{backupSoftware},</if>
             <if test="softwareVersion != null">#{softwareVersion},</if>
@@ -160,7 +162,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </foreach>
     </delete>
 
-    <select id="getBackupList">
+    <select id="getBackupList" resultMap="BakssBackupResult">
         <include refid="selectBakssBackupVo"/>
         where (owner = #{user} or manager=#{user}) and a.deleted = 0
         union
@@ -171,5 +173,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectBakssBackupVo"/>
         inner join bakss_backup_validate b on a.id = b.backup_id and b.exp_type = 1
         where a.deleted = 0 and b.deleted = 0
+    </select>
+
+    <select id="getAllBackupList" resultMap="BakssBackupResult">
+        <include refid="selectBakssBackupVo"/>
+        where a.deleted = 0
     </select>
 </mapper>

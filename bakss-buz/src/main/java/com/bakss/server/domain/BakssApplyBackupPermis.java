@@ -22,7 +22,7 @@ public class BakssApplyBackupPermis extends BaseEntity
 
     private String appId;
 
-    private Long backupId;
+    private String backupId;
 
     private String grantUser;
 

@@ -29,7 +29,7 @@ import com.bakss.common.core.page.TableDataInfo;
  * @date 2025-05-06
  */
 @RestController
-@RequestMapping("/apply/createBackup")
+@RequestMapping("/application/createBackup")
 public class BakssApplyBackupController extends BaseController
 {
     @Resource
@@ -64,10 +64,10 @@ public class BakssApplyBackupController extends BaseController
      * 获取 申请创建备份详细信息
      */
     @PreAuthorize("@ss.hasPermi('server:backup:query')")
-    @GetMapping(value = "/{id}")
-    public AjaxResult getInfo(@PathVariable("id") Long id)
+    @GetMapping(value = "/{appId}")
+    public AjaxResult getInfo(@PathVariable("appId") String appId)
     {
-        return success(bakssApplyBackupService.selectBakssApplyBackupById(id));
+        return success(bakssApplyBackupService.selectBakssApplyBackupByAppId(appId));
     }
 
     /**

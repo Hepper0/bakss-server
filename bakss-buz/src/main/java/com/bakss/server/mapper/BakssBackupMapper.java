@@ -31,6 +31,8 @@ public interface BakssBackupMapper
 
     public List<BakssBackup> getBackupList(@Param("user") String user);
 
+    public List<BakssBackup> getAllBackupList();
+
     /**
      * 新增备份管理
      * 

@@ -48,6 +48,9 @@ public class BakssTask extends BaseEntity
     /** $column.columnComment */
     @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
     private Long backupStatus;
+
+    private String backupSoftware;
+
     private Integer backupExecType;
 
     /** $column.columnComment */

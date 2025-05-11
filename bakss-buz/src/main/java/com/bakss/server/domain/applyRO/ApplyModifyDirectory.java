@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class ApplyModifyDirectory extends ApplyBase {
-    int backupId;
+    String backupId;
     String oldDirectory;
     String newDirectory;
 }

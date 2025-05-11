@@ -12,6 +12,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="backupId"    column="backup_id"    />
         <result property="backupTime"    column="backup_time"    />
         <result property="backupExecType"    column="backup_exec_type"    />
+        <result property="backupSoftware"    column="backup_software"    />
         <result property="backupStatus"    column="backup_status"    />
         <result property="flowId"    column="flow_id"    />
         <result property="flowStep"    column="flow_step"    />
@@ -27,7 +28,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectBakssTaskVo">
-        select a.id, app_type, app_user, app_time, backup_id, backup_time, backup_exec_type, backup_status, flow_id, flow_step, review_user, review_status, review_time, a.remark, a.deleted, a.create_time, a.create_by, a.update_time
+        select a.id, app_type, app_user, app_time, backup_id, backup_time, backup_exec_type, backup_software, backup_status, flow_id, flow_step, review_user, review_status, review_time, a.remark, a.deleted, a.create_time, a.create_by, a.update_time
         from bakss_app a, bakss_app_flow b
     </sql>
 
@@ -81,7 +82,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="getTaskList" parameterType="String" resultMap="BakssTaskResult">
         <include refid="selectBakssTaskVo"></include>
-        where a.deleted = 0 and a.status = 1 and a.flow_id = b.id
+        where a.deleted = 0 and a.status != 2 and a.flow_id = b.id
         <if test="reviewStatus != null and reviewStatus != ''">
             and b.review_status = #{reviewStatus}
         </if>

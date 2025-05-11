@@ -162,12 +162,14 @@ public class BakssAppServiceImpl implements IBakssAppService
             bakssAppMapper.updateBakssApp(app);
         } else {
             log.info("申请单[" + app.getId() + "]当前流程" + flow.getFlowStep() +  ", 找不到下一个流程. 审核完成");
-//            throw new RuntimeException("申请单[" + App.getId() + "]当前流程" + flow.getFlowStep() +  ", 找不到下一个流程.");
+            handleApprovedApplication(app);
         }
-
     }
 
     public void handleApprovedApplication(BakssApp app) {
+        // 设置订单为完成状态
+        app.setStatus(APPLICATION_COMPLETED);
+
         Integer appType = app.getAppType();
         if (appType.equals(APPLY_BACKUP_PERMISSION)) {
 
@@ -190,8 +192,12 @@ public class BakssAppServiceImpl implements IBakssAppService
 
             BakssBackup bakssBackup = BeanUtils.conventTo(applyBackup, BakssBackup.class);
             BakssBackupVmware bakssBackupVmware = BeanUtils.conventTo(applyBackupVmware, BakssBackupVmware.class);
-            bakssBackupService.insertBakssBackup(bakssBackup);
+            String backupId = bakssBackupService.insertBakssBackup(bakssBackup);
+            bakssBackupVmware.setBackupId(backupId);
             bakssBackupVmwareService.insertBakssBackupVmware(bakssBackupVmware);
+
+            app.setBackupId(backupId); // 申请单中关联备份任务执行状况
+
         } else if(appType.equals(BACKUP_RIGHT_NOW)) {
 
         } else if(appType.equals(BACKUP_AT_TIME)) {
@@ -209,6 +215,7 @@ public class BakssAppServiceImpl implements IBakssAppService
         } else if(appType.equals(MODIFY_MANAGER)) {
 
         }
+        bakssAppMapper.updateBakssApp(app);
     }
 
     public void rejected(BakssApp App) {
