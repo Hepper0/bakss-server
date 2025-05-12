@@ -210,6 +210,9 @@ public class BaseController
         if (requestAttributes != null) {
             HttpServletRequest request = requestAttributes.getRequest();
             server = request.getHeader("server");
+            if (!server.startsWith("http://")) {
+                server = "http://" + server;
+            }
         } else {
             throw new RuntimeException("The header is missing the server field");
         }

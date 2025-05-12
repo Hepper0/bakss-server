@@ -1,4 +1,5 @@
 -- 备份配置
+drop table if exists bakss_backup;
 create table bakss_backup (
     id varchar(50) primary key,
     backup_server varchar(100),
@@ -24,6 +25,7 @@ create table bakss_backup (
     update_time datetime
 );
 
+drop table if exists bakss_backup_vmware;
 create table bakss_backup_vmware (
    id int primary key auto_increment,
    backup_id varchar(50),
@@ -37,6 +39,7 @@ create table bakss_backup_vmware (
    update_time datetime
 )
 
+drop table if exists bakss_backup_strategy;
 create table bakss_backup_strategy (
     id int primary key auto_increment,
     backup_id varchar(50),
@@ -46,6 +49,7 @@ create table bakss_backup_strategy (
     update_time datetime
 )
 
+drop table if exists bakss_backup_validate;
 -- 控制被授权人员的有效期
 create table bakss_backup_validate (
     id int primary key auto_increment,
@@ -60,11 +64,8 @@ create table bakss_backup_validate (
     update_time datetime
 )
 
--- 备份任务表
-create table bakss_backup_task (
 
-);
-
+drop table if exists bakss_app;
 create table bakss_app(
     id varchar(50) primary key,
     app_type int,
@@ -84,6 +85,7 @@ create table bakss_app(
     update_time datetime
 );
 
+drop table if exists bakss_app_flow;
 create table bakss_app_flow (
     id int primary key auto_increment,
     flow_step varchar(20) comment 'assign,leader,owner,dba,dbaLeader,admin',
@@ -99,6 +101,7 @@ create table bakss_app_flow (
     update_time datetime
 )
 
+drop table if exists bakss_apply_backup;
 create table bakss_apply_backup(
     id int primary key auto_increment,
     app_id varchar(50),
@@ -110,7 +113,7 @@ create table bakss_apply_backup(
     machine_type varchar(100),
     data_center varchar(100),
     env varchar(100),
-    platform varchar(100),,
+    platform varchar(100),
     backup_software varchar(100),
     cost_type varchar(30),
     cost_number varchar(50),
@@ -120,6 +123,7 @@ create table bakss_apply_backup(
     update_time datetime
 )
 
+drop table if exists bakss_apply_backup_vmware;
 create table bakss_apply_backup_vmware (
     id int primary key auto_increment,
     app_id varchar(50),
@@ -133,24 +137,26 @@ create table bakss_apply_backup_vmware (
     update_time datetime
 )
 
-create tbale bakss_apply_backup_mysql ()
-create tbale bakss_apply_backup_sqlserver ()
-create tbale bakss_apply_backup_postgresql ()
-create tbale bakss_apply_backup_oracle ()
-create tbale bakss_apply_backup_filesystem ()
+-- create tbale bakss_apply_backup_mysql ()
+-- create tbale bakss_apply_backup_sqlserver ()
+-- create tbale bakss_apply_backup_postgresql ()
+-- create tbale bakss_apply_backup_oracle ()
+-- create tbale bakss_apply_backup_filesystem ()
 
+drop table if exists bakss_apply_directory;
 -- 备份目录：修改目录
 create table bakss_apply_directory(
     id int primary key auto_increment,
     app_id varchar(50),
     old_dir varchar(500),
-    new_dir varchar(500)
+    new_dir varchar(500),
     deleted int default 0,
     create_time datetime default now(),
     create_by varchar(100),
     update_time datetime
 );
 
+drop table if exists bakss_apply_strategy;
 -- 备份策略：删除，禁用，启用策略
 create table bakss_apply_strategy(
     id int primary key auto_increment,
@@ -173,6 +179,7 @@ create table bakss_apply_strategy(
 --    update_time datetime
 -- )
 
+drop table if exists bakss_apply_restore;
 -- 创建恢复
 create table bakss_apply_restore(
     id int primary key auto_increment,
@@ -195,6 +202,7 @@ create table bakss_apply_restore(
 --     update_time datetime
 -- )
 
+drop table if exists bakss_apply_backup_permis;
 -- 备份管理权, 可以同时给多个用户授权
 create table bakss_apply_backup_permis(
       id int primary key auto_increment,
@@ -210,6 +218,7 @@ create table bakss_apply_backup_permis(
       update_time datetime
 );
 
+drop table if exists bakss_apply_change_backup_user;
 -- 修改owner与修改管理员都用同一个表
 create table bakss_apply_change_backup_user(
       id int primary key auto_increment,
@@ -223,7 +232,7 @@ create table bakss_apply_change_backup_user(
       update_time datetime
 );
 
---
+drop table if exists bakss_master_config;
 create table bakss_master_config (
     id int primary key auto_increment,
     master_ip varchar(30),
@@ -251,6 +260,7 @@ create table bakss_master_config (
     update_time datetime
 )
 
+drop table if exists bakss_ushare_store_config;
 create table bakss_ushare_store_config (
     id int primary key auto_increment,
     master varchar(100),
@@ -264,6 +274,7 @@ create table bakss_ushare_store_config (
     update_time datetime
 )
 
+drop table if exists bakss_network_store_config;
 create table bakss_network_store_config (
     id int primary key auto_increment,
     master varchar(100),
@@ -275,6 +286,7 @@ create table bakss_network_store_config (
     update_time datetime
 )
 
+drop table if exists bakss_app_step;
 create table bakss_app_step(
     id int primary key auto_increment,
     app_type int,

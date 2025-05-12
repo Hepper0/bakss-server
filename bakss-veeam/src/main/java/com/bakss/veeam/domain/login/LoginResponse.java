@@ -6,5 +6,5 @@ import lombok.Data;
 @Data
 public class LoginResponse {
     private String token;
-    private Integer expireAt;
+    private Long expireAt;
 }

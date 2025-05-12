@@ -21,7 +21,7 @@ import java.util.Map;
 public class VeeamBasicService {
 
     private final Map<String, String> token = new HashMap<>();
-    private final Map<String, Integer> expireAt = new HashMap<>();
+    private final Map<String, Long> expireAt = new HashMap<>();
 
     public void login(String server) {
         String path = "/base/login";
@@ -31,16 +31,14 @@ public class VeeamBasicService {
         request.setCaptcha("");
         request.setCaptchaId("nH00YUnCvHz0XHx3232333");
         request.setOpenCaptcha(false);
-        Response response = HttpUtils.get("http://" + server + path, null, BeanUtils.beanToMap(request));
-        assert response != null : "请求返回为空";
+        Response response = HttpUtils.post(server + path, null, BeanUtils.beanToMap(request));
         LoginResponse loginResponse = BeanUtils.mapToBean(response.getData(), LoginResponse.class);
         token.put(server, loginResponse.getToken());
         expireAt.put(server, loginResponse.getExpireAt());
     }
 
     public String validate(String server) {
-        // todo 确认返回expireAt单位
-        if (expireAt.get(server) == null || expireAt.get(server) < System.currentTimeMillis()) {
+        if (expireAt.get(server) == null || expireAt.get(server) <= System.currentTimeMillis()) {
             login(server);
         }
 //        VeeamToken veeamToken = new VeeamToken();

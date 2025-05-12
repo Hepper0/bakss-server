@@ -28,7 +28,7 @@ public class VeeamRepositoryService {
 
     public List<VeeamRepository> getVeeamRepositoryList(int page, int pageSize, String server) {
         String token = basicService.validate(server);
-        String path = "/veeamrepository/getVeeamRepositoryList";
+        String path = "/veeamRepository/getVeeamRepositoryList";
         Map<String, String> header = new HashMap<>();
         header.put("x-token", token);
         Map<String, Object> query = new HashMap<>();
@@ -49,7 +49,7 @@ public class VeeamRepositoryService {
 
     public VeeamRepositoryDetail getVeeamRepositoryDetail(String ID, String server) {
         String token = basicService.validate(server);
-        String path = "/veeamrepository/findVeeamRepository";
+        String path = "/veeamRepository/findVeeamRepository";
         Map<String, String> header = new HashMap<>();
         header.put("x-token", token);
         Map<String, Object> query = new HashMap<>();
@@ -61,7 +61,7 @@ public class VeeamRepositoryService {
 
     public void deleteVeeamRepository(String name, String server) {
         String token = basicService.validate(server);
-        String path = "/veeamrepository/deleteVeeamRepository";
+        String path = "/veeamRepository/deleteVeeamRepository";
         Map<String, String> header = new HashMap<>();
         header.put("x-token", token);
         Map<String, Object> query = new HashMap<>();

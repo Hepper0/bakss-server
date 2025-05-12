@@ -2,6 +2,7 @@ package com.bakss.veeam.utils;
 
 import cn.hutool.http.HttpRequest;
 import com.alibaba.fastjson2.JSONObject;
+import com.bakss.framework.web.domain.server.Sys;
 import com.bakss.veeam.domain.Response;
 import com.bakss.veeam.domain.ResponseList;
 import com.bakss.veeam.domain.ResponseObject;
@@ -25,14 +26,14 @@ public class HttpUtils {
 
     public static Response get(String URL, Map<String, String> headers, Map<String, Object> query, Boolean isList) {
         try {
-            log.info("发送get请求，url：{}，headers：{}，,query: {},", URL, headers, query);
+            log.info("send get，url：{}，headers：{}，,query: {},", URL, headers, query);
             String result = HttpRequest
                     .get(URL)
                     .headerMap(headers, true)
                     .form(query == null ? new HashMap<>() : query)
                     .execute()
                     .body();
-            log.info("get请求成功，url：{}， response：{}", URL, result);
+            log.info("get successfully，url：{}， response：{}", URL, result);
             assert result != null : URL + "请求返回为空";
             if (isList) {
                 return BeanUtils.mapToBean(JSONObject.parseObject(result), ResponseList.class);
@@ -41,14 +42,14 @@ public class HttpUtils {
             }
 
         } catch (Exception e) {
-            log.error("发送get请求失败", e);
+            log.error("send get failed", e);
             throw e;
         }
     }
 
     public static Response delete(String URL, Map<String, String> headers, Map<String, Object> query) {
         try {
-            log.info("发送delete请求，url：{}，headers：{}，,query: {},", URL, headers, query);
+            log.info("send delete，url：{}，headers：{}，,query: {},", URL, headers, query);
             String result = HttpRequest
                     .delete(URL)
                     .headerMap(headers, true)
@@ -56,27 +57,27 @@ public class HttpUtils {
                     .execute()
                     .body();
             assert result != null : URL + "请求返回为空";
-            log.info("delete请求成功，url：{}， response：{}", URL, result);
+            log.info("delete successfully，url：{}， response：{}", URL, result);
             return BeanUtils.mapToBean(JSONObject.parseObject(result), Response.class);
         } catch (Exception e) {
-            log.error("发送delete请求失败", e);
+            log.error("send delete failed", e);
             throw e;
         }
     }
 
     public static Response post(String URL, Map<String, String> headers, Map<String, Object> data) {
         try {
-            log.info("发送post请求，url：{}，headers：{}，,query: {},", URL, headers, data);
-            String result = HttpRequest.post(URL).headerMap(headers, true).body(data.toString()).execute().body();
+            log.info("send post，url：{}，headers：{}，,query: {},", URL, headers, data);
+            String result = HttpRequest.post(URL).headerMap(headers, true).body(JSONObject.toJSONString(data)).execute().body();
             assert result != null : URL + "请求返回为空";
-            log.info("post请求成功,url: {}, response: {}", URL,  result);
+            log.info("post successfully, url: {}, response: {}", URL,  result);
             Response response = BeanUtils.mapToBean(JSONObject.parseObject(result), Response.class);
             if (!response.getCode().equals(0)) {
                 throw new RuntimeException("return code: " + response.getCode() + ", msg: " + response.getMsg());
             }
             return response;
         } catch (Exception e) {
-            log.error("发送post请求失败", e);
+            log.error("send post failed", e);
             // 远程端执行的错误要抛出去
             throw e;
         }
@@ -84,22 +85,27 @@ public class HttpUtils {
 
     public static Response put(String URL, Map<String, String> headers, Map<String, Object> data) {
         try {
-            log.info("发送put请求，url：{}，headers：{}，,query: {},", URL, headers, data);
-            String result = HttpRequest.put(URL).headerMap(headers, true).body(data.toString()).execute().body();
+            log.info("send put，url：{}，headers：{}，,query: {},", URL, headers, data);
+            String result = HttpRequest.put(URL).headerMap(headers, true).body(JSONObject.toJSONString(data)).execute().body();
             assert result != null : URL + "请求返回为空";
-            log.info("put请求成功,url: {}, response: {}", URL, result);
+            log.info("put successfully,url: {}, response: {}", URL, result);
             Response response = BeanUtils.mapToBean(JSONObject.parseObject(result), Response.class);
             if (!response.getCode().equals(0)) {
                 throw new RuntimeException("return code: " + response.getCode() + ", msg: " + response.getMsg());
             }
             return response;
         } catch (Exception e) {
-            log.error("发送put请求失败", e);
+            log.error("send put failed", e);
             throw e;
             // 远程端执行的错误要抛出去
 //            if (e.getClass() == VeeanExecError.class) {
 //                throw new RuntimeException(e);
 //            }
         }
+    }
+
+    public static void main(String[] args) {
+        System.out.println(System.currentTimeMillis());
+        Map<String, Object> map = new HashMap<>();
     }
 }
