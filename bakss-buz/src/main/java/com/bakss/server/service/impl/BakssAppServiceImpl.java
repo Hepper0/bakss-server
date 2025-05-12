@@ -180,6 +180,11 @@ public class BakssAppServiceImpl implements IBakssAppService
         } else if(appType.equals(CREATE_BACKUP)) {
             BakssApplyBackup applyBackup = applyBackupService.selectBakssApplyBackupByAppId(app.getId());
             BakssApplyBackupVmware applyBackupVmware = applyBackupVmwareService.selectBakssApplyBackupVmwareByAppId(app.getId());
+
+            if (applyBackup.getName() == null) {
+                applyBackup.setName(String.format("%s_%s", applyBackup.getBackupContent(), app.getId()));
+            }
+
             String vmObjects = applyBackupVmware.getVmObjects();
             List<ViEntity> vmEntities = new ArrayList<>();
             // 查询实时的vm信息
@@ -192,6 +197,8 @@ public class BakssAppServiceImpl implements IBakssAppService
 
             BakssBackup bakssBackup = BeanUtils.conventTo(applyBackup, BakssBackup.class);
             BakssBackupVmware bakssBackupVmware = BeanUtils.conventTo(applyBackupVmware, BakssBackupVmware.class);
+
+            bakssBackup.setBackupJobKey(applyBackup.getName());
             String backupId = bakssBackupService.insertBakssBackup(bakssBackup);
             bakssBackupVmware.setBackupId(backupId);
             bakssBackupVmwareService.insertBakssBackupVmware(bakssBackupVmware);
