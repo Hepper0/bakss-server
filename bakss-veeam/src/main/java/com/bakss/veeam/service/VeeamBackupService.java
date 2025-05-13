@@ -2,21 +2,23 @@ package com.bakss.veeam.service;
 
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
-import com.bakss.veeam.config.VeeamConfig;
+import com.bakss.common.core.redis.RedisCache;
 import com.bakss.veeam.domain.Response;
 import com.bakss.veeam.domain.ResponseList;
-import com.bakss.veeam.domain.VeeamToken;
 import com.bakss.veeam.domain.backup.*;
-import com.bakss.veeam.domain.repository.VeeamRepositoryDetail;
 import com.bakss.veeam.utils.BeanUtils;
 import com.bakss.veeam.utils.HttpUtils;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+
+import static com.bakss.veeam.config.RedisConfig.*;
 
 @Service
 public class VeeamBackupService {
@@ -24,9 +26,41 @@ public class VeeamBackupService {
     @Resource
     VeeamBasicService basicService;
 
+    @Resource
+    RedisCache redisCache;
+
+    private final Long REFRESH_INTERVAL = 1000 * 60 * 10L;
+
 //    private String openApiUrl = VeeamConfig.openApiUrl;
 
 //    private String token;
+    private final String[] backupServers = new String[]{"192.168.1.104"};
+
+    @PostConstruct
+    public void syncBackupData() {
+
+        new Thread(() -> {
+            try {
+                refreshBackupCache();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            try {
+                Thread.sleep(REFRESH_INTERVAL);
+            } catch (Exception ignored){}
+
+        }).start();
+    }
+
+    public void refreshBackupCache() {
+        for(String server: backupServers) {
+            String redisKey = String.format("%s%s:%s", REDIS_VEEAM_HOST_PREFIX, server, "backupJob");
+            List<Backup> backupList = getBackupList(1, 100, server);
+            redisCache.setCacheList(redisKey, backupList.stream().map(BeanUtils::beanToMap).collect(Collectors.toList()));
+            // todo 同步backup表的记录
+        }
+
+    }
 
     public List<Backup> getBackupList(int page, int pageSize, String server) {
         String token = basicService.validate(server);

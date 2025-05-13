@@ -27,7 +27,7 @@ public class VeeamHostController extends BaseController {
 
     @GetMapping("entity")
     public AjaxResult getViEntity(@RequestParam String serverName, @RequestParam String viewMode) {
-        return success(hostService.getViEntity(serverName, viewMode, getBackupServerHost()));
+        return success(hostService.getViEntityList(serverName, viewMode, getBackupServerHost()));
     }
 
     @GetMapping("datastore")

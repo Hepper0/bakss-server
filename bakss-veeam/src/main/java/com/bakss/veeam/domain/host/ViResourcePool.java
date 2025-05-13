@@ -3,7 +3,7 @@ package com.bakss.veeam.domain.host;
 import lombok.Data;
 
 @Data
-public class ViResourcePool {
+public class ViResourcePool extends HostBase {
     private  String id;
     private String name;
     private Long capacity;

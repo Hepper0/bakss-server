@@ -1,9 +1,12 @@
 package com.bakss.server.service.impl;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import cn.hutool.json.JSONObject;
 import com.bakss.common.core.domain.model.LoginUser;
+import com.bakss.common.core.redis.RedisCache;
 import com.bakss.common.utils.DateUtils;
 import com.bakss.common.utils.SecurityUtils;
 import com.bakss.server.domain.*;
@@ -12,7 +15,6 @@ import com.bakss.server.mapper.BakssAppFlowMapper;
 import com.bakss.server.mapper.BakssAppStepMapper;
 import com.bakss.server.service.*;
 import com.bakss.veeam.domain.host.ViEntity;
-import com.bakss.veeam.service.VeeamHostService;
 import com.bakss.veeam.service.VeeamJobService;
 import com.bakss.veeam.utils.BeanUtils;
 import org.slf4j.Logger;
@@ -23,6 +25,7 @@ import com.bakss.server.mapper.BakssAppMapper;
 import javax.annotation.Resource;
 
 import static com.bakss.server.config.Config.*;
+import static com.bakss.veeam.config.RedisConfig.*;
 
 /**
  * 申请Service业务层处理
@@ -61,7 +64,7 @@ public class BakssAppServiceImpl implements IBakssAppService
     private VeeamJobService veeamJobService;
 
     @Resource
-    private VeeamHostService veeamHostService;
+    private RedisCache redisCache;
 
     /**
      * 查询申请
@@ -186,12 +189,10 @@ public class BakssAppServiceImpl implements IBakssAppService
             }
 
             String vmObjects = applyBackupVmware.getVmObjects();
-            List<ViEntity> vmEntities = new ArrayList<>();
-            // 查询实时的vm信息
-            for (String vm : vmObjects.split(",")) {
-                ViEntity entity = veeamHostService.getViEntity(vm, "HostAndVms", applyBackup.getBackupServer());
-                vmEntities.add(entity);
-            }
+            List<JSONObject> entityCache = redisCache.getCacheList(String.format("%s%s:%s", REDIS_VEEAM_HOST_PREFIX, applyBackup.getBackupServer(), "entity"));
+            List<JSONObject> vmEntitiesJSON = entityCache.stream().filter(e -> Arrays.asList(vmObjects.split(",")).contains(e.getStr("id"))).collect(Collectors.toList());
+            List<ViEntity> vmEntities = vmEntitiesJSON.stream().map(v -> BeanUtils.mapToBean(v, ViEntity.class)).collect(Collectors.toList());
+
             // 创建备份
             veeamJobService.createJob(applyBackup.getName(), applyBackup.getDescription(), vmEntities, applyBackupVmware.getRepository(), applyBackupVmware.getAfterJob(), applyBackup.getBackupServer());
 

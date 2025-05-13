@@ -3,7 +3,7 @@ package com.bakss.veeam.domain.host;
 import lombok.Data;
 
 @Data
-public class VeeamHost {
+public class VeeamHost extends HostBase {
     private String ID;
     private Integer type;
     private String name;
