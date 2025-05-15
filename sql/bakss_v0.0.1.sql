@@ -232,6 +232,20 @@ create table bakss_apply_change_backup_user(
       update_time datetime
 );
 
+
+drop table if exists bakss_server_config;
+create table bakss_server_config(
+    id int primary key auto_increment,
+    hostname varchar(100),
+    ip varchar(50),
+    port int,
+    status int,
+    deleted int default 0,
+    create_time datetime default now(),
+    create_by varchar(100),
+    update_time datetime
+);
+
 drop table if exists bakss_master_config;
 create table bakss_master_config (
     id int primary key auto_increment,

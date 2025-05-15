@@ -85,3 +85,14 @@ INSERT INTO `bakss`.`sys_menu`(`menu_id`, `menu_name`, `parent_id`, `order_num`,
 VALUES (701, '详情', 8, 1, '/task/detail', 'task/detail', NULL, '', 1, 0, 'C', '1', '0', 'task:detail', '', 'admin', '任务详情页面');
 
 
+-- 菜单 SQL
+insert into sys_menu (id, menu_name, parent_id, order_num, path, component, is_frame, is_cache, menu_type, visible, status, perms, icon, create_by, create_time, update_by, update_time, remark)
+values(305, 'Veeam服务器', 6, 5, 'config', 'veeam/config/server/index', 1, 0, 'C', '0', '0', 'veeam:server:list', '#', 'admin', sysdate(), '', null, 'Veeam服务器菜单');
+
+-- 按钮 SQL
+insert into sys_menu (menu_id, menu_name, parent_id, order_num, path, component, is_frame, is_cache, menu_type, visible, status, perms, icon, create_by, create_time, update_by, update_time, remark)
+values
+(3051,'Veeam服务器查询', 305, '1',  '#', '', 1, 0, 'F', '0', '0', 'veeam:server:query',        '#', 'admin', sysdate(), '', null, ''),
+(3052,'Veeam服务器新增', 305, '2',  '#', '', 1, 0, 'F', '0', '0', 'veeam:server:add',          '#', 'admin', sysdate(), '', null, ''),
+(3053,'Veeam服务器修改', 305, '3',  '#', '', 1, 0, 'F', '0', '0', 'veeam:server:edit',         '#', 'admin', sysdate(), '', null, ''),
+(3054,'Veeam服务器删除', 305, '4',  '#', '', 1, 0, 'F', '0', '0', 'veeam:server:remove',       '#', 'admin', sysdate(), '', null, '');

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bakss.veeam.mapper.BakssServerConfigMapper">
+    
+    <resultMap type="BakssServerConfig" id="BakssServerConfigResult">
+        <result property="id"    column="id"    />
+        <result property="hostname"    column="hostname"    />
+        <result property="ip"    column="ip"    />
+        <result property="port"    column="port"    />
+        <result property="status"    column="status"    />
+        <result property="deleted"    column="deleted"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectBakssServerConfigVo">
+        select id, hostname, ip, port, status, deleted, create_time, create_by, update_time from bakss_server_config
+    </sql>
+
+    <select id="selectBakssServerConfigList" parameterType="BakssServerConfig" resultMap="BakssServerConfigResult">
+        <include refid="selectBakssServerConfigVo"/>
+        <where>  
+            <if test="hostname != null  and hostname != ''"> and hostname like concat('%', #{hostname}, '%')</if>
+            <if test="ip != null  and ip != ''"> and ip = #{ip}</if>
+            <if test="port != null "> and port = #{port}</if>
+            <if test="status != null "> and status = #{status}</if>
+            <if test="deleted != null "> and deleted = #{deleted}</if>
+        </where>
+    </select>
+    
+    <select id="selectBakssServerConfigById" parameterType="Long" resultMap="BakssServerConfigResult">
+        <include refid="selectBakssServerConfigVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertBakssServerConfig" parameterType="BakssServerConfig" useGeneratedKeys="true" keyProperty="id">
+        insert into bakss_server_config
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="hostname != null">hostname,</if>
+            <if test="ip != null">ip,</if>
+            <if test="port != null">port,</if>
+            <if test="status != null">status,</if>
+            <if test="deleted != null">deleted,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="hostname != null">#{hostname},</if>
+            <if test="ip != null">#{ip},</if>
+            <if test="port != null">#{port},</if>
+            <if test="status != null">#{status},</if>
+            <if test="deleted != null">#{deleted},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBakssServerConfig" parameterType="BakssServerConfig">
+        update bakss_server_config
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="hostname != null">hostname = #{hostname},</if>
+            <if test="ip != null">ip = #{ip},</if>
+            <if test="port != null">port = #{port},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="deleted != null">deleted = #{deleted},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBakssServerConfigById" parameterType="Long">
+        delete from bakss_server_config where id = #{id}
+    </delete>
+
+    <delete id="deleteBakssServerConfigByIds" parameterType="String">
+        delete from bakss_server_config where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
