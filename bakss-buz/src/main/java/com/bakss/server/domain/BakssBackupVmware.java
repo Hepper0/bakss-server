@@ -25,6 +25,10 @@ public class BakssBackupVmware extends BaseEntity
 
     private String afterJob;
 
+    private String scheduleTime;
+    private String scheduleDateType;
+    private String scheduleDay;
+
 
     private Long deleted;
 

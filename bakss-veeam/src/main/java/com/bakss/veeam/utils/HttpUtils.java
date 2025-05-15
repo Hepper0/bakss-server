@@ -20,26 +20,34 @@ public class HttpUtils {
 
     private static final Logger log = LoggerFactory.getLogger(HttpUtils.class);
 
+    private final static Integer REQUEST_TIME = 10000;
+
     public static Response get(String URL, Map<String, String> headers, Map<String, Object> query) {
         return get(URL, headers, query, false);
     }
 
     public static Response get(String URL, Map<String, String> headers, Map<String, Object> query, Boolean isList) {
         try {
-            log.info("send get，url：{}，headers：{}，,query: {},", URL, headers, query);
+            log.info("send get,url:{},headers:{},,query: {},", URL, headers, query);
             String result = HttpRequest
                     .get(URL)
                     .headerMap(headers, true)
                     .form(query == null ? new HashMap<>() : query)
+                    .timeout(REQUEST_TIME)
                     .execute()
                     .body();
-            log.info("get successfully，url：{}， response：{}", URL, result);
+            log.info("get successfully,url:{}, response:{}", URL, result);
             assert result != null : URL + "请求返回为空";
+            Response response;
             if (isList) {
-                return BeanUtils.mapToBean(JSONObject.parseObject(result), ResponseList.class);
+                response = BeanUtils.mapToBean(JSONObject.parseObject(result), ResponseList.class);
             } else {
-                return BeanUtils.mapToBean(JSONObject.parseObject(result), ResponseObject.class);
+                response = BeanUtils.mapToBean(JSONObject.parseObject(result), ResponseObject.class);
             }
+            if (response.getCode() != 0) {
+                throw new RuntimeException("return code: " + response.getCode() + ", msg: " + response.getMsg());
+            }
+            return response;
 
         } catch (Exception e) {
             log.error("send get failed", e);
@@ -49,16 +57,21 @@ public class HttpUtils {
 
     public static Response delete(String URL, Map<String, String> headers, Map<String, Object> query) {
         try {
-            log.info("send delete，url：{}，headers：{}，,query: {},", URL, headers, query);
+            log.info("send delete,url:{}, headers:{}, query: {},", URL, headers, query);
             String result = HttpRequest
                     .delete(URL)
                     .headerMap(headers, true)
                     .form(query == null ? new HashMap<>() : query)
+                    .timeout(REQUEST_TIME)
                     .execute()
                     .body();
             assert result != null : URL + "请求返回为空";
-            log.info("delete successfully，url：{}， response：{}", URL, result);
-            return BeanUtils.mapToBean(JSONObject.parseObject(result), Response.class);
+            log.info("delete successfully, url:{},  response:{}", URL, result);
+            Response response = BeanUtils.mapToBean(JSONObject.parseObject(result), Response.class);
+            if (response.getCode() != 0) {
+                throw new RuntimeException("return code: " + response.getCode() + ", msg: " + response.getMsg());
+            }
+            return response;
         } catch (Exception e) {
             log.error("send delete failed", e);
             throw e;
@@ -67,8 +80,14 @@ public class HttpUtils {
 
     public static Response post(String URL, Map<String, String> headers, Map<String, Object> data) {
         try {
-            log.info("send post，url：{}，headers：{}，,query: {},", URL, headers, data);
-            String result = HttpRequest.post(URL).headerMap(headers, true).body(JSONObject.toJSONString(data)).execute().body();
+            log.info("send post, url:{}, headers:{}, query: {},", URL, headers, data);
+            String result = HttpRequest
+                    .post(URL)
+                    .headerMap(headers, true)
+                    .body(JSONObject.toJSONString(data))
+                    .timeout(REQUEST_TIME)
+                    .execute()
+                    .body();
             assert result != null : URL + "请求返回为空";
             log.info("post successfully, url: {}, response: {}", URL,  result);
             Response response = BeanUtils.mapToBean(JSONObject.parseObject(result), Response.class);
@@ -85,10 +104,16 @@ public class HttpUtils {
 
     public static Response put(String URL, Map<String, String> headers, Map<String, Object> data) {
         try {
-            log.info("send put，url：{}，headers：{}，,query: {},", URL, headers, data);
-            String result = HttpRequest.put(URL).headerMap(headers, true).body(JSONObject.toJSONString(data)).execute().body();
+            log.info("send put,url:{}, headers:{}, query: {},", URL, headers, data);
+            String result = HttpRequest
+                    .put(URL)
+                    .headerMap(headers, true)
+                    .body(JSONObject.toJSONString(data))
+                    .timeout(REQUEST_TIME)
+                    .execute()
+                    .body();
             assert result != null : URL + "请求返回为空";
-            log.info("put successfully,url: {}, response: {}", URL, result);
+            log.info("put successfully, url: {}, response: {}", URL, result);
             Response response = BeanUtils.mapToBean(JSONObject.parseObject(result), Response.class);
             if (!response.getCode().equals(0)) {
                 throw new RuntimeException("return code: " + response.getCode() + ", msg: " + response.getMsg());

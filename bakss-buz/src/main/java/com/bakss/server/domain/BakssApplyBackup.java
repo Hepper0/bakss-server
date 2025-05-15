@@ -50,4 +50,10 @@ public class BakssApplyBackup extends BaseEntity
 
     private String costNumber;
 
+    private String scheduleTime;
+
+    private String scheduleDateType;
+
+    private String scheduleDay;
+
 }

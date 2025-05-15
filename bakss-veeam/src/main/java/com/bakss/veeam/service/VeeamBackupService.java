@@ -34,7 +34,7 @@ public class VeeamBackupService {
 //    private String openApiUrl = VeeamConfig.openApiUrl;
 
 //    private String token;
-    private final String[] backupServers = new String[]{"192.168.1.104"};
+    private final String[] backupServers = new String[]{"192.168.1.104:8888"};
 
     @PostConstruct
     public void syncBackupData() {

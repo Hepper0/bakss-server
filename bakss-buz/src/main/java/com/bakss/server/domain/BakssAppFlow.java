@@ -2,6 +2,7 @@ package com.bakss.server.domain;
 
 import com.bakss.common.annotation.Excel;
 import com.bakss.common.core.domain.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import java.util.Date;
 
@@ -39,6 +40,7 @@ public class BakssAppFlow extends BaseEntity
     @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
     private Long reviewStatus;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date reviewTime;
 
     /** $column.columnComment */

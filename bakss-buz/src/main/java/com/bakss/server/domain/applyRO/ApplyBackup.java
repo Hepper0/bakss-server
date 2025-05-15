@@ -36,4 +36,8 @@ public class ApplyBackup extends ApplyBase {
 
     private String costNumber;
 
+    private String scheduleTime;
+    private String scheduleDateType;
+    private String scheduleDay;
+
 }

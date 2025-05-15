@@ -35,12 +35,12 @@ public class VeeamHostService {
     private void updateCache(String server, String key, HostBase obj) {
         String redisKey = String.format("%s%s:%s", REDIS_VEEAM_HOST_PREFIX, server, key);
         List<JSONObject> cache = redisCache.getCacheList(redisKey);
-        List<String> cacheKeys = cache.stream().map(c -> c.getString("id")).collect(Collectors.toList());
+        List<String> cacheKeys = cache.stream().map(c -> c.getString("ID")).collect(Collectors.toList());
         if(cacheKeys.contains(obj.getId())) {
-            JSONObject existedObj = cache.stream().filter(c->obj.getId().equals(c.getString("id"))).collect(Collectors.toList()).get(0);
+            JSONObject existedObj = cache.stream().filter(c->obj.getId().equals(c.getString("ID"))).collect(Collectors.toList()).get(0);
             cache.remove(existedObj);
         }
-        cache.add((JSONObject) BeanUtils.beanToMap(obj));
+        cache.add(new JSONObject(BeanUtils.beanToMap(obj)));
         redisCache.setCacheList(redisKey, cache);
     }
 
