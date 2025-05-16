@@ -18,7 +18,7 @@ public interface BakssBackupMapper
      * @param id 备份管理主键
      * @return 备份管理
      */
-    public BakssBackup selectBakssBackupById(Long id);
+    public BakssBackup selectBakssBackupById(String id);
 
     /**
      * 查询备份管理列表

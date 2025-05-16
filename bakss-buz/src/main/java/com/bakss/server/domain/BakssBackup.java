@@ -29,6 +29,8 @@ public class BakssBackup extends BaseEntity
     @Excel(name = "软件版本", readConverterExp = "$column.readConverterExp()")
     private String softwareVersion;
 
+    private Integer backupType;
+
     /** 客户端名称 */
     @Excel(name = "客户端名称", readConverterExp = "$column.readConverterExp()")
     private String clientName;
@@ -42,8 +44,8 @@ public class BakssBackup extends BaseEntity
     private String backupIP;
 
     /** 应用名称 */
-    @Excel(name = "应用名称", readConverterExp = "$column.readConverterExp()")
-    private String appName;
+    @Excel(name = "任务名称", readConverterExp = "$column.readConverterExp()")
+    private String appName; // 当作taskName 使用
 
     /* 环境 */
     private String env;

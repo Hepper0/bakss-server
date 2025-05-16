@@ -95,7 +95,7 @@ public class BakssBackupController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('service:backup:query')")
     @GetMapping(value = "/{id}")
-    public AjaxResult getInfo(@PathVariable("id") Long id)
+    public AjaxResult getInfo(@PathVariable("id") String id)
     {
         return success(bakssBackupService.selectBakssBackupById(id));
     }

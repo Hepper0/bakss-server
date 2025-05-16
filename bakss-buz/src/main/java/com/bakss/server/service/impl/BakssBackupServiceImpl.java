@@ -29,7 +29,7 @@ public class BakssBackupServiceImpl implements IBakssBackupService
      * @return 备份管理
      */
     @Override
-    public BakssBackup selectBakssBackupById(Long id)
+    public BakssBackup selectBakssBackupById(String id)
     {
         return bakssBackupMapper.selectBakssBackupById(id);
     }

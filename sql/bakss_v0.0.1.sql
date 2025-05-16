@@ -4,6 +4,7 @@ create table bakss_backup (
     id varchar(50) primary key,
     backup_server varchar(100),
     backup_software varchar(50),
+    backup_type int,
     software_version varchar(10),
     client_name varchar(50),
     app_name varchar(50),

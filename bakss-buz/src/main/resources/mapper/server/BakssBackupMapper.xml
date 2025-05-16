@@ -58,7 +58,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
     </select>
     
-    <select id="selectBakssBackupById" parameterType="Long" resultMap="BakssBackupResult">
+    <select id="selectBakssBackupById" parameterType="String" resultMap="BakssBackupResult">
         <include refid="selectBakssBackupVo"/>
         where id = #{id}
     </select>

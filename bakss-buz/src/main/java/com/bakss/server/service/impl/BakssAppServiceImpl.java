@@ -184,9 +184,9 @@ public class BakssAppServiceImpl implements IBakssAppService
             BakssApplyBackup applyBackup = applyBackupService.selectBakssApplyBackupByAppId(app.getId());
             BakssApplyBackupVmware applyBackupVmware = applyBackupVmwareService.selectBakssApplyBackupVmwareByAppId(app.getId());
 
-            if (applyBackup.getName() == null) {
-                applyBackup.setName(String.format("%s_%s", applyBackup.getBackupContent(), app.getId()));
-            }
+//            if (applyBackup.getName() == null) {
+//                applyBackup.setName(String.format("%s_%s", applyBackup.getBackupContent(), app.getId()));
+//            }
 
             String vmObjects = applyBackupVmware.getVmObjects();
             List<JSONObject> entityCache = redisCache.getCacheList(String.format("%s%s:%s", REDIS_VEEAM_HOST_PREFIX, applyBackup.getBackupServer(), "entity"));
@@ -194,7 +194,7 @@ public class BakssAppServiceImpl implements IBakssAppService
             List<ViEntity> vmEntities = vmEntitiesJSON.stream().map(v -> BeanUtils.mapToBean(v, ViEntity.class)).collect(Collectors.toList());
 
             // 创建备份
-            veeamJobService.createJob(applyBackup.getName(), applyBackup.getDescription(), vmEntities, applyBackupVmware.getRepository(), applyBackupVmware.getAfterJob(), applyBackup.getBackupServer());
+            veeamJobService.createJob(applyBackup.getAppName(), applyBackup.getDescription(), vmEntities, applyBackupVmware.getRepository(), applyBackupVmware.getAfterJob(), applyBackup.getBackupServer());
 
             BakssBackup bakssBackup = BeanUtils.conventTo(applyBackup, BakssBackup.class);
             BakssBackupVmware bakssBackupVmware = BeanUtils.conventTo(applyBackupVmware, BakssBackupVmware.class);
@@ -241,7 +241,7 @@ public class BakssAppServiceImpl implements IBakssAppService
             isDB = app.getIsDb();
         } else {
             String backupId = app.getBackupId().split(",")[0];
-            BakssBackup backup = bakssBackupService.selectBakssBackupById(Long.valueOf(backupId));
+            BakssBackup backup = bakssBackupService.selectBakssBackupById(backupId);
             isDB = DB_TYPES.contains(backup.getBackupContent());
         }
         BakssAppStep bakssAppStep = bakssAppStepMapper.getBakssAppStepByAppType((long)app.getAppType(), isDB);

@@ -18,7 +18,7 @@ public interface IBakssBackupService
      * @param id 备份主键
      * @return 备份
      */
-    public BakssBackup selectBakssBackupById(Long id);
+    public BakssBackup selectBakssBackupById(String id);
 
     /**
      * 查询备份列表
