@@ -15,6 +15,8 @@ import com.bakss.server.mapper.BakssAppFlowMapper;
 import com.bakss.server.mapper.BakssAppStepMapper;
 import com.bakss.server.service.*;
 import com.bakss.veeam.domain.host.ViEntity;
+import com.bakss.veeam.domain.job.ApplyBackupJob;
+import com.bakss.veeam.domain.job.schedule.ApplyBackupJobScheduleDaily;
 import com.bakss.veeam.service.VeeamJobService;
 import com.bakss.veeam.utils.BeanUtils;
 import org.slf4j.Logger;
@@ -193,13 +195,27 @@ public class BakssAppServiceImpl implements IBakssAppService
             List<JSONObject> vmEntitiesJSON = entityCache.stream().filter(e -> Arrays.asList(vmObjects.split(",")).contains(e.getStr("id"))).collect(Collectors.toList());
             List<ViEntity> vmEntities = vmEntitiesJSON.stream().map(v -> BeanUtils.mapToBean(v, ViEntity.class)).collect(Collectors.toList());
 
+            // 对接createJob
+            ApplyBackupJob applyBackupJob = new ApplyBackupJob();
+            applyBackupJob.setName(applyBackup.getAppName());
+            applyBackupJob.setAfterJobName(applyBackupVmware.getAfterJob());
+            applyBackupJob.setDescription(applyBackup.getDescription());
+            applyBackupJob.setVmObjects(vmEntities);
+            applyBackupJob.setIsScheduleEnable(true); // todo 第一期默认true
+            applyBackupJob.setRepository(applyBackupVmware.getRepository());
+            applyBackupJob.setPolicy("Daily"); // todo 第一期默认Daily
+
+            ApplyBackupJobScheduleDaily scheduleDaily = new ApplyBackupJobScheduleDaily();
+            scheduleDaily.setStartDateTimeLocal(applyBackup.getScheduleTime());
+            scheduleDaily.setDayNumberInMonth(applyBackup.getScheduleDateType());
+            scheduleDaily.setDayOfWeek(applyBackup.getScheduleDay().split(","));
             // 创建备份
-            veeamJobService.createJob(applyBackup.getAppName(), applyBackup.getDescription(), vmEntities, applyBackupVmware.getRepository(), applyBackupVmware.getAfterJob(), applyBackup.getBackupServer());
+            veeamJobService.createJob(applyBackupJob, applyBackup.getBackupServer());
 
             BakssBackup bakssBackup = BeanUtils.conventTo(applyBackup, BakssBackup.class);
             BakssBackupVmware bakssBackupVmware = BeanUtils.conventTo(applyBackupVmware, BakssBackupVmware.class);
 
-            bakssBackup.setBackupJobKey(applyBackup.getName());
+            bakssBackup.setBackupJobKey(applyBackup.getName()); // todo name是可以修改的， key修改为记录jobId
             String backupId = bakssBackupService.insertBakssBackup(bakssBackup);
             bakssBackupVmware.setBackupId(backupId);
             bakssBackupVmwareService.insertBakssBackupVmware(bakssBackupVmware);

@@ -87,12 +87,25 @@ VALUES (701, '详情', 8, 1, '/task/detail', 'task/detail', NULL, '', 1, 0, 'C',
 
 -- 菜单 SQL
 insert into sys_menu (id, menu_name, parent_id, order_num, path, component, is_frame, is_cache, menu_type, visible, status, perms, icon, create_by, create_time, update_by, update_time, remark)
-values(305, 'Veeam服务器', 6, 5, 'config', 'veeam/config/server/index', 1, 0, 'C', '0', '0', 'veeam:server:list', '#', 'admin', sysdate(), '', null, 'Veeam服务器菜单');
+values(305, '服务器管理', 6, 5, 'serverConfig', 'basic/server/index', 1, 0, 'C', '0', '0', 'basic:server:list', '#', 'admin', sysdate(), '', null, 'Veeam服务器菜单');
 
 -- 按钮 SQL
 insert into sys_menu (menu_id, menu_name, parent_id, order_num, path, component, is_frame, is_cache, menu_type, visible, status, perms, icon, create_by, create_time, update_by, update_time, remark)
 values
-(3051,'Veeam服务器查询', 305, '1',  '#', '', 1, 0, 'F', '0', '0', 'veeam:server:query',        '#', 'admin', sysdate(), '', null, ''),
-(3052,'Veeam服务器新增', 305, '2',  '#', '', 1, 0, 'F', '0', '0', 'veeam:server:add',          '#', 'admin', sysdate(), '', null, ''),
-(3053,'Veeam服务器修改', 305, '3',  '#', '', 1, 0, 'F', '0', '0', 'veeam:server:edit',         '#', 'admin', sysdate(), '', null, ''),
-(3054,'Veeam服务器删除', 305, '4',  '#', '', 1, 0, 'F', '0', '0', 'veeam:server:remove',       '#', 'admin', sysdate(), '', null, '');
+(3051,'服务器查询', 305, '1',  '#', '', 1, 0, 'F', '0', '0', 'basic:server:query',        '#', 'admin', sysdate(), '', null, ''),
+(3052,'服务器新增', 305, '2',  '#', '', 1, 0, 'F', '0', '0', 'basic:server:add',          '#', 'admin', sysdate(), '', null, ''),
+(3053,'服务器修改', 305, '3',  '#', '', 1, 0, 'F', '0', '0', 'basic:server:edit',         '#', 'admin', sysdate(), '', null, ''),
+(3054,'服务器删除', 305, '4',  '#', '', 1, 0, 'F', '0', '0', 'basic:server:remove',       '#', 'admin', sysdate(), '', null, '');
+
+
+-- 菜单 SQL
+insert into sys_menu (menu_id, menu_name, parent_id, order_num, path, component, is_frame, is_cache, menu_type, visible, status, perms, icon, create_by, create_time, update_by, update_time, remark)
+values(306, '仓库管理', 6, 6, 'repository', 'basic/repository/index', 1, 0, 'C', '0', '0', 'basic:repository:list', '#', 'admin', sysdate(), '', null, '仓库管理菜单');
+
+-- 按钮 SQL
+insert into sys_menu (menu_id, menu_name, parent_id, order_num, path, component, is_frame, is_cache, menu_type, visible, status, perms, icon, create_by, create_time, update_by, update_time, remark)
+values
+(3061, '仓库管理查询', 306, '1',  '#', '', 1, 0, 'F', '0', '0', 'basic:repository:query',        '#', 'admin', sysdate(), '', null, ''),
+(3062, '仓库管理新增', 306, '2',  '#', '', 1, 0, 'F', '0', '0', 'basic:repository:add',          '#', 'admin', sysdate(), '', null, ''),
+(3063, '仓库管理修改', 306, '3',  '#', '', 1, 0, 'F', '0', '0', 'basic:repository:edit',         '#', 'admin', sysdate(), '', null, ''),
+(3064, '仓库管理删除', 306, '4',  '#', '', 1, 0, 'F', '0', '0', 'basic:repository:remove',       '#', 'admin', sysdate(), '', null, ''),

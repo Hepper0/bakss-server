@@ -7,6 +7,7 @@ import com.bakss.veeam.config.VeeamConfig;
 import com.bakss.veeam.domain.Response;
 import com.bakss.veeam.domain.VeeamToken;
 import com.bakss.veeam.domain.host.ViEntity;
+import com.bakss.veeam.domain.job.ApplyBackupJob;
 import com.bakss.veeam.domain.job.BackupJob;
 import com.bakss.veeam.domain.job.BackupJobDetail;
 import com.bakss.veeam.utils.BeanUtils;
@@ -106,13 +107,17 @@ public class VeeamJobService {
         operateJob("delete", path, name, server);
     }
 
-    public void createJob(String name, String description, List<ViEntity> vmObjects, String repository, String afterJobName, String server) {
+    public void createJob(ApplyBackupJob applyBackupJob, String server) {
+        String name = applyBackupJob.getName();
+        String description = applyBackupJob.getDescription();
+        String repository = applyBackupJob.getRepository();
+        String afterJobName = applyBackupJob.getAfterJobName();
         String token = basicService.validate(server);
         String path = "/job/createJob";
         BackupJobDetail jobDetail = new BackupJobDetail();
         jobDetail.setName(name);
         jobDetail.setDescription(description);
-        jobDetail.setSelectedVmObjects(vmObjects);
+        jobDetail.setSelectedVmObjects(applyBackupJob.getVmObjects());
 
         JSONObject backupProxyOptions = new JSONObject();
         backupProxyOptions.put("policyType", "Auto");
@@ -139,13 +144,13 @@ public class VeeamJobService {
         jobDetail.setApplicationAwareOptions(new ArrayList<>());
 
         JSONObject schedule = new JSONObject();
-        schedule.put("isScheduleEnabled", true);
-        schedule.put("policy", "Daily");
-        JSONObject optionsDaily = new JSONObject();
-        optionsDaily.put("startDateTimeLocal", "00:00");
-        optionsDaily.put("dayNumberInMonth", "Weekdays");
-        optionsDaily.put("dayOfWeek", new JSONArray());
-        schedule.put("optionsDaily", optionsDaily);
+        schedule.put("isScheduleEnabled", applyBackupJob.getIsScheduleEnable());
+        schedule.put("policy", applyBackupJob.getPolicy());
+//        JSONObject optionsDaily = new JSONObject();
+//        optionsDaily.put("startDateTimeLocal", "00:00");
+//        optionsDaily.put("dayNumberInMonth", "Weekdays");
+//        optionsDaily.put("dayOfWeek", new JSONArray());
+        schedule.put("optionsDaily", BeanUtils.beanToMap(applyBackupJob.getScheduleDaily()));
 
         JSONObject optionsMonthly = new JSONObject();
         optionsMonthly.put("time", "00:00");
