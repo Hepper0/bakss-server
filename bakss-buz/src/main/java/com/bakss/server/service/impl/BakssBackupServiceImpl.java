@@ -47,7 +47,7 @@ public class BakssBackupServiceImpl implements IBakssBackupService
     }
 
     @Override
-    public List<BakssBackup> selectBakssBackupByIds(Integer[] ids)
+    public List<BakssBackup> selectBakssBackupByIds(String[] ids)
     {
         return bakssBackupMapper.selectBakssBackupByIds(ids);
     }

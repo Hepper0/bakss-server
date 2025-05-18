@@ -42,7 +42,7 @@ public class BakssBackupController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('service:backup:query')")
     @GetMapping("")
-    public TableDataInfo getListByIds(Integer[] ids)
+    public TableDataInfo getListByIds(String[] ids)
     {
         startPage();
         List<BakssBackup> list = bakssBackupService.selectBakssBackupByIds(ids);

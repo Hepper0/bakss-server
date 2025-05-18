@@ -27,7 +27,7 @@ public interface IBakssBackupService
      * @return 备份集合
      */
     public List<BakssBackup> selectBakssBackupList(BakssBackup bakssBackup);
-    public List<BakssBackup> selectBakssBackupByIds(Integer[] ids);
+    public List<BakssBackup> selectBakssBackupByIds(String[] ids);
 
     public List<BakssBackup> getBackupList(String user);
     public List<BakssBackup> getAllBackupList();

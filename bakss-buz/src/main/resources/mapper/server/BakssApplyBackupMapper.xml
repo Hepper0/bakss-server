@@ -19,6 +19,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="backupSoftware"    column="backup_software"    />
         <result property="costType"    column="cost_type"    />
         <result property="costNumber"    column="cost_number"    />
+        <result property="policy"    column="policy"    />
+        <result property="isScheduleEnabled"    column="is_schedule_enabled"    />
         <result property="scheduleTime"    column="schedule_time"    />
         <result property="scheduleDateType"    column="schedule_date_type"    />
         <result property="scheduleDay"    column="schedule_day"    />
@@ -29,7 +31,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectBakssApplyBackupVo">
-        select id, app_id, backup_content, machine_type, data_center, env, platform, backup_software, app_name, backup_ip, backup_port, backup_server, cost_type, cost_number, schedule_time, schedule_date_type, schedule_day, deleted, create_time, create_by, update_time from bakss_apply_backup
+        select id, app_id, backup_content, machine_type, data_center, env, platform, backup_software, app_name, backup_ip, backup_port, backup_server, cost_type, cost_number, policy, is_schedule_enabled, schedule_time, schedule_date_type, schedule_day, deleted, create_time, create_by, update_time from bakss_apply_backup
     </sql>
 
     <select id="selectBakssApplyBackupList" parameterType="BakssApplyBackup" resultMap="BakssApplyBackupResult">
@@ -74,6 +76,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="backupServer != null">backup_server,</if>
             <if test="costType != null">cost_type,</if>
             <if test="costNumber != null">cost_number,</if>
+            <if test="policy != null">policy,</if>
+            <if test="isScheduleEnabled != null">is_schedule_enabled,</if>
             <if test="scheduleTime != null">schedule_time,</if>
             <if test="scheduleDateType != null">schedule_date_type,</if>
             <if test="scheduleDay != null">schedule_day,</if>
@@ -96,6 +100,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="backupServer != null">#{backupServer},</if>
             <if test="costType != null">#{costType},</if>
             <if test="costNumber != null">#{costNumber},</if>
+            <if test="policy != null">#{policy},</if>
+            <if test="isScheduleEnabled != null">#{is_schedule_enabled},</if>
             <if test="scheduleTime != null">#{scheduleTime},</if>
             <if test="scheduleDateType != null">#{scheduleDateType},</if>
             <if test="scheduleDay != null">#{scheduleDay},</if>
@@ -122,6 +128,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="backupServer != null">backup_server = #{backupServer},</if>
             <if test="costType != null">cost_type = #{costType},</if>
             <if test="costNumber != null">cost_number = #{costNumber},</if>
+            <if test="policy != null">policy = #{policy},</if>
+            <if test="isScheduleEnabled != null">is_schedule_endabled = #{isScheduleEnabled},</if>
             <if test="scheduleTime != null">schedule_time = #{scheduleTime},</if>
             <if test="scheduleDateType != null">schedule_date_type = #{scheduleDateType},</if>
             <if test="scheduleDay != null">schedule_day = #{scheduleDay},</if>

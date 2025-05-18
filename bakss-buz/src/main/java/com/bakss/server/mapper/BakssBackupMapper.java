@@ -25,7 +25,7 @@ public interface BakssBackupMapper
      * 
      * @return 备份管理集合
      */
-    public List<BakssBackup> selectBakssBackupByIds(Integer[] ids);
+    public List<BakssBackup> selectBakssBackupByIds(String[] ids);
 
     public List<BakssBackup> selectBakssBackupList(BakssBackup bakssBackup);
 
