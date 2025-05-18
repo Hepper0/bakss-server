@@ -19,7 +19,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectBakssApplyBackupPermisVo">
-        select id, app_id, backup_id, grant_user, start_time, end_time, deleted, create_time, create_by, update_time from bakss_apply_backup_permis
+        select id, app_id, backup_id, grant_user, start_time, end_time, expiration, deleted, create_time, create_by, update_time from bakss_apply_backup_permis
     </sql>
 
     <select id="selectBakssApplyBackupPermisList" parameterType="BakssApplyBackupPermis" resultMap="BakssApplyBackupPermisResult">
@@ -38,6 +38,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectBakssApplyBackupPermisById" parameterType="Long" resultMap="BakssApplyBackupPermisResult">
         <include refid="selectBakssApplyBackupPermisVo"/>
         where id = #{id}
+    </select>
+
+    <select id="selectBakssApplyBackupPermisByAppId" parameterType="String" resultMap="BakssApplyBackupPermisResult">
+        <include refid="selectBakssApplyBackupPermisVo"/>
+        where app_id = #{appId}
+        order by create_time desc
+        limit 1
     </select>
 
     <insert id="insertBakssApplyBackupPermis" parameterType="BakssApplyBackupPermis" useGeneratedKeys="true" keyProperty="id">

@@ -19,6 +19,8 @@ public interface BakssApplyBackupPermisMapper
      */
     public BakssApplyBackupPermis selectBakssApplyBackupPermisById(Long id);
 
+    public BakssApplyBackupPermis selectBakssApplyBackupPermisByAppId(String appId);
+
     /**
      * 查询备份权限申请列表
      *

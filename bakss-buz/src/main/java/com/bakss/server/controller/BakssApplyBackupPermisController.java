@@ -29,7 +29,7 @@ import com.bakss.common.core.page.TableDataInfo;
  * @date 2025-04-08
  */
 @RestController
-@RequestMapping("/apply/permis")
+@RequestMapping("/service/application/permis")
 public class BakssApplyBackupPermisController extends BaseController
 {
     @Resource
@@ -64,10 +64,10 @@ public class BakssApplyBackupPermisController extends BaseController
      * 获取备份权限申请详细信息
      */
     @PreAuthorize("@ss.hasPermi('service:permis:query')")
-    @GetMapping(value = "/{id}")
-    public AjaxResult getInfo(@PathVariable("id") Long id)
+    @GetMapping(value = "/{appId}")
+    public AjaxResult getInfo(@PathVariable("appId") String appId)
     {
-        return success(bakssApplyBackupPermisService.selectBakssApplyBackupPermisById(id));
+        return success(bakssApplyBackupPermisService.selectBakssApplyBackupPermisByAppId(appId));
     }
 
     /**

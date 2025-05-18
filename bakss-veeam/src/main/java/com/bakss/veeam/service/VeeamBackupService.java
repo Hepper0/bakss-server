@@ -26,41 +26,9 @@ public class VeeamBackupService {
     @Resource
     VeeamBasicService basicService;
 
-    @Resource
-    RedisCache redisCache;
-
-    private final Long REFRESH_INTERVAL = 1000 * 60 * 10L;
-
 //    private String openApiUrl = VeeamConfig.openApiUrl;
 
 //    private String token;
-    private final String[] backupServers = new String[]{"192.168.1.104:8888"};
-
-    @PostConstruct
-    public void syncBackupData() {
-
-        new Thread(() -> {
-            try {
-                refreshBackupCache();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            try {
-                Thread.sleep(REFRESH_INTERVAL);
-            } catch (Exception ignored){}
-
-        }).start();
-    }
-
-    public void refreshBackupCache() {
-        for(String server: backupServers) {
-            String redisKey = String.format("%s%s:%s", REDIS_VEEAM_HOST_PREFIX, server, "backupJob");
-            List<Backup> backupList = getBackupList(1, 100, server);
-            redisCache.setCacheList(redisKey, backupList.stream().map(BeanUtils::beanToMap).collect(Collectors.toList()));
-            // todo 同步backup表的记录
-        }
-
-    }
 
     public List<Backup> getBackupList(int page, int pageSize, String server) {
         String token = basicService.validate(server);

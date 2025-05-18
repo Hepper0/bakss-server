@@ -24,6 +24,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import com.bakss.server.mapper.BakssAppMapper;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 
 import static com.bakss.server.config.Config.*;
@@ -63,10 +64,33 @@ public class BakssAppServiceImpl implements IBakssAppService
     private IBakssApplyBackupVmwareService applyBackupVmwareService;
 
     @Resource
+    private IBakssApplyBackupPermisService applyBackupPermisService;
+
+    @Resource
+    private IBakssBackupValidateService validateService;
+
+    @Resource
     private VeeamJobService veeamJobService;
 
     @Resource
     private RedisCache redisCache;
+
+    private final Integer HANDLE_INTERVAL = 1000 * 60 * 3;
+
+    @PostConstruct
+    public void handleApprovedApplication() {
+        new Thread(() -> {
+            try {
+                List<BakssApp> pendingApprovalApps = bakssAppMapper.getPendingApprovalApp();
+                pendingApprovalApps.forEach(this::handleApprovedApplication);
+            }
+            catch (Exception ignored){}
+
+            try {
+                Thread.sleep(HANDLE_INTERVAL);
+            } catch (Exception ignored){}
+        }).start();
+    }
 
     /**
      * 查询申请
@@ -147,7 +171,6 @@ public class BakssAppServiceImpl implements IBakssAppService
         return bakssAppMapper.deleteBakssAppById(id);
     }
 
-
     public void approved(BakssApp app){
         // 更新审核人及审核时间
         LoginUser user = SecurityUtils.getLoginUser();
@@ -167,18 +190,26 @@ public class BakssAppServiceImpl implements IBakssAppService
             bakssAppMapper.updateBakssApp(app);
         } else {
             log.info("申请单[" + app.getId() + "]当前流程" + flow.getFlowStep() +  ", 找不到下一个流程. 审核完成");
-            handleApprovedApplication(app);
+            // 设置订单为完成状态
+            app.setStatus(APPLICATION_COMPLETED);
+            bakssAppMapper.updateBakssApp(app);
         }
     }
 
+    // 审批通过后对各种类型申请的处理
     public void handleApprovedApplication(BakssApp app) {
-        // 设置订单为完成状态
-        app.setStatus(APPLICATION_COMPLETED);
 
         Integer appType = app.getAppType();
-        if (appType.equals(APPLY_BACKUP_PERMISSION)) {
-
-        } else if(appType.equals(GRANT_BACKUP_PERMISSION)) {
+        if (appType.equals(APPLY_BACKUP_PERMISSION) || appType.equals(GRANT_BACKUP_PERMISSION)) {
+            BakssApplyBackupPermis applyBackupPermis = applyBackupPermisService.selectBakssApplyBackupPermisByAppId(app.getId());
+            BakssBackupValidate validate = new BakssBackupValidate();
+            validate.setBackupId(applyBackupPermis.getBackupId());
+            validate.setExpType(applyBackupPermis.getExpiration());
+            if (applyBackupPermis.getExpiration() == 2) {
+                validate.setStartDate(applyBackupPermis.getStartTime());
+                validate.setEndDate(applyBackupPermis.getEndTime());
+            }
+            validateService.insertBakssBackupValidate(validate);
 
         } else if(appType.equals(CREATE_RESTORE)) {
 
@@ -186,10 +217,7 @@ public class BakssAppServiceImpl implements IBakssAppService
             BakssApplyBackup applyBackup = applyBackupService.selectBakssApplyBackupByAppId(app.getId());
             BakssApplyBackupVmware applyBackupVmware = applyBackupVmwareService.selectBakssApplyBackupVmwareByAppId(app.getId());
 
-//            if (applyBackup.getName() == null) {
-//                applyBackup.setName(String.format("%s_%s", applyBackup.getBackupContent(), app.getId()));
-//            }
-
+            // 获取entity
             String vmObjects = applyBackupVmware.getVmObjects();
             List<JSONObject> entityCache = redisCache.getCacheList(String.format("%s%s:%s", REDIS_VEEAM_HOST_PREFIX, applyBackup.getBackupServer(), "entity"));
             List<JSONObject> vmEntitiesJSON = entityCache.stream().filter(e -> Arrays.asList(vmObjects.split(",")).contains(e.getStr("id"))).collect(Collectors.toList());
@@ -205,10 +233,12 @@ public class BakssAppServiceImpl implements IBakssAppService
             applyBackupJob.setRepository(applyBackupVmware.getRepository());
             applyBackupJob.setPolicy("Daily"); // todo 第一期默认Daily
 
+            // 处理Daily
             ApplyBackupJobScheduleDaily scheduleDaily = new ApplyBackupJobScheduleDaily();
             scheduleDaily.setStartDateTimeLocal(applyBackup.getScheduleTime());
             scheduleDaily.setDayNumberInMonth(applyBackup.getScheduleDateType());
             scheduleDaily.setDayOfWeek(applyBackup.getScheduleDay().split(","));
+
             // 创建备份
             veeamJobService.createJob(applyBackupJob, applyBackup.getBackupServer());
 
@@ -239,6 +269,7 @@ public class BakssAppServiceImpl implements IBakssAppService
         } else if(appType.equals(MODIFY_MANAGER)) {
 
         }
+        app.setIsCompleted(true);
         bakssAppMapper.updateBakssApp(app);
     }
 

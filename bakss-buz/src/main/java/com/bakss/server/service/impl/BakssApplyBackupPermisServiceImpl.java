@@ -34,6 +34,12 @@ public class BakssApplyBackupPermisServiceImpl implements IBakssApplyBackupPermi
         return bakssApplyBackupPermisMapper.selectBakssApplyBackupPermisById(id);
     }
 
+    @Override
+    public BakssApplyBackupPermis selectBakssApplyBackupPermisByAppId(String appId)
+    {
+        return bakssApplyBackupPermisMapper.selectBakssApplyBackupPermisByAppId(appId);
+    }
+
     /**
      * 查询备份权限申请列表
      *

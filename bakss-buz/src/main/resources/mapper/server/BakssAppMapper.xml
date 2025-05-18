@@ -17,6 +17,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="flowId"    column="flow_id"    />
         <result property="remark"    column="remark"    />
         <result property="status"    column="status"    />
+        <result property="isCompleted"    column="is_completed"    />
         <result property="deleted"    column="deleted"    />
         <result property="createTime"    column="create_time"    />
         <result property="createBy"    column="create_by"    />
@@ -40,6 +41,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="reviewTime"    column="review_time"    />
         <result property="remark"    column="remark"    />
         <result property="status"    column="status"    />
+        <result property="isCompleted"    column="is_completed"    />
         <result property="deleted"    column="deleted"    />
         <result property="createTime"    column="create_time"    />
         <result property="createBy"    column="create_by"    />
@@ -47,11 +49,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectBakssAppVo">
-        select id, app_type, app_user, app_time, backup_id, backup_time, backup_exec_type, backup_software, backup_status, flow_id, remark, status, deleted, create_time, create_by, update_time from bakss_app
+        select id, app_type, app_user, app_time, backup_id, backup_time, backup_exec_type, backup_software, backup_status, flow_id, remark, status, is_completed, deleted, create_time, create_by, update_time from bakss_app
     </sql>
 
     <sql id="selectBakssTaskVo">
-        select a.id, app_type, app_user, app_time, backup_id, backup_time, backup_exec_type, backup_software, backup_status, flow_id, flow_step, review_user, review_status, review_time, a.remark, a.status, a.deleted, a.create_time, a.create_by, a.update_time
+        select a.id, app_type, app_user, app_time, backup_id, backup_time, backup_exec_type, backup_software, backup_status, flow_id, flow_step, review_user, review_status, review_time, a.remark, a.status, a.is_completed, a.deleted, a.create_time, a.create_by, a.update_time
         from bakss_app a
         inner join bakss_app_flow b on a.flow_id = b.id and b.deleted = 0
     </sql>
@@ -72,6 +74,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="status != null "> and status = #{status}</if>
         </where>
         order by create_time desc
+    </select>
+
+    <select id="getPendingApprovalApp" resultType="BakssApp">
+        <include refid="selectBakssAppVo"/>
+        where status = 3 and is_completed != 1
     </select>
     
     <select id="selectBakssAppById" parameterType="String" resultMap="BakssAppResult">
@@ -94,6 +101,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="flowId != null">flow_id,</if>
             <if test="remark != null">remark,</if>
             <if test="status != null">status,</if>
+            <if test="isCompleted != null">is_completed,</if>
             <if test="deleted != null">deleted,</if>
             <if test="createTime != null">create_time,</if>
             <if test="createBy != null">create_by,</if>
@@ -112,6 +120,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="flowId != null">#{flowId},</if>
             <if test="remark != null">#{remark},</if>
             <if test="status != null">#{status},</if>
+            <if test="isCompleted != null">#{isCompleted},</if>
             <if test="deleted != null">#{deleted},</if>
             <if test="createTime != null">#{createTime},</if>
             <if test="createBy != null">#{createBy},</if>
@@ -133,6 +142,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="flowId != null">flow_id = #{flowId},</if>
             <if test="remark != null">remark = #{remark},</if>
             <if test="status != null">status = #{status},</if>
+            <if test="isCompleted != null">is_completed = #{isCompleted},</if>
             <if test="deleted != null">deleted = #{deleted},</if>
             <if test="createTime != null">create_time = #{createTime},</if>
             <if test="createBy != null">create_by = #{createBy},</if>

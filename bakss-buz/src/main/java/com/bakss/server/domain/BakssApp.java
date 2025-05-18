@@ -60,5 +60,7 @@ public class BakssApp extends BaseEntity
 
     private Long status;
 
+    private Boolean isCompleted;
+
     private Boolean isDb;
 }

@@ -28,6 +28,8 @@ public interface BakssAppMapper
      */
     public List<BakssTask> selectBakssAppList(BakssApp bakssApp);
 
+    public List<BakssApp> getPendingApprovalApp();
+
     /**
      * 新增申请
      * 
