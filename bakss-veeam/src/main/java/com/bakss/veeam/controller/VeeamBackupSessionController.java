@@ -19,8 +19,8 @@ public class VeeamBackupSessionController extends BaseController {
     private VeeamSessionService sessionService;
 
     @GetMapping("list")
-    public AjaxResult getVeeamHostList(@RequestParam int page, @RequestParam int pageSize) {
-        return success(sessionService.getBackupSessionList(page, pageSize, getBackupServerHost()));
+    public AjaxResult getVeeamHostList(@RequestParam int page, @RequestParam int pageSize, @RequestParam(required = false) String jobName) {
+        return success(sessionService.getBackupSessionList(jobName, page, pageSize, getBackupServerHost()));
     }
 
     @GetMapping("detail")

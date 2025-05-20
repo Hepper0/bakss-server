@@ -23,12 +23,13 @@ public class VeeamSessionService {
     @Resource
     VeeamBasicService basicService;
 
-    public List<BackupSession> getBackupSessionList(Integer page, Integer pageSize, String server) {
+    public List<BackupSession> getBackupSessionList(String jobName, Integer page, Integer pageSize, String server) {
         String token = basicService.validate(server);
         String path = "/jobsessions/getJobsessionList";
         Map<String, String> header = new HashMap<>();
         header.put("x-token", token);
         Map<String, Object> query = new HashMap<>();
+        query.put("jobName", jobName);
         query.put("page", page);
         query.put("pageSize", pageSize);
         Response response = HttpUtils.get( server + path, header, query);

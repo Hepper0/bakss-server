@@ -144,7 +144,9 @@ public class VeeamJobService {
     public BackupJobDetail getJobDetail(String name, String server) {
         String path = "/job/findJob";
         Response response = operateJob("get", path, name, server);
-        return BeanUtils.mapToBean(response.getData(), BackupJobDetail.class);
+        JSONObject data = (JSONObject)response.getData();
+        JSONObject jobInfo = data.getJSONObject("jobInfo");
+        return BeanUtils.mapToBean(jobInfo, BackupJobDetail.class);
     }
 
     public void startJob(String name, String server) {
