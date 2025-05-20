@@ -54,6 +54,7 @@ public class VeeamSessionService {
         query.put("ID", ID);
         Response response = HttpUtils.get(server + path, header, query);
         JSONObject data = (JSONObject)response.getData();
-        return BeanUtils.mapToBean(data, BackupSessionDetail.class);
+        JSONObject jobSession = data.getJSONObject("jobSession");
+        return BeanUtils.mapToBean(jobSession, BackupSessionDetail.class);
     }
 }
