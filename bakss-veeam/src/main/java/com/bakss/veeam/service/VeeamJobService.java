@@ -38,7 +38,7 @@ public class VeeamJobService {
 
     private final Long REFRESH_INTERVAL = 1000 * 60 * 10L;
 
-    private final Integer REDIS_KEY_EXPIRE = 60;
+    private final Integer REDIS_KEY_EXPIRE = 60 * 60 * 12;
 
     private final String REDIS_BACKUP_JOB_KEY = "backupJob";
 
@@ -72,17 +72,16 @@ public class VeeamJobService {
             redisCache.setCacheList(redisKey, backupList.stream().map(BeanUtils::beanToMap).collect(Collectors.toList()));
             // todo 同步backup表的记录
         }
-
     }
 
     public List<BackupJob> getBackupJobList(String jobName, Integer page, Integer pageSize, String server) {
         List<BackupJob> backupJobs = new ArrayList<>();
-        String redisKey = String.format("%s%s:%s", REDIS_VEEAM_HOST_PREFIX, server, REDIS_BACKUP_JOB_KEY);
+        String redisKey = String.format("%s%s:%s:%s", REDIS_VEEAM_HOST_PREFIX, server, REDIS_BACKUP_JOB_KEY, jobName);
         List<JSONObject> backupJobRedisCache = redisCache.getCacheList(redisKey);
         if (backupJobRedisCache.size() > 0) {
-            if (jobName != null) {
-                backupJobRedisCache = backupJobRedisCache.stream().filter(b -> jobName.equals(b.getString("name"))).collect(Collectors.toList());
-            }
+//            if (jobName != null) {
+//                backupJobRedisCache = backupJobRedisCache.stream().filter(b -> jobName.equals(b.getString("name"))).collect(Collectors.toList());
+//            }
             backupJobRedisCache.forEach(j -> {
                 backupJobs.add(BeanUtils.mapToBean(j, BackupJob.class));
             });

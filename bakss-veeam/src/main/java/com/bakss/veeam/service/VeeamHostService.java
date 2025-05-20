@@ -27,7 +27,7 @@ public class VeeamHostService {
     @Resource
     RedisCache redisCache;
 
-    private final Integer REDIS_KEY_EXPIRE = 60;
+    private final Integer REDIS_KEY_EXPIRE = 12 * 60 * 60;
 
 //    private final String openApiUrl = VeeamConfig.openApiUrl;
 
@@ -80,8 +80,8 @@ public class VeeamHostService {
         return veeamHostList;
     }
 
-    public List<ViEntity> getViEntityList(String serverName, String viewMode, String server) {
-        String redisKey = String.format("%s%s:%s", REDIS_VEEAM_HOST_PREFIX, server, "entity");
+    public List<ViEntity> getViEntityList(String vcName, String viewMode, String server) {
+        String redisKey = String.format("%s%s:%s:%s", REDIS_VEEAM_HOST_PREFIX, server, "entity", vcName);
         List<JSONObject> viEntityRedisCache = redisCache.getCacheList(redisKey);
         if (viEntityRedisCache.size() > 0) {
             List<ViEntity> viEntityList = new ArrayList<>();
@@ -95,7 +95,7 @@ public class VeeamHostService {
         Map<String, String> header = new HashMap<>();
         header.put("x-token", token);
         Map<String, Object> query = new HashMap<>();
-        query.put("serverName", serverName);
+        query.put("serverName", vcName);
         query.put("viewMode", viewMode);
         Response response = HttpUtils.get(server + path, header, query);
         JSONObject data = (JSONObject)response.getData();

@@ -231,7 +231,7 @@ public class BakssAppServiceImpl implements IBakssAppService
 
                 // 获取entity
                 String vmObjects = applyBackupVmware.getVmObjects();
-                List<JSONObject> entityCache = redisCache.getCacheList(String.format("%s%s:%s", REDIS_VEEAM_HOST_PREFIX, applyBackup.getBackupServer(), "entity"));
+                List<JSONObject> entityCache = redisCache.getCacheList(String.format("%s%s:%s:%s", REDIS_VEEAM_HOST_PREFIX, applyBackup.getBackupServer(), "entity", applyBackupVmware.getVCenter()));
                 List<JSONObject> vmEntitiesJSON = entityCache.stream().filter(e -> Arrays.asList(vmObjects.split(",")).contains(e.getString("id"))).collect(Collectors.toList());
                 List<ViEntity> vmEntities = vmEntitiesJSON.stream().map(v -> BeanUtils.mapToBean(v, ViEntity.class)).collect(Collectors.toList());
 
