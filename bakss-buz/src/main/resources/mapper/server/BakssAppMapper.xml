@@ -76,9 +76,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         order by create_time desc
     </select>
 
-    <select id="getPendingApprovalApp" resultType="BakssApp">
+    <select id="getPendingApprovalApp" resultMap="BakssAppResult">
         <include refid="selectBakssAppVo"/>
-        where status = 3 and is_completed != 1
+        where status = 3 and is_completed is null
     </select>
     
     <select id="selectBakssAppById" parameterType="String" resultMap="BakssAppResult">

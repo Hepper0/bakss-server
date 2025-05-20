@@ -1,14 +1,13 @@
-package com.bakss.veeam.service.impl;
+package com.bakss.server.service.impl;
 
-import java.util.List;
 import com.bakss.common.utils.DateUtils;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.bakss.server.service.IBakssServerConfigService;
+import com.bakss.server.domain.BakssServerConfig;
+import com.bakss.server.mapper.BakssServerConfigMapper;
 import org.springframework.stereotype.Service;
-import com.bakss.veeam.mapper.BakssServerConfigMapper;
-import com.bakss.veeam.domain.BakssServerConfig;
-import com.bakss.veeam.service.IBakssServerConfigService;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * VeeamServerService业务层处理

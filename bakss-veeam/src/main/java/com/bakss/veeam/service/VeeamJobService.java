@@ -38,26 +38,29 @@ public class VeeamJobService {
 
     private final Long REFRESH_INTERVAL = 1000 * 60 * 10L;
 
+    private final Integer REDIS_KEY_EXPIRE = 60;
+
     private final String REDIS_BACKUP_JOB_KEY = "backupJob";
 
 //    private final String openApiUrl = VeeamConfig.openApiUrl;
 
 //    private String token;
 
-    private final String[] backupServers = new String[]{"192.168.1.104:8888"};
+    private final String[] backupServers = new String[]{"http://192.168.1.104:8888/"};
 
-    @PostConstruct
+//    @PostConstruct
     public void syncBackupData() {
 
         new Thread(() -> {
+            try {
+                Thread.sleep(REFRESH_INTERVAL);
+            } catch (Exception ignored){}
+
             try {
                 refreshBackupCache();
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            try {
-                Thread.sleep(REFRESH_INTERVAL);
-            } catch (Exception ignored){}
 
         }).start();
     }
@@ -84,7 +87,12 @@ public class VeeamJobService {
                 backupJobs.add(BeanUtils.mapToBean(j, BackupJob.class));
             });
             if (pageSize == 0) return backupJobs;
-            return backupJobs.subList((page - 1) * page, page * pageSize);
+            int pageStart = (page - 1) * page;
+            int pageEnd = page * pageSize;
+            if (backupJobs.size() < pageSize * page) {
+                pageEnd = backupJobs.size();
+            }
+            return backupJobs.subList(pageStart, pageEnd);
         }
         String token = basicService.validate(server);
         String path = "/job/getJobList";
@@ -104,6 +112,8 @@ public class VeeamJobService {
                 backupJobs.add(backupJob);
             }
         }
+        redisCache.setCacheList(redisKey, jobList);
+        redisCache.expire(redisKey, REDIS_KEY_EXPIRE);
         return backupJobs;
     }
 
@@ -205,7 +215,9 @@ public class VeeamJobService {
 //        optionsDaily.put("startDateTimeLocal", "00:00");
 //        optionsDaily.put("dayNumberInMonth", "Weekdays");
 //        optionsDaily.put("dayOfWeek", new JSONArray());
-        schedule.put("optionsDaily", BeanUtils.beanToMap(applyBackupJob.getScheduleDaily()));
+        Map<String, Object> dailyOptions = BeanUtils.beanToMap(applyBackupJob.getScheduleDaily());
+        if (dailyOptions != null)
+            schedule.put("optionsDaily", new JSONObject(dailyOptions));
 
         JSONObject optionsMonthly = new JSONObject();
         optionsMonthly.put("time", "00:00");
@@ -255,7 +267,7 @@ public class VeeamJobService {
 
         Map<String, String> header = new HashMap<>();
         header.put("x-token", token);
-        HttpUtils.post(server + path, header, BeanUtils.beanToMap(jobDetail));
+        HttpUtils.post(server + path, header, new JSONObject(BeanUtils.beanToMap(jobDetail)));
     }
 
     public void updateJob(BackupJobDetail jobDetail, String server) {
@@ -263,6 +275,6 @@ public class VeeamJobService {
         String path = "/job/updateJob";
         Map<String, String> header = new HashMap<>();
         header.put("x-token", token);
-        HttpUtils.put(server + path, header, BeanUtils.beanToMap(jobDetail));
+        HttpUtils.put(server + path, header, new JSONObject(BeanUtils.beanToMap(jobDetail)));
     }
 }

@@ -20,7 +20,7 @@ public class HttpUtils {
 
     private static final Logger log = LoggerFactory.getLogger(HttpUtils.class);
 
-    private final static Integer REQUEST_TIME = 10000;
+    private final static Integer REQUEST_TIME = 120 * 1000;
 
     public static Response get(String URL, Map<String, String> headers, Map<String, Object> query) {
         return get(URL, headers, query, false);

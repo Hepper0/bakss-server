@@ -1,26 +1,19 @@
-package com.bakss.veeam.controller;
+package com.bakss.server.controller;
 
-import java.util.List;
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletResponse;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 import com.bakss.common.annotation.Log;
 import com.bakss.common.core.controller.BaseController;
 import com.bakss.common.core.domain.AjaxResult;
-import com.bakss.common.enums.BusinessType;
-import com.bakss.veeam.domain.BakssServerConfig;
-import com.bakss.veeam.service.IBakssServerConfigService;
-import com.bakss.common.utils.poi.ExcelUtil;
 import com.bakss.common.core.page.TableDataInfo;
+import com.bakss.common.enums.BusinessType;
+import com.bakss.common.utils.poi.ExcelUtil;
+import com.bakss.server.domain.BakssServerConfig;
+import com.bakss.server.service.IBakssServerConfigService;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /**
  * VeeamServerController

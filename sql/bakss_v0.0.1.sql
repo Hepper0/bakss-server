@@ -38,7 +38,7 @@ create table bakss_backup_vmware (
    create_time datetime default now(),
    create_by varchar(100),
    update_time datetime
-)
+);
 
 drop table if exists bakss_backup_strategy;
 create table bakss_backup_strategy (
@@ -48,7 +48,7 @@ create table bakss_backup_strategy (
     create_time datetime default now(),
     create_by varchar(100),
     update_time datetime
-)
+);
 
 drop table if exists bakss_backup_validate;
 -- 控制被授权人员的有效期
@@ -63,7 +63,7 @@ create table bakss_backup_validate (
     create_time datetime default now(),
     create_by varchar(100),
     update_time datetime
-)
+);
 
 
 drop table if exists bakss_app;
@@ -101,7 +101,7 @@ create table bakss_app_flow (
     create_time datetime default now(),
     create_by varchar(100),
     update_time datetime
-)
+);
 
 drop table if exists bakss_apply_backup;
 create table bakss_apply_backup(
@@ -128,7 +128,7 @@ create table bakss_apply_backup(
     create_time datetime default now(),
     create_by varchar(100),
     update_time datetime
-)
+);
 
 drop table if exists bakss_apply_backup_vmware;
 create table bakss_apply_backup_vmware (
@@ -142,7 +142,7 @@ create table bakss_apply_backup_vmware (
     create_time datetime default now(),
     create_by varchar(100),
     update_time datetime
-)
+);
 
 -- create tbale bakss_apply_backup_mysql ()
 -- create tbale bakss_apply_backup_sqlserver ()
@@ -174,7 +174,7 @@ create table bakss_apply_strategy(
     create_time datetime default now(),
     create_by varchar(100),
     update_time datetime
-)
+);
 
 -- 创建备份计划
 -- create table bakss_apply_backup(
@@ -279,7 +279,7 @@ create table bakss_master_config (
     deleted int default 0,
     create_time datetime default now(),
     update_time datetime
-)
+);
 
 drop table if exists bakss_ushare_store_config;
 create table bakss_ushare_store_config (
@@ -305,7 +305,7 @@ create table bakss_network_store_config (
     deleted int default 0,
     create_time datetime default now(),
     update_time datetime
-)
+);
 
 drop table if exists bakss_app_step;
 create table bakss_app_step(
@@ -316,7 +316,7 @@ create table bakss_app_step(
     deleted int default 0,
     create_time datetime default now(),
     update_time datetime
-)
+);
 
 insert into bakss_app_step(app_type, app_steps, is_db) values(0, 'dba,admin', 1); -- 申请备份管理权
 insert into bakss_app_step(app_type, app_steps, is_db) values(1, 'assign,dba,admin', 1); -- 授权备份管理权

@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import cn.hutool.json.JSONObject;
+import com.alibaba.fastjson2.JSONObject;
 import com.bakss.common.core.domain.model.LoginUser;
 import com.bakss.common.core.redis.RedisCache;
 import com.bakss.common.utils.DateUtils;
@@ -75,21 +75,31 @@ public class BakssAppServiceImpl implements IBakssAppService
     @Resource
     private RedisCache redisCache;
 
-    private final Integer HANDLE_INTERVAL = 1000 * 60 * 3;
+    private final Integer HANDLE_INTERVAL = 1000 * 60 * 10;
 
     @PostConstruct
     public void handleApprovedApplication() {
+        try {
+            Thread.sleep(3 * 1000);
+        } catch (Exception ignored){}
         new Thread(() -> {
-            try {
-                List<BakssApp> pendingApprovalApps = bakssAppMapper.getPendingApprovalApp();
-                pendingApprovalApps.forEach(this::handleApprovedApplication);
-            }
-            catch (Exception ignored){}
+            while (true) {
 
-            try {
-                Thread.sleep(HANDLE_INTERVAL);
-            } catch (Exception ignored){}
+                try {
+                    List<BakssApp> pendingApprovalApps = bakssAppMapper.getPendingApprovalApp();
+                    log.info("pending approval application size: " + pendingApprovalApps.size());
+                    pendingApprovalApps.forEach(this::handleApprovedApplication);
+                }
+                catch (Exception e){
+                    e.printStackTrace();
+                }
+
+                try {
+                    Thread.sleep(HANDLE_INTERVAL);
+                } catch (Exception ignored){}
+            }
         }).start();
+        log.info("Approval thread has started!");
     }
 
     /**
@@ -198,79 +208,89 @@ public class BakssAppServiceImpl implements IBakssAppService
 
     // 审批通过后对各种类型申请的处理
     public void handleApprovedApplication(BakssApp app) {
+        log.info("Handling: " + app.getId());
+        try {
+            Integer appType = app.getAppType();
+            if (appType.equals(APPLY_BACKUP_PERMISSION) || appType.equals(GRANT_BACKUP_PERMISSION)) {
+                BakssApplyBackupPermis applyBackupPermis = applyBackupPermisService.selectBakssApplyBackupPermisByAppId(app.getId());
+                BakssBackupValidate validate = new BakssBackupValidate();
+                validate.setBackupId(applyBackupPermis.getBackupId());
+                validate.setExpType(applyBackupPermis.getExpiration());
+                validate.setUsername(applyBackupPermis.getGrantUser());
+                if (applyBackupPermis.getExpiration() == 2) {
+                    validate.setStartDate(applyBackupPermis.getStartTime());
+                    validate.setEndDate(applyBackupPermis.getEndTime());
+                }
+                validateService.insertBakssBackupValidate(validate);
 
-        Integer appType = app.getAppType();
-        if (appType.equals(APPLY_BACKUP_PERMISSION) || appType.equals(GRANT_BACKUP_PERMISSION)) {
-            BakssApplyBackupPermis applyBackupPermis = applyBackupPermisService.selectBakssApplyBackupPermisByAppId(app.getId());
-            BakssBackupValidate validate = new BakssBackupValidate();
-            validate.setBackupId(applyBackupPermis.getBackupId());
-            validate.setExpType(applyBackupPermis.getExpiration());
-            if (applyBackupPermis.getExpiration() == 2) {
-                validate.setStartDate(applyBackupPermis.getStartTime());
-                validate.setEndDate(applyBackupPermis.getEndTime());
+            } else if(appType.equals(CREATE_RESTORE)) {
+
+            } else if(appType.equals(CREATE_BACKUP)) {
+                BakssApplyBackup applyBackup = applyBackupService.selectBakssApplyBackupByAppId(app.getId());
+                BakssApplyBackupVmware applyBackupVmware = applyBackupVmwareService.selectBakssApplyBackupVmwareByAppId(app.getId());
+
+                // 获取entity
+                String vmObjects = applyBackupVmware.getVmObjects();
+                List<JSONObject> entityCache = redisCache.getCacheList(String.format("%s%s:%s", REDIS_VEEAM_HOST_PREFIX, applyBackup.getBackupServer(), "entity"));
+                List<JSONObject> vmEntitiesJSON = entityCache.stream().filter(e -> Arrays.asList(vmObjects.split(",")).contains(e.getString("id"))).collect(Collectors.toList());
+                List<ViEntity> vmEntities = vmEntitiesJSON.stream().map(v -> BeanUtils.mapToBean(v, ViEntity.class)).collect(Collectors.toList());
+
+                // 对接createJob
+                ApplyBackupJob applyBackupJob = new ApplyBackupJob();
+                applyBackupJob.setName(applyBackup.getAppName());
+                applyBackupJob.setAfterJobName(applyBackupVmware.getAfterJob());
+                applyBackupJob.setDescription(applyBackup.getDescription());
+                applyBackupJob.setVmObjects(vmEntities);
+                applyBackupJob.setIsScheduleEnable(true); // todo 第一期默认true
+                applyBackupJob.setRepository(applyBackupVmware.getRepository());
+                applyBackupJob.setPolicy("Daily"); // todo 第一期默认Daily
+
+                // 处理Daily
+                ApplyBackupJobScheduleDaily scheduleDaily = new ApplyBackupJobScheduleDaily();
+                scheduleDaily.setStartDateTimeLocal(applyBackup.getScheduleTime());
+                scheduleDaily.setDayNumberInMonth(applyBackup.getScheduleDateType());
+                if (applyBackup.getScheduleDay() != null) {
+                    scheduleDaily.setDayOfWeek(applyBackup.getScheduleDay().split(","));
+                }
+                applyBackupJob.setScheduleDaily(scheduleDaily);
+
+                // 创建备份
+                veeamJobService.createJob(applyBackupJob, applyBackup.getBackupServer());
+
+                BakssBackup bakssBackup = BeanUtils.conventTo(applyBackup, BakssBackup.class);
+                BakssBackupVmware bakssBackupVmware = BeanUtils.conventTo(applyBackupVmware, BakssBackupVmware.class);
+
+                bakssBackup.setBackupJobKey(applyBackup.getName()); // todo name是可以修改的， key修改为记录jobId
+                String backupId = bakssBackupService.insertBakssBackup(bakssBackup);
+                bakssBackupVmware.setBackupId(backupId);
+                bakssBackupVmwareService.insertBakssBackupVmware(bakssBackupVmware);
+
+                app.setBackupId(backupId); // 申请单中关联备份任务执行状况
+
+            } else if(appType.equals(BACKUP_RIGHT_NOW)) {
+
+            } else if(appType.equals(BACKUP_AT_TIME)) {
+
+            } else if(appType.equals(MODIFY_DIRECTORY)) {
+
+            } else if(appType.equals(ENABLE_STRATEGY)) {
+
+            } else if(appType.equals(DISABLE_STRATEGY)) {
+
+            } else if(appType.equals(DELETE_STRATEGY)) {
+
+            } else if(appType.equals(MODIFY_OWNER)) {
+
+            } else if(appType.equals(MODIFY_MANAGER)) {
+
             }
-            validateService.insertBakssBackupValidate(validate);
-
-        } else if(appType.equals(CREATE_RESTORE)) {
-
-        } else if(appType.equals(CREATE_BACKUP)) {
-            BakssApplyBackup applyBackup = applyBackupService.selectBakssApplyBackupByAppId(app.getId());
-            BakssApplyBackupVmware applyBackupVmware = applyBackupVmwareService.selectBakssApplyBackupVmwareByAppId(app.getId());
-
-            // 获取entity
-            String vmObjects = applyBackupVmware.getVmObjects();
-            List<JSONObject> entityCache = redisCache.getCacheList(String.format("%s%s:%s", REDIS_VEEAM_HOST_PREFIX, applyBackup.getBackupServer(), "entity"));
-            List<JSONObject> vmEntitiesJSON = entityCache.stream().filter(e -> Arrays.asList(vmObjects.split(",")).contains(e.getStr("id"))).collect(Collectors.toList());
-            List<ViEntity> vmEntities = vmEntitiesJSON.stream().map(v -> BeanUtils.mapToBean(v, ViEntity.class)).collect(Collectors.toList());
-
-            // 对接createJob
-            ApplyBackupJob applyBackupJob = new ApplyBackupJob();
-            applyBackupJob.setName(applyBackup.getAppName());
-            applyBackupJob.setAfterJobName(applyBackupVmware.getAfterJob());
-            applyBackupJob.setDescription(applyBackup.getDescription());
-            applyBackupJob.setVmObjects(vmEntities);
-            applyBackupJob.setIsScheduleEnable(true); // todo 第一期默认true
-            applyBackupJob.setRepository(applyBackupVmware.getRepository());
-            applyBackupJob.setPolicy("Daily"); // todo 第一期默认Daily
-
-            // 处理Daily
-            ApplyBackupJobScheduleDaily scheduleDaily = new ApplyBackupJobScheduleDaily();
-            scheduleDaily.setStartDateTimeLocal(applyBackup.getScheduleTime());
-            scheduleDaily.setDayNumberInMonth(applyBackup.getScheduleDateType());
-            scheduleDaily.setDayOfWeek(applyBackup.getScheduleDay().split(","));
-
-            // 创建备份
-            veeamJobService.createJob(applyBackupJob, applyBackup.getBackupServer());
-
-            BakssBackup bakssBackup = BeanUtils.conventTo(applyBackup, BakssBackup.class);
-            BakssBackupVmware bakssBackupVmware = BeanUtils.conventTo(applyBackupVmware, BakssBackupVmware.class);
-
-            bakssBackup.setBackupJobKey(applyBackup.getName()); // todo name是可以修改的， key修改为记录jobId
-            String backupId = bakssBackupService.insertBakssBackup(bakssBackup);
-            bakssBackupVmware.setBackupId(backupId);
-            bakssBackupVmwareService.insertBakssBackupVmware(bakssBackupVmware);
-
-            app.setBackupId(backupId); // 申请单中关联备份任务执行状况
-
-        } else if(appType.equals(BACKUP_RIGHT_NOW)) {
-
-        } else if(appType.equals(BACKUP_AT_TIME)) {
-
-        } else if(appType.equals(MODIFY_DIRECTORY)) {
-
-        } else if(appType.equals(ENABLE_STRATEGY)) {
-
-        } else if(appType.equals(DISABLE_STRATEGY)) {
-
-        } else if(appType.equals(DELETE_STRATEGY)) {
-
-        } else if(appType.equals(MODIFY_OWNER)) {
-
-        } else if(appType.equals(MODIFY_MANAGER)) {
-
+            app.setIsCompleted(true);
+            bakssAppMapper.updateBakssApp(app);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        app.setIsCompleted(true);
-        bakssAppMapper.updateBakssApp(app);
+
+
     }
 
     public void rejected(BakssApp App) {

@@ -27,6 +27,8 @@ public class VeeamHostService {
     @Resource
     RedisCache redisCache;
 
+    private final Integer REDIS_KEY_EXPIRE = 60;
+
 //    private final String openApiUrl = VeeamConfig.openApiUrl;
 
 //    private String token;
@@ -46,6 +48,15 @@ public class VeeamHostService {
 
 
     public List<VeeamHost> getVeeamHostList(int page, int pageSize, String server) {
+        String redisKey = String.format("%s%s:%s", REDIS_VEEAM_HOST_PREFIX, server, "host");
+        List<JSONObject> viHostRedisCache = redisCache.getCacheList(redisKey);
+        if (viHostRedisCache.size() > 0) {
+            List<VeeamHost> viHostList = new ArrayList<>();
+            for (JSONObject obj : viHostRedisCache) {
+                viHostList.add(BeanUtils.mapToBean(obj, VeeamHost.class));
+            }
+            return viHostList;
+        }
         String token = basicService.validate(server);
         String path = "/veeamHost/getVeeamHostList";
         Map<String, String> header = new HashMap<>();
@@ -61,13 +72,24 @@ public class VeeamHostService {
             for (Object host: hostList) {
                 VeeamHost veeamHost = BeanUtils.mapToBean((JSONObject)host, VeeamHost.class);
                 veeamHostList.add(veeamHost);
-                updateCache(server, "host", veeamHost);
+//                updateCache(server, "host", veeamHost);
             }
         }
+        redisCache.setCacheList(redisKey, hostList);
+        redisCache.expire(redisKey, REDIS_KEY_EXPIRE);
         return veeamHostList;
     }
 
     public List<ViEntity> getViEntityList(String serverName, String viewMode, String server) {
+        String redisKey = String.format("%s%s:%s", REDIS_VEEAM_HOST_PREFIX, server, "entity");
+        List<JSONObject> viEntityRedisCache = redisCache.getCacheList(redisKey);
+        if (viEntityRedisCache.size() > 0) {
+            List<ViEntity> viEntityList = new ArrayList<>();
+            for (JSONObject obj : viEntityRedisCache) {
+                viEntityList.add(BeanUtils.mapToBean(obj, ViEntity.class));
+            }
+            return viEntityList;
+        }
         String token = basicService.validate(server);
         String path = "/veeamHost/findViEntity";
         Map<String, String> header = new HashMap<>();
@@ -78,15 +100,17 @@ public class VeeamHostService {
         Response response = HttpUtils.get(server + path, header, query);
         JSONObject data = (JSONObject)response.getData();
 //        return BeanUtils.mapToBean(data, ViEntity.class);
-        JSONArray hostList = data.getJSONArray("list");
+        JSONArray entities = data.getJSONArray("list");
         List<ViEntity> entityList = new ArrayList<>();
-        if (hostList.size() > 0) {
-            for (Object host: hostList) {
-                ViEntity entity = BeanUtils.mapToBean((JSONObject)host, ViEntity.class);
+        if (entities.size() > 0) {
+            for (Object en: entities) {
+                ViEntity entity = BeanUtils.mapToBean((JSONObject)en, ViEntity.class);
                 entityList.add(entity);
-                updateCache(server, "entity", entity);
+//                updateCache(server, "entity", entity);
             }
         }
+        redisCache.setCacheList(redisKey, entities);
+        redisCache.expire(redisKey, REDIS_KEY_EXPIRE);
         return entityList;
     }
 

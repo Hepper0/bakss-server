@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.bakss.veeam.mapper.BakssServerConfigMapper">
+<mapper namespace="com.bakss.server.mapper.BakssServerConfigMapper">
     
     <resultMap type="BakssServerConfig" id="BakssServerConfigResult">
         <result property="id"    column="id"    />

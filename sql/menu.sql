@@ -86,7 +86,7 @@ VALUES (701, '详情', 8, 1, '/task/detail', 'task/detail', NULL, '', 1, 0, 'C',
 
 
 -- 菜单 SQL
-insert into sys_menu (id, menu_name, parent_id, order_num, path, component, is_frame, is_cache, menu_type, visible, status, perms, icon, create_by, create_time, update_by, update_time, remark)
+insert into sys_menu (menu_id, menu_name, parent_id, order_num, path, component, is_frame, is_cache, menu_type, visible, status, perms, icon, create_by, create_time, update_by, update_time, remark)
 values(305, '服务器管理', 6, 5, 'serverConfig', 'basic/server/index', 1, 0, 'C', '0', '0', 'basic:server:list', '#', 'admin', sysdate(), '', null, 'Veeam服务器菜单');
 
 -- 按钮 SQL

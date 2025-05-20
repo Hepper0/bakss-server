@@ -1,7 +1,8 @@
-package com.bakss.veeam.mapper;
+package com.bakss.server.mapper;
+
+import com.bakss.server.domain.BakssServerConfig;
 
 import java.util.List;
-import com.bakss.veeam.domain.BakssServerConfig;
 
 /**
  * VeeamServerMapper接口

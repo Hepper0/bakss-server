@@ -1,6 +1,5 @@
-package com.bakss.veeam.domain;
+package com.bakss.server.domain;
 
-import com.bakss.common.annotation.Excel;
 import com.bakss.common.core.domain.BaseEntity;
 import lombok.Data;
 

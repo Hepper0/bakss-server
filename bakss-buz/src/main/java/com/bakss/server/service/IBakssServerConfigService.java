@@ -1,7 +1,8 @@
-package com.bakss.veeam.service;
+package com.bakss.server.service;
+
+import com.bakss.server.domain.BakssServerConfig;
 
 import java.util.List;
-import com.bakss.veeam.domain.BakssServerConfig;
 
 /**
  * VeeamServerService接口

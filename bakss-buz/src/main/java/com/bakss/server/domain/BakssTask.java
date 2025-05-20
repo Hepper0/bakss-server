@@ -70,4 +70,6 @@ public class BakssTask extends BaseEntity
     @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
     private Long deleted;
     private Long status;
+
+    private Boolean isCompleted;
 }
