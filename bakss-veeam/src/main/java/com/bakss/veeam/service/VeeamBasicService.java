@@ -1,18 +1,13 @@
 package com.bakss.veeam.service;
 
-import com.bakss.veeam.config.VeeamConfig;
 import com.bakss.veeam.domain.Response;
-import com.bakss.veeam.domain.VeeamToken;
 import com.bakss.veeam.domain.login.LoginRequest;
 import com.bakss.veeam.domain.login.LoginResponse;
 import com.bakss.veeam.utils.BeanUtils;
 import com.bakss.veeam.utils.HttpUtils;
 import org.springframework.stereotype.Service;
-import org.springframework.web.context.request.RequestAttributes;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
-import javax.servlet.http.HttpServletRequest;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,7 +16,7 @@ import java.util.Map;
 public class VeeamBasicService {
 
     private final Map<String, String> token = new HashMap<>();
-    private final Map<String, Long> expireAt = new HashMap<>();
+    private final Map<String, Long> expiresAt = new HashMap<>();
 
     public void login(String server) {
         String path = "/base/login";
@@ -34,11 +29,11 @@ public class VeeamBasicService {
         Response response = HttpUtils.post(server + path, null, BeanUtils.beanToMap(request));
         LoginResponse loginResponse = BeanUtils.mapToBean(response.getData(), LoginResponse.class);
         token.put(server, loginResponse.getToken());
-        expireAt.put(server, loginResponse.getExpireAt());
+        expiresAt.put(server, loginResponse.getExpiresAt());
     }
 
     public String validate(String server) {
-        if (expireAt.get(server) == null || expireAt.get(server) <= System.currentTimeMillis()) {
+        if (expiresAt.get(server) == null || expiresAt.get(server) <= System.currentTimeMillis()) {
             login(server);
         }
 //        VeeamToken veeamToken = new VeeamToken();
