@@ -69,6 +69,10 @@ public class BakssBackupServiceImpl implements IBakssBackupService
     @Override
     public String insertBakssBackup(BakssBackup bakssBackup)
     {
+        BakssBackup existed = bakssBackupMapper.selectBakssBackupByName(bakssBackup.getAppName());
+        if (existed != null) {
+            throw new RuntimeException("任务名称重复");
+        }
         String backupId = IdUtils.simpleUUID();
         bakssBackup.setId(backupId);
         bakssBackup.setCreateTime(DateUtils.getNowDate());

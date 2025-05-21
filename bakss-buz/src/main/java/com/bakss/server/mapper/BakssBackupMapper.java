@@ -20,6 +20,8 @@ public interface BakssBackupMapper
      */
     public BakssBackup selectBakssBackupById(String id);
 
+    public BakssBackup selectBakssBackupByName(String name);
+
     /**
      * 查询备份管理列表
      * 
