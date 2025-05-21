@@ -7,7 +7,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <resultMap type="BakssApplyStrategy" id="BakssApplyStrategyResult">
         <result property="id"    column="id"    />
         <result property="appId"    column="app_id"    />
-        <result property="strategyId"    column="strategy_id"    />
+        <result property="jobKey"    column="job_key"    />
         <result property="type"    column="type"    />
         <result property="deleted"    column="deleted"    />
         <result property="createTime"    column="create_time"    />
@@ -16,14 +16,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectBakssApplyStrategyVo">
-        select id, app_id, strategy_id, type, deleted, create_time, create_by, update_time from bakss_app_strategy
+        select id, app_id, job_key, type, deleted, create_time, create_by, update_time from bakss_apply_strategy
     </sql>
 
     <select id="selectBakssApplyStrategyList" parameterType="BakssApplyStrategy" resultMap="BakssApplyStrategyResult">
         <include refid="selectBakssApplyStrategyVo"/>
         <where>  
             <if test="appId != null "> and app_id = #{appId}</if>
-            <if test="strategyId != null "> and strategy_id = #{strategyId}</if>
+            <if test="jobKey != null "> and job_key = #{jobKey}</if>
             <if test="type != null "> and type = #{type}</if>
             <if test="deleted != null "> and deleted = #{deleted}</if>
         </where>
@@ -34,11 +34,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where id = #{id}
     </select>
 
+    <select id="selectBakssApplyStrategyByAppId" parameterType="String" resultMap="BakssApplyStrategyResult">
+        <include refid="selectBakssApplyStrategyVo"/>
+        where app_id = #{appId}
+        order by create_time desc
+        limit 1
+    </select>
+
     <insert id="insertBakssApplyStrategy" parameterType="BakssApplyStrategy" useGeneratedKeys="true" keyProperty="id">
-        insert into bakss_app_strategy
+        insert into bakss_apply_strategy
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="appId != null">app_id,</if>
-            <if test="strategyId != null">strategy_id,</if>
+            <if test="jobKey != null">job_key,</if>
             <if test="type != null">type,</if>
             <if test="deleted != null">deleted,</if>
             <if test="createTime != null">create_time,</if>
@@ -47,7 +54,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="appId != null">#{appId},</if>
-            <if test="strategyId != null">#{strategyId},</if>
+            <if test="jobKey != null">#{jobKey},</if>
             <if test="type != null">#{type},</if>
             <if test="deleted != null">#{deleted},</if>
             <if test="createTime != null">#{createTime},</if>
@@ -57,10 +64,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </insert>
 
     <update id="updateBakssApplyStrategy" parameterType="BakssApplyStrategy">
-        update bakss_app_strategy
+        update bakss_apply_strategy
         <trim prefix="SET" suffixOverrides=",">
             <if test="appId != null">app_id = #{appId},</if>
-            <if test="strategyId != null">strategy_id = #{strategyId},</if>
+            <if test="jobKey != null">jobKey = #{jobKey},</if>
             <if test="type != null">type = #{type},</if>
             <if test="deleted != null">deleted = #{deleted},</if>
             <if test="createTime != null">create_time = #{createTime},</if>
@@ -71,11 +78,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </update>
 
     <delete id="deleteBakssApplyStrategyById" parameterType="Long">
-        delete from bakss_app_strategy where id = #{id}
+        delete from bakss_apply_strategy where id = #{id}
     </delete>
 
     <delete id="deleteBakssApplyStrategyByIds" parameterType="String">
-        delete from bakss_app_strategy where id in 
+        delete from bakss_apply_strategy where id in
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
         </foreach>

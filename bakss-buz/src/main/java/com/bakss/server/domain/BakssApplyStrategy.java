@@ -20,11 +20,11 @@ public class BakssApplyStrategy extends BaseEntity
 
     /** $column.columnComment */
     @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
-    private Long appId;
+    private String appId;
 
     /** $column.columnComment */
     @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
-    private Long strategyId;
+    private String jobKey;
 
     /** 1启用 2禁用 3删除 */
     @Excel(name = "1启用 2禁用 3删除")

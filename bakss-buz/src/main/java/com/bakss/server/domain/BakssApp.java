@@ -46,6 +46,8 @@ public class BakssApp extends BaseEntity
 
     private String backupSoftware;
 
+    private String backupServer;
+
     /** $column.columnComment */
     @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
     private Long backupStatus;

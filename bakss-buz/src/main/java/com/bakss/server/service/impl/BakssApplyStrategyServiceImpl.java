@@ -32,6 +32,12 @@ public class BakssApplyStrategyServiceImpl implements IBakssApplyStrategyService
         return bakssApplyStrategyMapper.selectBakssApplyStrategyById(id);
     }
 
+    @Override
+    public BakssApplyStrategy selectBakssApplyStrategyByAppId(String appId)
+    {
+        return bakssApplyStrategyMapper.selectBakssApplyStrategyByAppId(appId);
+    }
+
     /**
      * 查询备份策略申请列表
      *

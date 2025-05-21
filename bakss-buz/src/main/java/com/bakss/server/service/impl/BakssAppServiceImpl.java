@@ -67,6 +67,9 @@ public class BakssAppServiceImpl implements IBakssAppService
     private IBakssApplyBackupPermisService applyBackupPermisService;
 
     @Resource
+    private IBakssApplyStrategyService applyStrategyService;
+
+    @Resource
     private IBakssBackupValidateService validateService;
 
     @Resource
@@ -257,8 +260,8 @@ public class BakssAppServiceImpl implements IBakssAppService
                 // 创建备份
                 veeamJobService.createJob(applyBackupJob, applyBackup.getBackupServer());
 
-                BakssBackup bakssBackup = BeanUtils.conventTo(applyBackup, BakssBackup.class);
-                BakssBackupVmware bakssBackupVmware = BeanUtils.conventTo(applyBackupVmware, BakssBackupVmware.class);
+                BakssBackup bakssBackup = BeanUtils.convertTo(applyBackup, BakssBackup.class);
+                BakssBackupVmware bakssBackupVmware = BeanUtils.convertTo(applyBackupVmware, BakssBackupVmware.class);
 
                 bakssBackup.setBackupJobKey(applyBackup.getName()); // todo name是可以修改的， key修改为记录jobId
                 String backupId = bakssBackupService.insertBakssBackup(bakssBackup);
@@ -274,6 +277,16 @@ public class BakssAppServiceImpl implements IBakssAppService
             } else if(appType.equals(MODIFY_DIRECTORY)) {
 
             } else if(appType.equals(ENABLE_STRATEGY)) {
+                Long ENABLE = 1L;
+                Long DISABLE = 2L;
+                BakssApplyStrategy strategy = applyStrategyService.selectBakssApplyStrategyByAppId(app.getId());
+                if (strategy.getType().equals(ENABLE)) {
+                    veeamJobService.enableJob(strategy.getJobKey(), app.getBackupServer());
+                } else if (strategy.getType().equals(DISABLE)) {
+                    veeamJobService.disableJob(strategy.getJobKey(), app.getBackupServer());
+                } else {
+                    veeamJobService.deleteJob(strategy.getJobKey(), app.getBackupServer());
+                }
 
             } else if(appType.equals(DISABLE_STRATEGY)) {
 

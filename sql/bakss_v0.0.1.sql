@@ -76,6 +76,7 @@ create table bakss_app(
     backup_time datetime,
     backup_exec_type int,
     backup_software varchar(50),
+    backup_server varchar(50),
     backup_status int,
     flow_id int,
     remark varchar(1000),
@@ -168,7 +169,7 @@ drop table if exists bakss_apply_strategy;
 create table bakss_apply_strategy(
     id int primary key auto_increment,
     app_id varchar(50),
-    strategy_id int,
+    job_key varchar(50),
     type int comment '1启用 2禁用 3删除',
     deleted int default 0,
     create_time datetime default now(),

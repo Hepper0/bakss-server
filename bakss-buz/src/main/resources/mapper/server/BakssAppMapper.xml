@@ -14,6 +14,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="backupExecType"    column="backup_exec_type"    />
         <result property="backupSoftware"    column="backup_software"    />
         <result property="backupStatus"    column="backup_status"    />
+        <result property="backupServer"    column="backup_server"    />
         <result property="flowId"    column="flow_id"    />
         <result property="remark"    column="remark"    />
         <result property="status"    column="status"    />
@@ -49,7 +50,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectBakssAppVo">
-        select id, app_type, app_user, app_time, backup_id, backup_time, backup_exec_type, backup_software, backup_status, flow_id, remark, status, is_completed, deleted, create_time, create_by, update_time from bakss_app
+        select id, app_type, app_user, app_time, backup_id, backup_time, backup_exec_type, backup_software, backup_status, backup_server, flow_id, remark, status, is_completed, deleted, create_time, create_by, update_time from bakss_app
     </sql>
 
     <sql id="selectBakssTaskVo">
@@ -98,6 +99,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="backupExecType != null">backup_exec_type,</if>
             <if test="backupSoftware != null">backup_software,</if>
             <if test="backupStatus != null">backup_status,</if>
+            <if test="backupServer != null">backup_server,</if>
             <if test="flowId != null">flow_id,</if>
             <if test="remark != null">remark,</if>
             <if test="status != null">status,</if>
@@ -117,6 +119,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="backupExecType != null">#{backupExecType},</if>
             <if test="backupSoftware != null">#{backupSoftware},</if>
             <if test="backupStatus != null">#{backupStatus},</if>
+            <if test="backupServer != null">#{backupServer},</if>
             <if test="flowId != null">#{flowId},</if>
             <if test="remark != null">#{remark},</if>
             <if test="status != null">#{status},</if>
@@ -139,6 +142,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="backupExecType != null">backup_exec_type = #{backupExecType},</if>
             <if test="backupSoftware != null">backup_software = #{backupSoftware},</if>
             <if test="backupStatus != null">backup_status = #{backupStatus},</if>
+            <if test="backupServer != null">backup_server = #{backupServer},</if>
             <if test="flowId != null">flow_id = #{flowId},</if>
             <if test="remark != null">remark = #{remark},</if>
             <if test="status != null">status = #{status},</if>

@@ -42,7 +42,7 @@ public class BeanUtils extends BeanUtil {
         return mapToBean((JSONObject)obj, beanClass, true, CopyOptions.create());
     }
 
-    public static <T> T conventTo(Object source, Class<T> beanClass) {
+    public static <T> T convertTo(Object source, Class<T> beanClass) {
         return mapToBean(beanToMap(source), beanClass);
     }
 

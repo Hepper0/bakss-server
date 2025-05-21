@@ -50,7 +50,7 @@ public class HttpUtils {
             return response;
 
         } catch (Exception e) {
-            log.error("send get failed", e);
+            log.error("send get failed");
             throw e;
         }
     }

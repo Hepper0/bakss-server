@@ -4,14 +4,12 @@ import com.bakss.common.core.domain.model.LoginUser;
 import com.bakss.common.utils.DateUtils;
 import com.bakss.common.utils.SecurityUtils;
 import com.bakss.common.utils.uuid.IdUtils;
-import com.bakss.server.domain.BakssApp;
-import com.bakss.server.domain.BakssApplyBackup;
-import com.bakss.server.domain.BakssApplyBackupPermis;
-import com.bakss.server.domain.BakssBackupVmware;
+import com.bakss.server.domain.*;
 import com.bakss.server.domain.applyRO.*;
 import com.bakss.server.domain.backup.*;
 import com.bakss.server.service.IBakssApplyBackupVmwareService;
 import com.bakss.server.service.IBakssApplyService;
+import com.bakss.server.service.IBakssApplyStrategyService;
 import com.bakss.server.service.IBakssBackupVmwareService;
 import com.bakss.veeam.service.VeeamJobService;
 import com.bakss.veeam.utils.BeanUtils;
@@ -32,9 +30,6 @@ public class BakssApplyServiceImpl implements IBakssApplyService {
     private BakssAppServiceImpl appService;
 
     @Resource
-    private VeeamJobService veeamJobService;
-
-    @Resource
     private BakssApplyBackupPermisServiceImpl applyBackupPermisService;
 
     @Resource
@@ -43,6 +38,9 @@ public class BakssApplyServiceImpl implements IBakssApplyService {
     @Resource
     private IBakssApplyBackupVmwareService applyBackupVmwareService;
 
+    @Resource
+    private IBakssApplyStrategyService applyStrategyService;
+
     private final String TYPE_VM = "WMware";
     private final String TYPE_MYSQL = "MySQL";
     private final String TYPE_POSTGRESQL = "PostgreSQL";
@@ -50,10 +48,6 @@ public class BakssApplyServiceImpl implements IBakssApplyService {
     private final String TYPE_ORACLE = "Oracle";
     private final String TYPE_FILESYSTEM = "FileSystem";
 
-//    @PostConstruct
-//    void init() {
-//        veeamJobService.getJobDetail("123");
-//    }
 
     // 申请 与 授权
     public void applyBackupPermission(ApplyPermission applyPermission) {
@@ -87,16 +81,10 @@ public class BakssApplyServiceImpl implements IBakssApplyService {
     }
 
     public void applyModifyBackupStrategy(ApplyStrategy strategy) {
-        String appId = addApplication(strategy, strategy.getBackupId().toString());
+        String appId = addApplication(strategy, strategy.getBackupId());
         strategy.setAppId(appId);
-        Integer appType = strategy.getAppType();
-        if (appType.equals(ENABLE_STRATEGY)) {
-            enableBackupStrategy(strategy);
-        } else if (appType.equals(DISABLE_STRATEGY)) {
-            disableBackupStrategy(strategy);
-        } else if (appType.equals(DELETE_STRATEGY)) {
-            deleteBackupStrategy(strategy);
-        }
+        BakssApplyStrategy applyStrategy = BeanUtils.convertTo(strategy, BakssApplyStrategy.class);
+        applyStrategyService.insertBakssApplyStrategy(applyStrategy);
     }
 
     // 修改目录
@@ -174,6 +162,7 @@ public class BakssApplyServiceImpl implements IBakssApplyService {
         app.setRemark(apply.getRemark());
         app.setBackupSoftware(apply.getBackupSoftware());
         app.setIsDb(apply.getIsDB());
+        app.setBackupServer(apply.getBackupServer());
         if (backupId != null) app.setBackupId(backupId);
         // 创建申请单
         appService.insertBakssApp(app);
@@ -182,18 +171,4 @@ public class BakssApplyServiceImpl implements IBakssApplyService {
         return appId;
     }
 
-    // 启用策略
-    public void enableBackupStrategy(ApplyStrategy strategy) {
-
-    }
-
-    // 禁用策略
-    public void disableBackupStrategy(ApplyStrategy strategy) {
-
-    }
-
-    // 删除策略
-    public void deleteBackupStrategy(ApplyStrategy strategy) {
-
-    }
 }

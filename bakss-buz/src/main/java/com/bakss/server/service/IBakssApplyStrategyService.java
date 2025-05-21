@@ -19,6 +19,8 @@ public interface IBakssApplyStrategyService
      */
     public BakssApplyStrategy selectBakssApplyStrategyById(Long id);
 
+    public BakssApplyStrategy selectBakssApplyStrategyByAppId(String appId);
+
     /**
      * 查询备份策略申请列表
      * 
