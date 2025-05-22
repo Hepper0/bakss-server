@@ -17,7 +17,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="dataCenter"    column="data_center"    />
         <result property="env"    column="env"    />
         <result property="backupIP"    column="backup_ip"    />
-        <result property="backupPort"    column="backupPort"    />
+        <result property="backupPort"    column="backup_port"    />
         <result property="platform"    column="platform"    />
         <result property="costType"    column="cost_type"    />
         <result property="costNumber"    column="cost_number"    />
@@ -68,7 +68,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where app_name = #{name} and deleted = 0
     </select>
 
-    <select id="selectBakssBackupByIds" parameterType="String">
+    <select id="selectBakssBackupByIds" parameterType="String" resultMap="BakssBackupResult">
         <include refid="selectBakssBackupVo"/>
         where id in
         <foreach item="id" collection="array" open="(" separator="," close=")">

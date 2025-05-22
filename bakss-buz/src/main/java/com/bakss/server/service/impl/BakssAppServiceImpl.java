@@ -1,6 +1,7 @@
 package com.bakss.server.service.impl;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -230,23 +231,38 @@ public class BakssAppServiceImpl implements IBakssAppService
 
             } else if(appType.equals(CREATE_BACKUP)) {
                 BakssApplyBackup applyBackup = applyBackupService.selectBakssApplyBackupByAppId(app.getId());
-                BakssApplyBackupVmware applyBackupVmware = applyBackupVmwareService.selectBakssApplyBackupVmwareByAppId(app.getId());
-
-                // 获取entity
-                String vmObjects = applyBackupVmware.getVmObjects();
-                List<JSONObject> entityCache = redisCache.getCacheList(String.format("%s%s:%s:%s", REDIS_VEEAM_HOST_PREFIX, applyBackup.getBackupServer(), "entity", applyBackupVmware.getVCenter()));
-                List<JSONObject> vmEntitiesJSON = entityCache.stream().filter(e -> Arrays.asList(vmObjects.split(",")).contains(e.getString("id"))).collect(Collectors.toList());
-                List<ViEntity> vmEntities = vmEntitiesJSON.stream().map(v -> BeanUtils.mapToBean(v, ViEntity.class)).collect(Collectors.toList());
+                BakssApplyBackupVmware applyBackupVmware = applyBackupVmwareService.selectBakssApplyBackupVmwareByAppId(app.getId()); // todo repository 与 afterJob要提出来方外面
 
                 // 对接createJob
                 ApplyBackupJob applyBackupJob = new ApplyBackupJob();
                 applyBackupJob.setName(applyBackup.getAppName());
                 applyBackupJob.setAfterJobName(applyBackupVmware.getAfterJob());
                 applyBackupJob.setDescription(applyBackup.getDescription());
-                applyBackupJob.setVmObjects(vmEntities);
                 applyBackupJob.setIsScheduleEnable(true); // todo 第一期默认true
                 applyBackupJob.setRepository(applyBackupVmware.getRepository());
                 applyBackupJob.setPolicy("Daily"); // todo 第一期默认Daily
+
+                // 处理特定类型的字段
+                switch (applyBackup.getBackupContent()) {
+                    case "VMware":
+                        // 获取entity
+                        String vmObjects = applyBackupVmware.getVmObjects();
+                        List<JSONObject> entityCache = redisCache.getCacheList(String.format("%s%s:%s:%s", REDIS_VEEAM_HOST_PREFIX, applyBackup.getBackupServer(), "entity", applyBackupVmware.getVCenter()));
+                        List<JSONObject> vmEntitiesJSON = entityCache.stream().filter(e -> Arrays.asList(vmObjects.split(",")).contains(e.getString("id"))).collect(Collectors.toList());
+                        List<ViEntity> vmEntities = vmEntitiesJSON.stream().map(v -> BeanUtils.mapToBean(v, ViEntity.class)).collect(Collectors.toList());
+                        applyBackupJob.setVmObjects(vmEntities);
+                        break;
+                    case "MySQL":
+                        break;
+                    case "PostgreSQL":
+                        break;
+                    case "Oracle":
+                        break;
+                    case "SQL server":
+                        break;
+                    case "FileSystem":
+                        break;
+                }
 
                 // 处理Daily
                 ApplyBackupJobScheduleDaily scheduleDaily = new ApplyBackupJobScheduleDaily();
@@ -261,22 +277,26 @@ public class BakssAppServiceImpl implements IBakssAppService
                 veeamJobService.createJob(applyBackupJob, applyBackup.getBackupServer());
 
                 BakssBackup bakssBackup = BeanUtils.convertTo(applyBackup, BakssBackup.class);
-                BakssBackupVmware bakssBackupVmware = BeanUtils.convertTo(applyBackupVmware, BakssBackupVmware.class);
+//                BakssBackupVmware bakssBackupVmware = BeanUtils.convertTo(applyBackupVmware, BakssBackupVmware.class);
 
-                bakssBackup.setBackupJobKey(applyBackup.getName()); // todo name是可以修改的， key修改为记录jobId
+                bakssBackup.setBackupJobKey(applyBackup.getAppName()); // todo name是可以修改的， key修改为记录jobId
                 String backupId = bakssBackupService.insertBakssBackup(bakssBackup);
-                bakssBackupVmware.setBackupId(backupId);
-                bakssBackupVmwareService.insertBakssBackupVmware(bakssBackupVmware);
+//                bakssBackupVmware.setBackupId(backupId);
+//                bakssBackupVmwareService.insertBakssBackupVmware(bakssBackupVmware);
 
                 app.setBackupId(backupId); // 申请单中关联备份任务执行状况
 
             } else if(appType.equals(BACKUP_RIGHT_NOW)) {
-
+                BakssBackup backup = bakssBackupService.selectBakssBackupById(app.getBackupId());
+                veeamJobService.startJob(backup.getAppName() , app.getBackupServer());
             } else if(appType.equals(BACKUP_AT_TIME)) {
-
+                BakssBackup backup = bakssBackupService.selectBakssBackupById(app.getBackupId());
+                Date time = app.getBackupTime();
+                // todo 添加定时任务
+                veeamJobService.startJob(backup.getAppName() , app.getBackupServer());
             } else if(appType.equals(MODIFY_DIRECTORY)) {
 
-            } else if(appType.equals(ENABLE_STRATEGY)) {
+            } else if(appType.equals(ENABLE_STRATEGY) || appType.equals(DISABLE_STRATEGY) || appType.equals(DELETE_STRATEGY)) {
                 Long ENABLE = 1L;
                 Long DISABLE = 2L;
                 BakssApplyStrategy strategy = applyStrategyService.selectBakssApplyStrategyByAppId(app.getId());
@@ -287,11 +307,6 @@ public class BakssAppServiceImpl implements IBakssAppService
                 } else {
                     veeamJobService.deleteJob(strategy.getJobKey(), app.getBackupServer());
                 }
-
-            } else if(appType.equals(DISABLE_STRATEGY)) {
-
-            } else if(appType.equals(DELETE_STRATEGY)) {
-
             } else if(appType.equals(MODIFY_OWNER)) {
 
             } else if(appType.equals(MODIFY_MANAGER)) {
