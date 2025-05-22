@@ -149,23 +149,23 @@ public class VeeamJobService {
     }
 
     public void startJob(String name, String server) {
-        String path = "/job/startJob";
-        operateJob("put", path, name, server);
+        String path = "/job/startJob?name=" + name;
+        operateJob("put", path, null, server);
     }
 
     public void stopJob(String name, String server) {
-        String path = "/job/stopJob";
-        operateJob("put", path, name, server);
+        String path = "/job/stopJob?name=" + name;
+        operateJob("put", path, null, server);
     }
 
     public void enableJob(String name, String server) {
-        String path = "/job/enableJob";
-        operateJob("put", path, name, server);
+        String path = "/job/enableJob?name=" + name;
+        operateJob("put", path, null, server);
     }
 
     public void disableJob(String name, String server) {
-        String path = "/job/disableJob";
-        operateJob("put", path, name, server);
+        String path = "/job/disableJob?name=" + name;
+        operateJob("put", path, null, server);
     }
 
     public void deleteJob(String name, String server) {

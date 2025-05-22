@@ -28,7 +28,7 @@ public class HttpUtils {
 
     public static Response get(String URL, Map<String, String> headers, Map<String, Object> query, Boolean isList) {
         try {
-            log.info("send get,url:{},headers:{},,query: {},", URL, headers, query);
+            log.info("send get,url:{},headers:{},query: {},", URL, headers, query);
             String result = HttpRequest
                     .get(URL)
                     .headerMap(headers, true)
@@ -80,7 +80,7 @@ public class HttpUtils {
 
     public static Response post(String URL, Map<String, String> headers, Map<String, Object> data) {
         try {
-            log.info("send post, url:{}, headers:{}, query: {},", URL, headers, data);
+            log.info("send post, url:{}, headers:{}, data: {},", URL, headers, data);
             String result = HttpRequest
                     .post(URL)
                     .headerMap(headers, true)
@@ -104,7 +104,7 @@ public class HttpUtils {
 
     public static Response put(String URL, Map<String, String> headers, Map<String, Object> data) {
         try {
-            log.info("send put,url:{}, headers:{}, query: {},", URL, headers, data);
+            log.info("send put,url:{}, headers:{}, data: {},", URL, headers, data);
             String result = HttpRequest
                     .put(URL)
                     .headerMap(headers, true)
