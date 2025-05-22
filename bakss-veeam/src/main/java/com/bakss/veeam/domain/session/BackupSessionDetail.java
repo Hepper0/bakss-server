@@ -15,7 +15,7 @@ public class BackupSessionDetail {
     private String endTime;
     private Integer jobType;
     private Integer result;
-    private Integer status;
+    private Integer state;
     private JSONObject backupStatus;
     private JSONObject info;
     private JSONObject progress;
