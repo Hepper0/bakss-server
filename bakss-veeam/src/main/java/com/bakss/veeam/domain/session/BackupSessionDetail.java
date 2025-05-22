@@ -11,7 +11,7 @@ public class BackupSessionDetail {
     private String jobName;
     private String name;
     private String description;
-    private String createTime;
+    private String creationTime;
     private String endTime;
     private Integer jobType;
     private Integer result;
