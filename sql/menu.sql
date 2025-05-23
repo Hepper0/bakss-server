@@ -53,12 +53,12 @@ VALUES (207, '申请备份管理权', 5, 8, 'applyDetail', 'service/ApplyPermis/
 INSERT INTO `bakss`.`sys_menu`(`menu_id`, `menu_name`, `parent_id`, `order_num`, `path`, `component`, `query`, `route_name`, `is_frame`, `is_cache`, `menu_type`, `visible`, `status`, `perms`, `icon`, `create_by`, `remark`)
 VALUES (6, '配置管理', 0, 0, 'config', NULL, '', '', 1, 0, 'M', '0', '0', '', 'tree', 'admin', '配置管理菜单');
 -- 菜单
-INSERT INTO `bakss`.`sys_menu`(`menu_id`, `menu_name`, `parent_id`, `order_num`, `path`, `component`, `query`, `route_name`, `is_frame`, `is_cache`, `menu_type`, `visible`, `status`, `perms`, `icon`, `create_by`, remark)
-VALUES
-(301, 'Master管理', 6, 1, 'master', 'service/BackupMgr/index', NULL, '', 1, 0, 'C', '0', '0', 'config:master:list', 'tree', 'admin', 'Master管理菜单'),
-(302, '存储服务器配置', 6, 2, 'store', 'service/BackupMgr/index', NULL, '', 1, 0, 'C', '0', '0', 'config:store:list', 'tree', 'admin', '存储服务器配置菜单'),
-(303, '备份软件映射管理', 6, 3, 'mapping', 'service/BackupMgr/index', NULL, '', 1, 0, 'C', '0', '0', 'config:mapping:list', 'tree', 'admin', '备份软件映射菜单'),
-(304, '备份资源配置', 6, 4, 'resource', 'service/BackupMgr/index', NULL, '', 1, 0, 'C', '0', '0', 'config:resource:list', 'tree', 'admin', '备份资源配置菜单');
+-- INSERT INTO `bakss`.`sys_menu`(`menu_id`, `menu_name`, `parent_id`, `order_num`, `path`, `component`, `query`, `route_name`, `is_frame`, `is_cache`, `menu_type`, `visible`, `status`, `perms`, `icon`, `create_by`, remark)
+-- VALUES
+-- (301, 'Master管理', 6, 1, 'master', 'service/BackupMgr/index', NULL, '', 1, 0, 'C', '0', '0', 'config:master:list', 'tree', 'admin', 'Master管理菜单'),
+-- (302, '存储服务器配置', 6, 2, 'store', 'service/BackupMgr/index', NULL, '', 1, 0, 'C', '0', '0', 'config:store:list', 'tree', 'admin', '存储服务器配置菜单'),
+-- (303, '备份软件映射管理', 6, 3, 'mapping', 'service/BackupMgr/index', NULL, '', 1, 0, 'C', '0', '0', 'config:mapping:list', 'tree', 'admin', '备份软件映射菜单'),
+-- (304, '备份资源配置', 6, 4, 'resource', 'service/BackupMgr/index', NULL, '', 1, 0, 'C', '0', '0', 'config:resource:list', 'tree', 'admin', '备份资源配置菜单');
 
 -- 主菜单
 INSERT INTO `bakss`.`sys_menu`(`menu_id`, `menu_name`, `parent_id`, `order_num`, `path`, `component`, `query`, `route_name`, `is_frame`, `is_cache`, `menu_type`, `visible`, `status`, `perms`, `icon`, `create_by`, `remark`)

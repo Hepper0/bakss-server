@@ -294,7 +294,7 @@ create table bakss_ushare_store_config (
     deleted int default 0,
     create_time datetime default now(),
     update_time datetime
-)
+);
 
 drop table if exists bakss_network_store_config;
 create table bakss_network_store_config (

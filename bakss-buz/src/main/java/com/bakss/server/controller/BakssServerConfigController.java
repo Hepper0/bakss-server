@@ -31,7 +31,7 @@ public class BakssServerConfigController extends BaseController
     /**
      * 查询VeeamServer列表
      */
-    @PreAuthorize("@ss.hasPermi('veeam:server:list')")
+    @PreAuthorize("@ss.hasPermi('basic:server:list')")
     @GetMapping("/list")
     public TableDataInfo list(BakssServerConfig bakssServerConfig)
     {
@@ -43,7 +43,7 @@ public class BakssServerConfigController extends BaseController
     /**
      * 导出VeeamServer列表
      */
-    @PreAuthorize("@ss.hasPermi('veeam:server:export')")
+    @PreAuthorize("@ss.hasPermi('basic:server:export')")
     @Log(title = "VeeamServer", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, BakssServerConfig bakssServerConfig)
@@ -56,7 +56,7 @@ public class BakssServerConfigController extends BaseController
     /**
      * 获取VeeamServer详细信息
      */
-    @PreAuthorize("@ss.hasPermi('veeam:server:query')")
+    @PreAuthorize("@ss.hasPermi('basic:server:query')")
     @GetMapping(value = "/{id}")
     public AjaxResult getInfo(@PathVariable("id") Long id)
     {
@@ -66,7 +66,7 @@ public class BakssServerConfigController extends BaseController
     /**
      * 新增VeeamServer
      */
-    @PreAuthorize("@ss.hasPermi('veeam:server:add')")
+    @PreAuthorize("@ss.hasPermi('basic:server:add')")
     @Log(title = "VeeamServer", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody BakssServerConfig bakssServerConfig)
@@ -77,7 +77,7 @@ public class BakssServerConfigController extends BaseController
     /**
      * 修改VeeamServer
      */
-    @PreAuthorize("@ss.hasPermi('veeam:server:edit')")
+    @PreAuthorize("@ss.hasPermi('basic:server:edit')")
     @Log(title = "VeeamServer", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody BakssServerConfig bakssServerConfig)
@@ -88,7 +88,7 @@ public class BakssServerConfigController extends BaseController
     /**
      * 删除VeeamServer
      */
-    @PreAuthorize("@ss.hasPermi('veeam:server:remove')")
+    @PreAuthorize("@ss.hasPermi('basic:server:remove')")
     @Log(title = "VeeamServer", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable Long[] ids)
