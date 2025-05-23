@@ -1,19 +1,16 @@
 package com.bakss.veeam.service;
 
-import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import com.bakss.common.core.redis.RedisCache;
-import com.bakss.veeam.config.VeeamConfig;
+import com.bakss.framework.config.ServerConfig;
 import com.bakss.veeam.domain.Response;
-import com.bakss.veeam.domain.VeeamToken;
-import com.bakss.veeam.domain.backup.Backup;
-import com.bakss.veeam.domain.host.ViEntity;
 import com.bakss.veeam.domain.job.ApplyBackupJob;
 import com.bakss.veeam.domain.job.BackupJob;
 import com.bakss.veeam.domain.job.BackupJobDetail;
 import com.bakss.veeam.utils.BeanUtils;
 import com.bakss.veeam.utils.HttpUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -22,11 +19,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
-import static com.bakss.veeam.config.RedisConfig.REDIS_VEEAM_HOST_PREFIX;
+import static com.bakss.veeam.config.RedisConfig.*;
 
-
+@Slf4j
 @Service
 public class VeeamJobService {
 
@@ -36,69 +32,59 @@ public class VeeamJobService {
     @Resource
     RedisCache redisCache;
 
-    private final Long REFRESH_INTERVAL = 1000 * 60 * 10L;
-
-    private final Integer REDIS_KEY_EXPIRE = 60 * 60 * 12;
+    private final Long REFRESH_INTERVAL = 1000 * 60 * 60 * 8L;
 
     private final String REDIS_BACKUP_JOB_KEY = "backupJob";
 
-//    private final String openApiUrl = VeeamConfig.openApiUrl;
-
-//    private String token;
-
-    private final String[] backupServers = new String[]{"http://192.168.1.104:8888/"};
-
-//    @PostConstruct
-    public void syncBackupData() {
-
+    public void refreshCache(List<String> backupServers) {
         new Thread(() -> {
             try {
-                Thread.sleep(REFRESH_INTERVAL);
+                Thread.sleep(3 * 1000L);
             } catch (Exception ignored){}
 
-            try {
-                refreshBackupCache();
-            } catch (Exception e) {
-                e.printStackTrace();
+            while (true) {
+                for(String server: backupServers) {
+                    try {
+                        getBackupJobList(1, 100, server, false);
+                    } catch (Exception e) {
+                        log.error(String.format("[%s] job sync failed: %s", server, e.getMessage()));
+                    }
+                }
+                try {
+                    Thread.sleep(REFRESH_INTERVAL);
+                } catch (Exception ignored) {
+                }
             }
-
         }).start();
     }
 
-    public void refreshBackupCache() {
-        for(String server: backupServers) {
-            String redisKey = String.format("%s%s:%s", REDIS_VEEAM_HOST_PREFIX, server, REDIS_BACKUP_JOB_KEY);
-            List<BackupJob> backupList = getBackupJobList(null,1, 100, server);
-            redisCache.setCacheList(redisKey, backupList.stream().map(BeanUtils::beanToMap).collect(Collectors.toList()));
-            // todo 同步backup表的记录
-        }
+    public List<BackupJob> getBackupJobList(Integer page, Integer pageSize, String server) {
+        return getBackupJobList(page, pageSize, server, true);
     }
 
-    public List<BackupJob> getBackupJobList(String jobName, Integer page, Integer pageSize, String server) {
+    public List<BackupJob> getBackupJobList(Integer page, Integer pageSize, String server, Boolean useCache) {
+        String redisKey = String.format("%s%s:%s", REDIS_VEEAM_HOST_PREFIX, server, REDIS_BACKUP_JOB_KEY);
         List<BackupJob> backupJobs = new ArrayList<>();
-        String redisKey = String.format("%s%s:%s:%s", REDIS_VEEAM_HOST_PREFIX, server, REDIS_BACKUP_JOB_KEY, jobName);
-        List<JSONObject> backupJobRedisCache = redisCache.getCacheList(redisKey);
-        if (backupJobRedisCache.size() > 0) {
-//            if (jobName != null) {
-//                backupJobRedisCache = backupJobRedisCache.stream().filter(b -> jobName.equals(b.getString("name"))).collect(Collectors.toList());
-//            }
-            backupJobRedisCache.forEach(j -> {
-                backupJobs.add(BeanUtils.mapToBean(j, BackupJob.class));
-            });
-            if (pageSize == 0) return backupJobs;
-            int pageStart = (page - 1) * page;
-            int pageEnd = page * pageSize;
-            if (backupJobs.size() < pageSize * page) {
-                pageEnd = backupJobs.size();
+        if (useCache) {
+            List<JSONObject> backupJobRedisCache = redisCache.getCacheList(redisKey);
+            if (backupJobRedisCache.size() > 0) {
+                backupJobRedisCache.forEach(j -> {
+                    backupJobs.add(BeanUtils.mapToBean(j, BackupJob.class));
+                });
+                if (pageSize == 0) return backupJobs;
+                int pageStart = (page - 1) * page;
+                int pageEnd = page * pageSize;
+                if (backupJobs.size() < pageSize * page) {
+                    pageEnd = backupJobs.size();
+                }
+                return backupJobs.subList(pageStart, pageEnd);
             }
-            return backupJobs.subList(pageStart, pageEnd);
         }
         String token = basicService.validate(server);
         String path = "/job/getJobList";
         Map<String, String> header = new HashMap<>();
         header.put("x-token", token);
         Map<String, Object> query = new HashMap<>();
-        query.put("jobName", jobName);
         query.put("page", page);
         query.put("pageSize", pageSize);
         Response response = HttpUtils.get(server + path, header, query);

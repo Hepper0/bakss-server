@@ -7,6 +7,7 @@ import com.bakss.veeam.domain.Response;
 import com.bakss.veeam.domain.host.*;
 import com.bakss.veeam.utils.BeanUtils;
 import com.bakss.veeam.utils.HttpUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -18,6 +19,7 @@ import java.util.stream.Collectors;
 
 import static com.bakss.veeam.config.RedisConfig.*;
 
+@Slf4j
 @Service
 public class VeeamHostService {
 
@@ -27,12 +29,39 @@ public class VeeamHostService {
     @Resource
     RedisCache redisCache;
 
-    private final Integer REDIS_KEY_EXPIRE = 12 * 60 * 60;
+    private final Long REFRESH_INTERVAL = 1000 * 60 * 60 * 8L;
 
-//    private final String openApiUrl = VeeamConfig.openApiUrl;
+    public void refreshCache(List<String> backupServers) {
+        new Thread(() -> {
+            try {
+                Thread.sleep(3 * 1000L);
+            } catch (Exception ignored){}
 
-//    private String token;
-    // todo 每十分钟查询所有接口刷新一下缓存
+            while (true) {
+                try {
+                    for(String server: backupServers) {
+                        try {
+                            List<VeeamHost> hostList = getVeeamHostList(1, 100, server, false);
+                            hostList.parallelStream().forEach(h -> {
+                                try {
+                                    getViEntityList(h.getName(),"HostAndVms", server, false);
+                                } catch (Exception e) {
+                                    log.error(String.format("[%s] get entity failed: %s", h.getName(), e.getMessage()));
+                                }
+                            });
+                        } catch (Exception e) {
+                            log.error(String.format("[%s] host sync failed: %s", server, e.getMessage()));
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                try {
+                    Thread.sleep(REFRESH_INTERVAL);
+                } catch (Exception ignored){}
+            }
+        }).start();
+    }
 
     private void updateCache(String server, String key, HostBase obj) {
         String redisKey = String.format("%s%s:%s", REDIS_VEEAM_HOST_PREFIX, server, key);
@@ -46,17 +75,23 @@ public class VeeamHostService {
         redisCache.setCacheList(redisKey, cache);
     }
 
-
     public List<VeeamHost> getVeeamHostList(int page, int pageSize, String server) {
+        return getVeeamHostList(page, pageSize, server, true);
+    }
+
+    public List<VeeamHost> getVeeamHostList(int page, int pageSize, String server, Boolean useCache) {
         String redisKey = String.format("%s%s:%s", REDIS_VEEAM_HOST_PREFIX, server, "host");
-        List<JSONObject> viHostRedisCache = redisCache.getCacheList(redisKey);
-        if (viHostRedisCache.size() > 0) {
-            List<VeeamHost> viHostList = new ArrayList<>();
-            for (JSONObject obj : viHostRedisCache) {
-                viHostList.add(BeanUtils.mapToBean(obj, VeeamHost.class));
+        if (useCache) {
+            List<JSONObject> viHostRedisCache = redisCache.getCacheList(redisKey);
+            if (viHostRedisCache.size() > 0) {
+                List<VeeamHost> viHostList = new ArrayList<>();
+                for (JSONObject obj : viHostRedisCache) {
+                    viHostList.add(BeanUtils.mapToBean(obj, VeeamHost.class));
+                }
+                return viHostList;
             }
-            return viHostList;
         }
+
         String token = basicService.validate(server);
         String path = "/veeamHost/getVeeamHostList";
         Map<String, String> header = new HashMap<>();
@@ -81,14 +116,20 @@ public class VeeamHostService {
     }
 
     public List<ViEntity> getViEntityList(String vcName, String viewMode, String server) {
+        return getViEntityList(vcName, viewMode, server, true);
+    }
+
+    public List<ViEntity> getViEntityList(String vcName, String viewMode, String server, Boolean useCache) {
         String redisKey = String.format("%s%s:%s:%s", REDIS_VEEAM_HOST_PREFIX, server, "entity", vcName);
-        List<JSONObject> viEntityRedisCache = redisCache.getCacheList(redisKey);
-        if (viEntityRedisCache.size() > 0) {
-            List<ViEntity> viEntityList = new ArrayList<>();
-            for (JSONObject obj : viEntityRedisCache) {
-                viEntityList.add(BeanUtils.mapToBean(obj, ViEntity.class));
+        if (useCache) {
+            List<JSONObject> viEntityRedisCache = redisCache.getCacheList(redisKey);
+            if (viEntityRedisCache.size() > 0) {
+                List<ViEntity> viEntityList = new ArrayList<>();
+                for (JSONObject obj : viEntityRedisCache) {
+                    viEntityList.add(BeanUtils.mapToBean(obj, ViEntity.class));
+                }
+                return viEntityList;
             }
-            return viEntityList;
         }
         String token = basicService.validate(server);
         String path = "/veeamHost/findViEntity";
@@ -173,5 +214,5 @@ public class VeeamHostService {
         JSONObject data = (JSONObject)response.getData();
         return BeanUtils.mapToBean(data, ViFolder.class);
     }
-    
+
 }

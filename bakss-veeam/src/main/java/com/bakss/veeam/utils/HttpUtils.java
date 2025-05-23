@@ -2,18 +2,14 @@ package com.bakss.veeam.utils;
 
 import cn.hutool.http.HttpRequest;
 import com.alibaba.fastjson2.JSONObject;
-import com.bakss.framework.web.domain.server.Sys;
 import com.bakss.veeam.domain.Response;
 import com.bakss.veeam.domain.ResponseList;
 import com.bakss.veeam.domain.ResponseObject;
-import com.bakss.veeam.domain.VeeanExecError;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
-
 
 
 public class HttpUtils {

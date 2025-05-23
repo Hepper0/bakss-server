@@ -3,6 +3,9 @@ package com.bakss.server.service.impl;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.TimerTask;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import com.alibaba.fastjson2.JSONObject;
@@ -10,6 +13,7 @@ import com.bakss.common.core.domain.model.LoginUser;
 import com.bakss.common.core.redis.RedisCache;
 import com.bakss.common.utils.DateUtils;
 import com.bakss.common.utils.SecurityUtils;
+import com.bakss.common.utils.spring.SpringUtils;
 import com.bakss.server.domain.*;
 import com.bakss.server.domain.backup.BakssApplyBackupVmware;
 import com.bakss.server.mapper.BakssAppFlowMapper;
@@ -18,6 +22,7 @@ import com.bakss.server.service.*;
 import com.bakss.veeam.domain.host.ViEntity;
 import com.bakss.veeam.domain.job.ApplyBackupJob;
 import com.bakss.veeam.domain.job.schedule.ApplyBackupJobScheduleDaily;
+import com.bakss.veeam.service.VeeamHostService;
 import com.bakss.veeam.service.VeeamJobService;
 import com.bakss.veeam.utils.BeanUtils;
 import org.slf4j.Logger;
@@ -75,6 +80,9 @@ public class BakssAppServiceImpl implements IBakssAppService
 
     @Resource
     private VeeamJobService veeamJobService;
+
+    @Resource
+    private VeeamHostService veeamHostService;
 
     @Resource
     private RedisCache redisCache;
@@ -247,9 +255,9 @@ public class BakssAppServiceImpl implements IBakssAppService
                     case "VMware":
                         // 获取entity
                         String vmObjects = applyBackupVmware.getVmObjects();
-                        List<JSONObject> entityCache = redisCache.getCacheList(String.format("%s%s:%s:%s", REDIS_VEEAM_HOST_PREFIX, applyBackup.getBackupServer(), "entity", applyBackupVmware.getVCenter()));
-                        List<JSONObject> vmEntitiesJSON = entityCache.stream().filter(e -> Arrays.asList(vmObjects.split(",")).contains(e.getString("id"))).collect(Collectors.toList());
-                        List<ViEntity> vmEntities = vmEntitiesJSON.stream().map(v -> BeanUtils.mapToBean(v, ViEntity.class)).collect(Collectors.toList());
+                        String vCenter = applyBackupVmware.getVCenter();
+                        List<ViEntity> vmEntities = veeamHostService.getViEntityList(vCenter,"HostAndVms", app.getBackupServer());
+                        vmEntities = vmEntities.stream().filter(e -> Arrays.asList(vmObjects.split(",")).contains(e.getId())).collect(Collectors.toList());
                         applyBackupJob.setVmObjects(vmEntities);
                         break;
                     case "MySQL":
@@ -292,8 +300,7 @@ public class BakssAppServiceImpl implements IBakssAppService
             } else if(appType.equals(BACKUP_AT_TIME)) {
                 BakssBackup backup = bakssBackupService.selectBakssBackupById(app.getBackupId());
                 Date time = app.getBackupTime();
-                // todo 添加定时任务
-                veeamJobService.startJob(backup.getAppName() , app.getBackupServer());
+                // todo 落库 + 定时任务
             } else if(appType.equals(MODIFY_DIRECTORY)) {
 
             } else if(appType.equals(ENABLE_STRATEGY) || appType.equals(DISABLE_STRATEGY) || appType.equals(DELETE_STRATEGY)) {

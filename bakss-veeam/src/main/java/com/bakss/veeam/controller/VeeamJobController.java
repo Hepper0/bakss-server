@@ -18,8 +18,13 @@ public class VeeamJobController extends BaseController {
     private VeeamJobService jobService;
 
     @GetMapping("list")
-    public AjaxResult getBackupJobList(@RequestParam int page, @RequestParam int pageSize, @RequestParam(required = false) String jobName) {
-        return success(jobService.getBackupJobList(jobName, page, pageSize, getBackupServerHost()));
+    public AjaxResult getBackupJobList(@RequestParam int page, @RequestParam int pageSize, @RequestParam(required = false) Boolean useCache) {
+        if (useCache != null) {
+            return success(jobService.getBackupJobList(page, pageSize, getBackupServerHost(), useCache));
+        } else {
+            return success(jobService.getBackupJobList(page, pageSize, getBackupServerHost()));
+        }
+
     }
 
     @GetMapping("detail")

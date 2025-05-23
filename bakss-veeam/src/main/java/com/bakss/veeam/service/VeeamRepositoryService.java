@@ -3,14 +3,12 @@ package com.bakss.veeam.service;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import com.bakss.common.core.redis.RedisCache;
-import com.bakss.veeam.config.VeeamConfig;
 import com.bakss.veeam.domain.Response;
-import com.bakss.veeam.domain.VeeamToken;
-import com.bakss.veeam.domain.host.ViEntity;
 import com.bakss.veeam.domain.repository.VeeamRepository;
 import com.bakss.veeam.domain.repository.VeeamRepositoryDetail;
 import com.bakss.veeam.utils.BeanUtils;
 import com.bakss.veeam.utils.HttpUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -19,8 +17,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.bakss.veeam.config.RedisConfig.REDIS_VEEAM_HOST_PREFIX;
+import static com.bakss.veeam.config.RedisConfig.*;
 
+@Slf4j
 @Service
 public class VeeamRepositoryService {
     @Resource
@@ -29,22 +28,50 @@ public class VeeamRepositoryService {
     @Resource
     RedisCache redisCache;
 
-    private final Integer REDIS_KEY_EXPIRE = 12 * 60 * 60;
+    private final Long REFRESH_INTERVAL = 1000 * 60 * 60 * 8L;
 
-//    private final String openApiUrl = VeeamConfig.openApiUrl;
+    public void refreshCache(List<String> backupServers) {
+        new Thread(() -> {
+            try {
+                Thread.sleep(3 * 1000L);
+            } catch (Exception ignored){}
 
-//    private String token;
+            while (true) {
+                try {
+                    for(String server: backupServers) {
+                        try {
+                            getVeeamRepositoryList(1, 100, server, false);
+                        } catch (Exception e) {
+                            log.error(String.format("[%s] repository sync failed: %s", server, e.getMessage()));
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                try {
+                    Thread.sleep(REFRESH_INTERVAL);
+                } catch (Exception ignored){}
+            }
+        }).start();
+    }
 
     public List<VeeamRepository> getVeeamRepositoryList(int page, int pageSize, String server) {
+        return getVeeamRepositoryList(page, pageSize, server, true);
+    }
+
+    public List<VeeamRepository> getVeeamRepositoryList(int page, int pageSize, String server, Boolean useCache) {
         String redisKey = String.format("%s%s:%s", REDIS_VEEAM_HOST_PREFIX, server, "repository");
-        List<JSONObject> repositoryRedisCache = redisCache.getCacheList(redisKey);
-        if (repositoryRedisCache.size() > 0) {
-            List<VeeamRepository> viEntityList = new ArrayList<>();
-            for (JSONObject obj : repositoryRedisCache) {
-                viEntityList.add(BeanUtils.mapToBean(obj, VeeamRepository.class));
+        if (useCache) {
+            List<JSONObject> repositoryRedisCache = redisCache.getCacheList(redisKey);
+            if (repositoryRedisCache.size() > 0) {
+                List<VeeamRepository> viEntityList = new ArrayList<>();
+                for (JSONObject obj : repositoryRedisCache) {
+                    viEntityList.add(BeanUtils.mapToBean(obj, VeeamRepository.class));
+                }
+                return viEntityList;
             }
-            return viEntityList;
         }
+
         String token = basicService.validate(server);
         String path = "/veeamRepository/getVeeamRepositoryList";
         Map<String, String> header = new HashMap<>();

@@ -21,13 +21,22 @@ public class VeeamHostController extends BaseController {
 
 
     @GetMapping("list")
-    public AjaxResult getVeeamHostList(@RequestParam int page, @RequestParam int pageSize) {
-        return success(hostService.getVeeamHostList(page, pageSize, getBackupServerHost()));
+    public AjaxResult getVeeamHostList(@RequestParam int page, @RequestParam int pageSize, @RequestParam(required = false) Boolean useCache) {
+        if (useCache != null) {
+            return success(hostService.getVeeamHostList(page, pageSize, getBackupServerHost(), useCache));
+        } else {
+            return success(hostService.getVeeamHostList(page, pageSize, getBackupServerHost()));
+        }
+
     }
 
     @GetMapping("entity")
-    public AjaxResult getViEntity(@RequestParam String serverName, @RequestParam String viewMode) {
-        return success(hostService.getViEntityList(serverName, viewMode, getBackupServerHost()));
+    public AjaxResult getViEntity(@RequestParam String serverName, @RequestParam String viewMode, @RequestParam(required = false) Boolean useCache) {
+        if (useCache != null) {
+            return success(hostService.getViEntityList(serverName, viewMode, getBackupServerHost(), useCache));
+        } else {
+            return success(hostService.getViEntityList(serverName, viewMode, getBackupServerHost()));
+        }
     }
 
     @GetMapping("datastore")
